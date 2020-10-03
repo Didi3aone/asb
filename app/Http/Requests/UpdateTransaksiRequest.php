@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\MstSupplier;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSupplierRequest extends FormRequest
+class UpdateTransaksiRequest extends FormRequest
 {
     public function authorize()
     {

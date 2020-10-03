@@ -6,7 +6,7 @@ use App\MstGudang;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MassDestroyGudangequest extends FormRequest
+class MassDestroyGudangRequest extends FormRequest
 {
     public function authorize()
     {
