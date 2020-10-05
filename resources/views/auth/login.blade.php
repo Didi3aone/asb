@@ -15,7 +15,8 @@
                         <h1>
                             <div class="login-logo text-center">
                                 <a href="#">
-                                <img src="{{ asset('images/config/'.@unserialize(\App\Configuration::where('name','logo_login')->first()->value)) }}" 
+                                {{-- <img src="{{ asset('images/config/'.@unserialize(\App\Configuration::where('name','logo_login')->first()->value)) }}"  --}}
+                                <img src="{{ asset('images/config/'. (\App\Configuration::where('name','logo_login')->first()->value)) }}" 
                                     width=100 
                                     style="margin-left:0;"> <br>
                                 </a>
