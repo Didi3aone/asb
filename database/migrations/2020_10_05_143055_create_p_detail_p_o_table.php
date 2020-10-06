@@ -15,7 +15,13 @@ class CreatePDetailPOTable extends Migration
     {
         Schema::create('p_detail_po', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_barang')->unsigned()->nullable()->default(12);
+            $table->integer('id_barang');
+            $table->string('nomor_po', 100)->nullable()->default('text');
+            $table->integer('qty');
+            $table->decimal('price', 15, 2)->nullable();
+            $table->decimal('ppn', 15, 2)->nullable();
+            $table->decimal('total', 15, 2)->nullable();
+            $table->decimal('grand_total', 15, 2)->nullable();
             $table->timestamps();
         });
     }

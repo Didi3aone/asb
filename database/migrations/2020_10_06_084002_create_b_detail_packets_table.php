@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRDetailRequestsTable extends Migration
+class CreateBDetailPacketsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateRDetailRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('r_detail_requests', function (Blueprint $table) {
+        Schema::create('b_detail_packets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('no_req', 100);
-            $table->integer('receiver_id');
+            $table->integer('id_barang')->unsigned()->nullable()->default(12);
+            $table->integer('qty');
+            $table->tinyInteger('is_active');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateRDetailRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_requests');
+        Schema::dropIfExists('detail_packets');
     }
 }

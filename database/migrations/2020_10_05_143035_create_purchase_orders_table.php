@@ -15,6 +15,9 @@ class CreatePurchaseOrdersTable extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('no_po', 100);
+            $table->integer('supplier_by')->unsigned()->nullable()->default(12);
+            $table->tinyInteger('is_active');
             $table->timestamps();
         });
     }

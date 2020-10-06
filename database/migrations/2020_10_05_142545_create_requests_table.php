@@ -15,6 +15,10 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('no_request', 100);
+            $table->integer('program_id');
+            $table->integer('created_by');
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }
