@@ -29,6 +29,6 @@ class CreatePDetailPeriodeProgramsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_periode_programs');
+        Schema::dropIfExists('p_detail_periode_programs');
     }
 }

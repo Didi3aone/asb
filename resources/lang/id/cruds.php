@@ -9,6 +9,10 @@ return [
         'title'          => 'Barang',
         'title_singular' => 'Barang',
     ],
+    'memberManagement'      => [
+        'title'          => 'Anggota',
+        'title_singular' => 'Anggota',
+    ],
     'masterManagement'      => [
         'title'          => 'Master',
         'title_singular' => 'Master',
@@ -137,6 +141,30 @@ return [
     'item-category'          => [
         'title'          => 'Kategori',
         'title_singular' => 'Kategori',
+        'fields'         => [
+            'id'                 => 'ID',
+            'nama'               => 'Nama',
+            'status'             => 'Status',
+            'created_at'         => 'Dibuat Pada',
+            'updated_at'         => 'Dirubah Pada',
+            'deleted_at'         => 'Dihapus Pada',
+        ],
+    ],
+    'verified-member'          => [
+        'title'          => 'Anggota Terverifikasi',
+        'title_singular' => 'Anggota Terverifikasi',
+        'fields'         => [
+            'id'                 => 'ID',
+            'nama'               => 'Nama',
+            'status'             => 'Status',
+            'created_at'         => 'Dibuat Pada',
+            'updated_at'         => 'Dirubah Pada',
+            'deleted_at'         => 'Dihapus Pada',
+        ],
+    ],
+    'unverified-member'          => [
+        'title'          => 'Anggota Belum Terverifikasi',
+        'title_singular' => 'Anggota Belum Terverifikasi',
         'fields'         => [
             'id'                 => 'ID',
             'nama'               => 'Nama',

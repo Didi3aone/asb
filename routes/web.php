@@ -33,12 +33,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('customer', 'CustomerController');
 
     Route::resource('item-category', 'ItemCategoryController');
-
+    
     Route::resource('item-unit', 'ItemUnitController');
 
     Route::resource('item', 'ItemController');
 
     Route::resource('transaksi', 'TransaksiStokController');
+
+    Route::resource('verify','MemberVerifyController');
+    Route::resource('unverify','MemberUnverifyController');
 
     Route::get('transaksi-in','TransaksiStokController@createIn')->name('transaksi-in');
     Route::get('transaksi-out','TransaksiStokController@createOut')->name('transaksi-out');

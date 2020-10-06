@@ -41,6 +41,26 @@
             </div>
         </li>
         @endcan
+        @can('modul_member_access')
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">
+                <i class="nav-icon fas fa-cubes"></i> 
+                {{ trans('cruds.memberManagement.title') }} <span class="caret"></span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="download">
+                @can('verified_member_access')
+                <a href="{{ route("admin.member.index") }}" class="dropdown-item {{ request()->is('admin/member') || request()->is('admin/member/*') ? 'active' : '' }}">
+                    {{ trans('cruds.verified-member.title') }}
+                </a>
+                @endcan
+                {{-- @can('unverified_member_access')
+                <a href="{{ route("admin.unverify.index") }}" class="dropdown-item {{ request()->is('admin/unverify') || request()->is('admin/unverify/*') ? 'active' : '' }}">
+                    {{ trans('cruds.unverified-member.title') }}
+                </a>
+                @endcan --}}
+            </div>
+        </li>
+        @endcan
         @can('modul_transaction_access')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">

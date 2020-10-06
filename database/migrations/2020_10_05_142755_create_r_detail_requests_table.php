@@ -28,6 +28,6 @@ class CreateRDetailRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_requests');
+        Schema::dropIfExists('r_detail_requests');
     }
 }

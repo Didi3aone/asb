@@ -9,6 +9,10 @@ return [
         'title'          => 'Item',
         'title_singular' => 'Item',
     ],
+    'memberManagement'      => [
+        'title'          => 'Member',
+        'title_singular' => 'Member',
+    ],
     'masterManagement'      => [
         'title'          => 'Master',
         'title_singular' => 'Master',
@@ -150,7 +154,30 @@ return [
             'deleted_at'         => 'Deleted at',
         ],
     ],
-
+    'verified-member'          => [
+        'title'          => 'Verified Member',
+        'title_singular' => 'Verified Member',
+        'fields'         => [
+            'id'                 => 'ID',
+            'nama'               => 'Name',
+            'status'             => 'Status',
+            'created_at'         => 'Created At',
+            'updated_at'         => 'Updated At',
+            'deleted_at'         => 'Deleted At',
+        ],
+    ],
+    'unverified-member'          => [
+        'title'          => 'Unverified Member',
+        'title_singular' => 'Unverified Member',
+        'fields'         => [
+            'id'                 => 'ID',
+            'nama'               => 'Name',
+            'status'             => 'Status',
+            'created_at'         => 'Created At',
+            'updated_at'         => 'Updated At',
+            'deleted_at'         => 'Deleted At',
+        ],
+    ],
     'item-unit'          => [
         'title'          => 'Unit',
         'title_singular' => 'Unit',

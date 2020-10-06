@@ -29,6 +29,6 @@ class CreateBDetailPacketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_packets');
+        Schema::dropIfExists('b_detail_packets');
     }
 }

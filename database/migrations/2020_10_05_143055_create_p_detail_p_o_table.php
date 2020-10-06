@@ -33,6 +33,6 @@ class CreatePDetailPOTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_p_o_s');
+        Schema::dropIfExists('p_detail_po');
     }
 }
