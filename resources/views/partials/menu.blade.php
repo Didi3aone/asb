@@ -49,15 +49,17 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="download">
                 @can('verified_member_access')
-                <a href="{{ route("admin.member.index") }}" class="dropdown-item {{ request()->is('admin/member') || request()->is('admin/member/*') ? 'active' : '' }}">
+                <a href="{{ route("admin.verify.index") }}" class="dropdown-item {{ request()->is('admin/verify') || request()->is('admin/verify/*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-smile-o"></i> 
                     {{ trans('cruds.verified-member.title') }}
                 </a>
                 @endcan
-                {{-- @can('unverified_member_access')
+                @can('unverified_member_access')
                 <a href="{{ route("admin.unverify.index") }}" class="dropdown-item {{ request()->is('admin/unverify') || request()->is('admin/unverify/*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-frown-o"></i> 
                     {{ trans('cruds.unverified-member.title') }}
                 </a>
-                @endcan --}}
+                @endcan
             </div>
         </li>
         @endcan
@@ -68,13 +70,21 @@
                 {{ trans('cruds.transactionManagement.title') }} <span class="caret"></span></a>
             <div class="dropdown-menu" aria-labelledby="download">
                 @can('transaction_access')
-                <a href="{{ route("admin.transaksi.index") }}" class="dropdown-item {{ request()->is('admin/transaksi') || request()->is('admin/transaksi/*') ? 'active' : '' }}">
+                <a href="{{ route("admin.ro.index") }}" class="dropdown-item {{ request()->is('admin/ro') || request()->is('admin/ro/*') ? 'active' : '' }}">
                     {{-- <i class="fas fa-building nav-icon">
 
                     </i> --}}
-                    {{ trans('cruds.transaction-stock.title') }}
+                    {{ trans('cruds.request-order.title') }}
                 </a>
-                @endcan
+                 @endcan
+                @can('transaction_access')
+                <a href="{{ route("admin.po.index") }}" class="dropdown-item {{ request()->is('admin/po') || request()->is('admin/po/*') ? 'active' : '' }}">
+                    {{-- <i class="fas fa-building nav-icon">
+
+                    </i> --}}
+                    {{ trans('cruds.purchase-order.title') }}
+                </a>
+               @endcan
             </div>
         </li>
         @endcan
@@ -101,13 +111,65 @@
                 </a>
                 @endcan
                 @can('customer_access')
-                <a href="{{ route("admin.customer.index") }}" class="dropdown-item {{ request()->is('admin/customer') || request()->is('admin/customer/*') ? 'active' : '' }}">
+                <a href="{{ route("admin.program.index") }}" class="dropdown-item {{ request()->is('admin/program') || request()->is('admin/program/*') ? 'active' : '' }}">
                     <i class="fas fa-users nav-icon">
 
                     </i>
-                    {{ trans('cruds.customer.title') }}
+                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.program.title') }}
                 </a>
                 @endcan
+
+                @can('customer_access')
+                <a href="{{ route("admin.wilayah.index") }}" class="dropdown-item {{ request()->is('admin/wilayah') || request()->is('admin/wilayah/*') ? 'active' : '' }}">
+                    <i class="fa fa-globe nav-icon">
+
+                    </i>
+                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.wilayah.title') }}
+                </a>
+                @endcan
+
+                @can('customer_access')
+                <a href="{{ route("admin.provinsi.index") }}" class="dropdown-item {{ request()->is('admin/provinsi') || request()->is('admin/provinsi/*') ? 'active' : '' }}">
+                    <i class="fa fa-globe nav-icon">
+
+                    </i>
+                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.provinsi.title') }}
+                </a>
+                @endcan
+                
+                @can('customer_access')
+                <a href="{{ route("admin.kabupaten.index") }}" class="dropdown-item {{ request()->is('admin/kabupaten') || request()->is('admin/kabupaten/*') ? 'active' : '' }}">
+                    <i class="fa fa-globe nav-icon">
+
+                    </i>
+                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.kabupaten.title') }}
+                </a>
+                @endcan
+
+                @can('customer_access')
+                <a href="{{ route("admin.kecamatan.index") }}" class="dropdown-item {{ request()->is('admin/kecamatan') || request()->is('admin/kecamatan/*') ? 'active' : '' }}">
+                    <i class="fa fa-globe nav-icon">
+
+                    </i>
+                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.kecamatan.title') }}
+                </a>
+                @endcan
+
+                @can('customer_access')
+                <a href="{{ route("admin.kelurahan.index") }}" class="dropdown-item {{ request()->is('admin/kelurahan') || request()->is('admin/kelurahan/*') ? 'active' : '' }}">
+                    <i class="fa fa-globe nav-icon">
+
+                    </i>
+                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.kelurahan.title') }}
+                </a>
+                @endcan
+                
             </div>
         </li>
         @endcan

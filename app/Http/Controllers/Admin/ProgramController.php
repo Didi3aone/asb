@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyMemberRequest;
-use App\Http\Requests\StoreMemberRequest;
-use App\Http\Requests\UpdateMemberRequest;
-use App\Member;
+use App\Http\Requests\MassDestroyProgramRequest;
+use App\Http\Requests\StoreProgramRequest;
+use App\Http\Requests\UpdateProgramRequest;
+use App\PeriodeProgram as program;
 
-class MemberVerifyController extends Controller
+class ProgramController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +18,11 @@ class MemberVerifyController extends Controller
      */
     public function index()
     {
-        abort_unless(\Gate::allows('item_access'), 403);
+        abort_unless(\Gate::allows('customer_access'), 403);
 
-        $member = Member::where('is_verify', 1);
-
-        return view('admin.verify.index', compact('member'));
+        $program = program::all();
+        // dd($program);
+        return view('admin.program.index', compact('program'));
     }
 
     /**
@@ -32,7 +32,10 @@ class MemberVerifyController extends Controller
      */
     public function create()
     {
-        //
+        abort_unless(\Gate::allows('customer_create'), 403);
+
+
+        return view('admin.program.create');
     }
 
     /**

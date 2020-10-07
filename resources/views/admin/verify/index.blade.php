@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 @section('content')
-@can('item_create')
+@can('member_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-primary float-right" href="{{ route("admin.item.create") }}">
-                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.item.title_singular') }}
+            <a class="btn btn-primary float-right" href="{{ route("admin.member.create") }}">
+                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.member.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.item.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.member.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,26 +23,31 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.item.fields.nama') }}
+                            {{ trans('cruds.member.fields.nama') }}
                         </th>
 
                         <th>
-                            {{ trans('cruds.item.fields.kode') }}
+                            {{ trans('cruds.member.fields.nik') }}
                         </th>
 
                         <th>
-                            {{ trans('cruds.item.fields.kategori_id') }}
+                            {{ trans('cruds.member.fields.status') }}
                         </th>
 
                         <th>
-                            {{ trans('cruds.item.fields.unit_id') }}
+                            {{ trans('cruds.member.fields.created_at') }}
                         </th>
 
                         <th>
-                            {{ trans('cruds.item.fields.foto') }}
+                            {{ trans('cruds.member.fields.updated_at') }}
                         </th>
+
                         <th>
-                            {{ trans('cruds.item.fields.stock') }}
+                            {{ trans('cruds.member.fields.created_by') }}
+                        </th>
+
+                        <th>
+                            {{ trans('cruds.member.fields.updated_by') }}
                         </th>
                         <th>
                             &nbsp;
@@ -50,47 +55,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($item as $key => $items)
-                        <tr data-entry-id="{{ $items->id }}">
+                    @foreach($member as $key => $members)
+                        <tr data-entry-id="{{ $members->id }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $items->nama ?? '' }}
+                                {{ $members->nama ?? '' }}
                             </td>
                             <td>
-                                {{ $items->kode ?? '' }}
+                                {{ $members->nik ?? '' }}
                             </td>
                             <td>
-                                {{ $items->getKategori['nama'] ?? '' }}
+                                {{ $members->status ?? '' }}
                             </td>
                             <td>
-                                {{ $items->getUnit['nama'] ?? '' }}
-                            </td>
-                            <td>
-                                <a class="" href="{{ asset('images/item/'.@unserialize($items->foto)) }}" target="_blank">
-                                    <img src="{{ asset('images/item/'.@unserialize($items->foto)) }}" width=130 height=100>
-                                </a>
-                            </td>
-                            <td>
-                                {{ $items->stok_akhir ?? '' }}
-                            </td>
-                            <td>
-                                @if($items->is_paket == 1)
-                                    @can('item_unit_show')
-                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.item.show', $items->id) }}">
-                                            <i class="fa fa-eye"></i> {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
-                                @endif
-                                @can('item_unit_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.item.edit', $items->id) }}">
+                                @can('member_show')
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.member.show', $members->id) }}">
+                                        <i class="fa fa-eye"></i> {{ trans('global.view') }}
+                                    </a>
+                                @endcan
+                                @can('member_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.member.edit', $members->id) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('item_unit_delete')
+                                @can('member_delete')
                                     
-                                    <form action="{{ route('admin.item.destroy', $items->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <form action="{{ route('admin.member.destroy', $members->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <button type="submit" class="btn btn-xs btn-danger">

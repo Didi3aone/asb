@@ -31,6 +31,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('supplier', 'SupplierController');
 
     Route::resource('customer', 'CustomerController');
+    Route::resource('program', 'ProgramController');
+
+    Route::resource('wilayah', 'WilayahController');
+    Route::resource('provinsi', 'ProvinsiController');
+    Route::resource('kabupaten', 'KabupatenController');
+    Route::resource('kecamatan', 'KecamatanController');
+    Route::resource('kelurahan', 'KelurahanController');
 
     Route::resource('item-category', 'ItemCategoryController');
     
@@ -42,6 +49,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('verify','MemberVerifyController');
     Route::resource('unverify','MemberUnverifyController');
+
+    Route::resource('ro', 'RequestOrderController');
+    
+    Route::resource('po', 'PurchaseOrderController');
 
     Route::get('transaksi-in','TransaksiStokController@createIn')->name('transaksi-in');
     Route::get('transaksi-out','TransaksiStokController@createOut')->name('transaksi-out');

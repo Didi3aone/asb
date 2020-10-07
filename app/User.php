@@ -38,6 +38,11 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    public static function getName($value)
+    {
+        return User::where('id', $value)->select('name')->first();
+    }
+
     public function getEmailVerifiedAtAttribute($value)
     {
         return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;

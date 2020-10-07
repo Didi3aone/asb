@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyMemberRequest;
-use App\Http\Requests\StoreMemberRequest;
-use App\Http\Requests\UpdateMemberRequest;
-use App\Member;
+use App\Provinsi;
 
-class MemberVerifyController extends Controller
+class ProvinsiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +15,9 @@ class MemberVerifyController extends Controller
      */
     public function index()
     {
-        abort_unless(\Gate::allows('item_access'), 403);
-
-        $member = Member::where('is_verify', 1);
-
-        return view('admin.verify.index', compact('member'));
+        $prov = Provinsi::all();
+        // dd($kel);
+        return view('admin.prov.index', compact('prov'));
     }
 
     /**

@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 @section('content')
-@can('item_create')
+@can('customer_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-primary float-right" href="{{ route("admin.item.create") }}">
-                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.item.title_singular') }}
+            <a class="btn btn-primary float-right" href="{{ route("admin.provinsi.create") }}">
+                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.provinsi.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.item.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.provinsi.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,26 +23,10 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.item.fields.nama') }}
-                        </th>
-
-                        <th>
-                            {{ trans('cruds.item.fields.kode') }}
-                        </th>
-
-                        <th>
-                            {{ trans('cruds.item.fields.kategori_id') }}
-                        </th>
-
-                        <th>
-                            {{ trans('cruds.item.fields.unit_id') }}
-                        </th>
-
-                        <th>
-                            {{ trans('cruds.item.fields.foto') }}
+                            {{ trans('cruds.provinsi.fields.nama') }}
                         </th>
                         <th>
-                            {{ trans('cruds.item.fields.stock') }}
+                            {{ trans('cruds.provinsi.fields.active') }}
                         </th>
                         <th>
                             &nbsp;
@@ -50,47 +34,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($item as $key => $items)
-                        <tr data-entry-id="{{ $items->id }}">
+                    @foreach($prov as $key => $rows)
+                        <tr data-entry-id="{{ $rows->id }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $items->nama ?? '' }}
+                                {{ $rows->name ?? '' }}
                             </td>
                             <td>
-                                {{ $items->kode ?? '' }}
-                            </td>
-                            <td>
-                                {{ $items->getKategori['nama'] ?? '' }}
-                            </td>
-                            <td>
-                                {{ $items->getUnit['nama'] ?? '' }}
-                            </td>
-                            <td>
-                                <a class="" href="{{ asset('images/item/'.@unserialize($items->foto)) }}" target="_blank">
-                                    <img src="{{ asset('images/item/'.@unserialize($items->foto)) }}" width=130 height=100>
-                                </a>
-                            </td>
-                            <td>
-                                {{ $items->stok_akhir ?? '' }}
-                            </td>
-                            <td>
-                                @if($items->is_paket == 1)
-                                    @can('item_unit_show')
-                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.item.show', $items->id) }}">
-                                            <i class="fa fa-eye"></i> {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
+                                @if($rows->is_active == 1)
+                                    {{ trans('cruds.provinsi.fields.statusactive') }}
+                                @elseif($rows->is_active == 0)
+                                    {{ trans('cruds.provinsi.fields.statusinactive') }}
                                 @endif
-                                @can('item_unit_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.item.edit', $items->id) }}">
+                            </td>
+                            <td>
+                                @can('customer_show')
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.provinsi.show', $rows->id) }}">
+                                        <i class="fa fa-eye"></i> {{ trans('global.view') }}
+                                    </a>
+                                @endcan
+                                @can('customer_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.provinsi.edit', $rows->id) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('item_unit_delete')
+                                @can('customer_delete')
                                     
-                                    <form action="{{ route('admin.item.destroy', $items->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <form action="{{ route('admin.provinsi.destroy', $rows->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <button type="submit" class="btn btn-xs btn-danger">

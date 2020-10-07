@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyMemberRequest;
-use App\Http\Requests\StoreMemberRequest;
-use App\Http\Requests\UpdateMemberRequest;
-use App\Member;
+use App\Http\Requests\MassDestroyRORequest;
+use App\Http\Requests\StoreRORequest;
+use App\Http\Requests\UpdateRORequest;
+use App\Request as Req;
+use App\MstGudang;
+use App\Item;
 
-class MemberVerifyController extends Controller
+class RequestOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +20,21 @@ class MemberVerifyController extends Controller
      */
     public function index()
     {
-        abort_unless(\Gate::allows('item_access'), 403);
+        $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
+            ->join('users', 'requests.created_by', '=', 'users.id')
+            ->select('requests.id','requests.no_request', 'requests.created_at', 'users.name as fullname', 'periode_programs.name')
+            ->get();
+        
+        return view('admin.ro.index', compact('ro')); 
+    }
 
-        $member = Member::where('is_verify', 1);
-
-        return view('admin.verify.index', compact('member'));
+    public function countRO($id)
+    {
+        $ro = Req::where('no_request', $id)
+            ->selectRaw('count(id) as jml')
+            ->first();
+        
+        return $ro;
     }
 
     /**
@@ -32,7 +44,11 @@ class MemberVerifyController extends Controller
      */
     public function create()
     {
-        //
+        abort_unless(\Gate::allows('transaction_create'), 403);
+        $gudang = MstGudang::all()->pluck('nama_gudang','id');
+        $item   = Item::all()->pluck('nama','id');
+
+        return view('admin.ro.create', compact('gudang', 'item'));
     }
 
     /**
