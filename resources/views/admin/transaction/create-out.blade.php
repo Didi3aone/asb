@@ -50,6 +50,10 @@
 
                 </p>
             </div>
+            <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
+                <label for="roles">Description *</label>
+                <textarea class ="form-control" name="address" id="address"> </textarea>
+            </div>
             <br>
             <div class="form-group">
                 <table class="table table-bordered">

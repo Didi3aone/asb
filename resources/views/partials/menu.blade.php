@@ -69,6 +69,14 @@
                 <i class="nav-icon fas fa-money"></i> 
                 {{ trans('cruds.transactionManagement.title') }} <span class="caret"></span></a>
             <div class="dropdown-menu" aria-labelledby="download">
+                @can('gudang_access')
+                <a href="{{ route("admin.transaksi.index") }}" class="dropdown-item {{ request()->is('admin/gudang') || request()->is('admin/gudang/*') ? 'active' : '' }}">
+                    <i class="fas fa-building nav-icon">
+
+                    </i>
+                    Transaksi IN/Out
+                </a>
+                @endcan
                 @can('transaction_access')
                 <a href="{{ route("admin.ro.index") }}" class="dropdown-item {{ request()->is('admin/ro') || request()->is('admin/ro/*') ? 'active' : '' }}">
                     {{-- <i class="fas fa-building nav-icon">

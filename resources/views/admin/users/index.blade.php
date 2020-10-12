@@ -32,6 +32,9 @@
                             {{ trans('cruds.user.fields.roles') }}
                         </th>
                         <th>
+                            Gudang
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -52,6 +55,9 @@
                                 @foreach($user->roles()->pluck('title') as $role)
                                     <span class="badge badge-info">{{ $role }}</span>
                                 @endforeach
+                            </td>
+                            <td>
+                                Gudang
                             </td>
                             <td>
                                 @can('user_show')

@@ -63,6 +63,18 @@
                     {{ trans('cruds.user.fields.roles_helper') }}
                 </p>
             </div>
+            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                 <label for="name">Gudang *</label>  {{-- Drop DOWN --}}
+                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($user) ? $user->name : '') }}" required>
+                @if($errors->has('name'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('name') }} 
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.user.fields.name_helper') }}
+                </p>
+            </div>
             <div>
                 <button class="btn btn-primary" id="save" type="submit">
                     <span class="spinner-border spin-save spinner-border-sm" role="status" aria-hidden="true"></span>

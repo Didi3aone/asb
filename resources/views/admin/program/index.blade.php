@@ -86,17 +86,17 @@
                                 {{ $count ?? '' }}
                             </td>
                             <td>
-                                @can('customer_show')
+                                @can('program_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.program.show', $rows->id) }}">
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
                                     </a>
                                 @endcan
-                                @can('customer_edit')
+                                @can('program_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.program.edit', $rows->id) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('customer_delete')
+                                @can('program_delete')
                                     
                                     <form action="{{ route('admin.program.destroy', $rows->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">

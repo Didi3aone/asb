@@ -57,7 +57,12 @@ class ProgramController extends Controller
      */
     public function show($id)
     {
-        //
+        $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
+            ->join('users', 'requests.created_by', '=', 'users.id')
+            ->where('periode_programs.id', $id)
+            ->first();
+        
+        return view('admin.program.show', compact('ro')); 
     }
 
     /**

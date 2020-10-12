@@ -47,6 +47,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('transaksi', 'TransaksiStokController');
 
+    Route::resource('master-member', 'MemberController');
+
     Route::resource('verify','MemberVerifyController');
     Route::resource('unverify','MemberUnverifyController');
 

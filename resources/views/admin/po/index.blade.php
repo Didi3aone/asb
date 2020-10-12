@@ -65,7 +65,7 @@
                             </td>
                             <td>
                                 @can('transaction_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.ro.show', $transactions->id) }}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.po.show', $transactions->id) }}">
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
                                     </a>
                                 @endcan
