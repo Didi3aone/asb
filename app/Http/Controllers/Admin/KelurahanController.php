@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DataTables;
 use App\Kelurahan;
 
 class KelurahanController extends Controller
@@ -13,11 +14,20 @@ class KelurahanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function json()
+    {
+        $kel = Kelurahan::join('kecamatans', 'kecamatans.id_kec', '=', 'kelurahans.id_kec')
+            ->select('kelurahans.id', 'kelurahans.name', 'kecamatans.name as kec_name', 'kelurahans.is_active')
+            ->get();
+        return DataTables::of($kel)->make(true);
+    }
     public function index()
     {
-        $kel = Kelurahan::all();
-        // dd($kel);
-        return view('admin.kel.index', compact('kel'));
+        // $kel = Kelurahan::all();
+        // // dd($kel);
+        // return response()->json($kel);
+        return view('admin.kel.index');
+        // return view('admin.kel.index', compact('kel'));
     }
 
     /**

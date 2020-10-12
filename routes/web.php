@@ -12,32 +12,8 @@ Route::post('change-password', 'ChangePasswordController@store')->name('change.p
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
 
-    Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
-
-    Route::resource('permissions', 'PermissionsController');
-
-    Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
-
-    Route::resource('roles', 'RolesController');
-
-    Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
-
-    Route::resource('users', 'UsersController');
-
     Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
-
-    Route::resource('gudang', 'GudangController');
-
-    Route::resource('supplier', 'SupplierController');
-
     Route::resource('customer', 'CustomerController');
-    Route::resource('program', 'ProgramController');
-
-    Route::resource('wilayah', 'WilayahController');
-    Route::resource('provinsi', 'ProvinsiController');
-    Route::resource('kabupaten', 'KabupatenController');
-    Route::resource('kecamatan', 'KecamatanController');
-    Route::resource('kelurahan', 'KelurahanController');
 
     Route::resource('item-category', 'ItemCategoryController');
     
@@ -45,21 +21,36 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('item', 'ItemController');
 
-    Route::resource('transaksi', 'TransaksiStokController');
-
     Route::resource('master-member', 'MemberController');
 
     Route::resource('verify','MemberVerifyController');
     Route::resource('unverify','MemberUnverifyController');
 
-    Route::resource('ro', 'RequestOrderController');
-    
-    Route::resource('po', 'PurchaseOrderController');
-
+    //Transaction
+    Route::resource('transaksi', 'TransaksiStokController');
     Route::get('transaksi-in','TransaksiStokController@createIn')->name('transaksi-in');
     Route::get('transaksi-out','TransaksiStokController@createOut')->name('transaksi-out');
     Route::post('transaksi-store-out','TransaksiStokController@storeOut')->name('transaksi-store-out');
+    Route::resource('ro', 'RequestOrderController');
+    Route::resource('po', 'PurchaseOrderController');
 
+    //Master
+    Route::resource('gudang', 'GudangController');
+    Route::resource('supplier', 'SupplierController');
+    Route::resource('program', 'ProgramController');
+    Route::resource('wilayah', 'WilayahController');
+    Route::resource('provinsi', 'ProvinsiController');
+    Route::resource('kabupaten', 'KabupatenController');
+    Route::resource('kecamatan', 'KecamatanController');
+    Route::resource('kelurahan', 'KelurahanController');
+
+    //Settings
+    Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
+    Route::resource('permissions', 'PermissionsController');
+    Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
+    Route::resource('roles', 'RolesController');
+    Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+    Route::resource('users', 'UsersController');
     Route::get('configuration','ConfigurationController@index')->name('configuration.index');
     Route::get('configuration/create','ConfigurationController@create')->name('configuration.create');
     Route::get('configuration/edit/{id}','ConfigurationController@edit')->name('configuration.edit');

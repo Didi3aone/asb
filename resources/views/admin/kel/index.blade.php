@@ -16,7 +16,7 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable">
+            <table class=" table table-bordered table-striped table-hover datatable" id="kel">
                 <thead>
                     <tr>
                         <th width="10">
@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($kel as $key => $rows)
+                    {{-- @foreach($kel as $key => $rows)
                         <tr data-entry-id="{{ $rows->id }}">
                             <td>
 
@@ -46,17 +46,10 @@
                                 {{ $rows->name ?? '' }}
                             </td>
                             <td>
-                                {{-- @php
-                                    $name = \App\Kecamatan::getKec($rows->id_kec);
-                                @endphp
-                                {{ $name->name ?? '' }} --}}
+                                
                             </td>
                             <td>
-                                {{-- @if($rows->is_active == 1)
-                                    {{ trans('cruds.kelurahan.fields.statusactive') }}
-                                @elseif($rows->is_active == 0)
-                                    {{ trans('cruds.kelurahan.fields.statusinactive') }}
-                                @endif --}}
+                                
                             </td>
                             <td>
                                 @can('customer_show')
@@ -83,7 +76,7 @@
                             </td>
 
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -92,6 +85,21 @@
 @section('scripts')
 @parent
 <script>
+    $(document).ready( function () {
+    $('#kel').DataTable({
+           destroy: true,
+           processing: true,
+           serverSide: true,
+           ajax: "{{ url('admin/kel-json') }}",
+           columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name' },
+                    { data: 'kec_name', name: 'kec_name' },
+                    { data: 'is_active', name: 'is_active' },
+                    { data: 'created_at', name: 'created_at' }
+                 ]
+        });
+    });
     $(function () {
         let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
         let deleteButton = {

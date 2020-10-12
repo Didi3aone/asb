@@ -45,10 +45,12 @@
                             <td>
                                 {{ $rows->name ?? '' }}
                             </td>
+                            <td>
                                 @php
                                     $name = \App\Provinsi::getProv($rows->id_prov);
                                 @endphp
                                 {{ $name->name ?? '' }}
+                            </td>
                             <td>
                                 @if($rows->is_active == 1)
                                     {{ trans('cruds.kabupaten.fields.statusactive') }}
