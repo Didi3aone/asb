@@ -28,7 +28,7 @@ class Member extends Model
         'foto_ktp' ,
         'foto_kk' ,
         'status_kawin',
-        'agama',
+        'no_member',
         'pekerjaan',
         'status_korlap',
         'is_active',
@@ -51,4 +51,5 @@ class Member extends Model
         0 => 'Unverify',
         1 => 'Verified'
     ];
+    
 }

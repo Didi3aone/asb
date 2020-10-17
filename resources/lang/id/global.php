@@ -17,6 +17,7 @@ return [
     'forgot_password'                      => 'Lupa Password',
     'home'                                 => 'Beranda',
     'list'                                 => 'Daftar',
+    'report'                               => 'Laporan',
     'login'                                => 'Masuk',
     'login_email'                          => 'Email',
     'login_password'                       => 'Kata Sandi',

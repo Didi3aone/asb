@@ -63,16 +63,20 @@
                     {{ trans('cruds.user.fields.roles_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                 <label for="name">Gudang *</label>  {{-- Drop DOWN --}}
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($user) ? $user->name : '') }}" required>
-                @if($errors->has('name'))
+            <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
+                <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
+                <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
+                    <option value="">{{ trans('global.pleaseSelect') }}</option>
+                    @foreach($gudang as $id => $gd)
+                        <option value="{{ $id }}">{{ $gd }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('gudang_id'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('name') }} 
+                        {{ $errors->first('gudang_id') }}
                     </em>
                 @endif
                 <p class="helper-block">
-                    {{ trans('cruds.user.fields.name_helper') }}
                 </p>
             </div>
             <div>

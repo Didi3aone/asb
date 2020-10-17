@@ -44,9 +44,8 @@ class RolesController extends Controller
         abort_unless(\Gate::allows('role_edit'), 403);
 
         $permissions = Permission::all()->pluck('title', 'id');
-
         $role->load('permissions');
-
+        
         return view('admin.roles.edit', compact('permissions', 'role'));
     }
 

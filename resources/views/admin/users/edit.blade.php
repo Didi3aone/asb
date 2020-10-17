@@ -52,7 +52,7 @@
                     <span class="btn btn-info btn-xs deselect-all">{{ trans('global.deselect_all') }}</span></label>
                 <select name="roles[]" id="roles" class="form-control select2" multiple="multiple" required style="width: 100%; height:36px;">
                     @foreach($roles as $id => $roles)
-                        <option value="{{ $id }}" {{ (in_array($id, old('roles', [])) || isset($user) && $user->roles()->pluck('name', 'id')->contains($id)) ? 'selected' : '' }}>{{ $roles }}</option>
+                        <option value="{{ $id }}" {{ (in_array($id, old('roles', [])) || isset($user) && $user->roles()->pluck('title', 'id')->contains($id)) ? 'selected' : '' }}>{{ $roles }}</option>
                     @endforeach
                 </select>
                 @if($errors->has('roles'))
@@ -62,6 +62,22 @@
                 @endif
                 <p class="helper-block">
                     {{ trans('cruds.user.fields.roles_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
+                <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
+                <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
+                    <option value="">{{ trans('global.pleaseSelect') }}</option>
+                    @foreach($gudang as $id => $gd)
+                        <option value="{{ $id }}" @if($user->gudang_id == $id) selected @endif>{{ $gd }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('gudang_id'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('gudang_id') }}
+                    </em>
+                @endif
+                <p class="helper-block">
                 </p>
             </div>
             <div>

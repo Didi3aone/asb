@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StoreUserRequest extends FormRequest
 {
@@ -19,7 +20,7 @@ class StoreUserRequest extends FormRequest
                 'required',
             ],
             'email'    => [
-                'required',
+                'required, unique:users, email_address',
             ],
             'password' => [
                 'required',

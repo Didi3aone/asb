@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseOrder extends Model
 {
+    use SoftDeletes;
     public $table = 'purchase_orders';
 }

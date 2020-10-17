@@ -29,5 +29,10 @@ class MstGudang extends BaseModel
     public const TypeStatus = [
         0 => 'Not Active',
         1 => 'Active'
-    ]; 
+    ];
+
+    public static function getWarehouse($value)
+    {
+        return MstGudang::where('id', $value)->select('nama_gudang')->first();
+    }
 }

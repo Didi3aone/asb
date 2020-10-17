@@ -35,6 +35,7 @@ class User extends Authenticatable
         'updated_at',
         'deleted_at',
         'remember_token',
+        'gudang_id',
         'email_verified_at',
     ];
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\MstGudang;
 use App\Role;
 use App\User;
 
@@ -24,9 +25,10 @@ class UsersController extends Controller
     {
         abort_unless(\Gate::allows('user_create'), 403);
 
-        $roles = Role::all()->pluck('title', 'id');
+        $roles = Role::all()->pluck('name', 'id');
+        $gudang = MstGudang::all()->pluck('nama_gudang', 'id');
 
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create', compact('roles', 'gudang'));
     }
 
     public function store(StoreUserRequest $request)
@@ -43,11 +45,11 @@ class UsersController extends Controller
     {
         abort_unless(\Gate::allows('user_edit'), 403);
 
-        $roles = Role::all()->pluck('title', 'id');
-
+        $roles = Role::all()->pluck('name', 'id');
+        $gudang = MstGudang::all()->pluck('nama_gudang', 'id');
         $user->load('roles');
 
-        return view('admin.users.edit', compact('roles', 'user'));
+        return view('admin.users.edit', compact('roles', 'user', 'gudang'));
     }
 
     public function update(UpdateUserRequest $request, User $user)

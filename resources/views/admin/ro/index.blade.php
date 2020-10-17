@@ -35,6 +35,12 @@
                             {{ trans('cruds.request-order.fields.program') }}
                         </th>
                         <th>
+                            Kecamatan
+                        </th>
+                        <th>
+                            Request By
+                        </th>
+                        <th>
                             {{ trans('cruds.request-order.fields.total') }}
                         </th>
                         <th>
@@ -59,6 +65,12 @@
                             </td>
                             <td>
                                 {{ $transactions->name ?? '' }}
+                            </td>
+                            <td>
+                                Kecamatan
+                            </td>
+                            <td>
+                                Request By
                             </td>
                             <td>
                                 @php

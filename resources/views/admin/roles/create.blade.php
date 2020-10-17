@@ -10,11 +10,11 @@
         <form class="form-material mt-4" action="{{ route("admin.roles.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-                <label for="title">{{ trans('cruds.role.fields.title') }}*</label>
-                <input type="text" id="title" name="title" class="form-control" value="{{ old('title', isset($role) ? $role->title : '') }}" required>
-                @if($errors->has('title'))
+                <label for="name">{{ trans('cruds.role.fields.title') }}*</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($role) ? $role->title : '') }}" required>
+                @if($errors->has('name'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('title') }}
+                        {{ $errors->first('name') }}
                     </em>
                 @endif
                 <p class="helper-block">

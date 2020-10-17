@@ -21,8 +21,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('item', 'ItemController');
 
-    Route::resource('master-member', 'MemberController');
-
     Route::resource('verify','MemberVerifyController');
     Route::resource('unverify','MemberUnverifyController');
 
@@ -43,6 +41,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('kabupaten', 'KabupatenController');
     Route::resource('kecamatan', 'KecamatanController');
     Route::resource('kelurahan', 'KelurahanController');
+    Route::resource('master-member', 'MemberController');
 
     //Settings
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
@@ -56,4 +55,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('configuration/edit/{id}','ConfigurationController@edit')->name('configuration.edit');
     Route::post('configuration/update/{id}','ConfigurationController@update')->name('configuration.update');
     Route::post('configuration/store','ConfigurationController@store')->name('configuration.store');
+
+    //helper
+    Route::get('get-kel', 'HelperController@getKelurahan')->name('get-kel');
+    Route::get('get-kec', 'HelperController@getKecamatan')->name('get-kec');
+    Route::get('get-kab', 'HelperController@getKabupaten')->name('get-kab');
 });

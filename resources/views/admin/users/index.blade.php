@@ -32,7 +32,7 @@
                             {{ trans('cruds.user.fields.roles') }}
                         </th>
                         <th>
-                            Gudang
+                            {{ trans('cruds.user.fields.gudang') }}
                         </th>
                         <th>
                             &nbsp;
@@ -43,13 +43,13 @@
                     @foreach($users as $key => $user)
                         <tr data-entry-id="{{ $user->id }}">
                             <td>
-                                {{ $user->id ?? '' }}
+                                {{ $user->id ?? '-' }}
                             </td>
                             <td>
-                                {{ $user->name ?? '' }}
+                                {{ $user->name ?? '-' }}
                             </td>
                             <td>
-                                {{ $user->email ?? '' }}
+                                {{ $user->email ?? '-' }}
                             </td>
                             <td>
                                 @foreach($user->roles()->pluck('title') as $role)
@@ -57,7 +57,10 @@
                                 @endforeach
                             </td>
                             <td>
-                                Gudang
+                                @php
+                                    $name = \App\MstGudang::getWarehouse($user->gudang_id);
+                                @endphp
+                                {{ $name->nama_gudang ?? '-' }}
                             </td>
                             <td>
                                 @can('user_show')

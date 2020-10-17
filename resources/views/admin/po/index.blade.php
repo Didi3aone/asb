@@ -32,6 +32,9 @@
                             {{ trans('cruds.purchase-order.fields.supplier_by') }}
                         </th>
                         <th>
+                            {{ trans('cruds.purchase-order.fields.qty') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.purchase-order.fields.total') }}
                         </th>
                         <th>
@@ -62,6 +65,9 @@
                                     $count = \App\DetailPurchase::countPO($transactions->no_po); 
                                 @endphp
                                 {{ $count ?? 0 }}
+                            </td>
+                            <td>
+                                Total
                             </td>
                             <td>
                                 @can('transaction_show')

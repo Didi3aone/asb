@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DetailRequest extends Model
 {
-    
+    use SoftDeletes;
     public $table = 'r_detail_requests';
 
     public static function countRO($id)

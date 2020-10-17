@@ -79,17 +79,17 @@
                 @endcan
                 @can('transaction_access')
                 <a href="{{ route("admin.ro.index") }}" class="dropdown-item {{ request()->is('admin/ro') || request()->is('admin/ro/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
+                    <i class="fa fa-download nav-icon">
 
-                    </i> --}}
+                    </i>
                     {{ trans('cruds.request-order.title') }}
                 </a>
                  @endcan
                 @can('transaction_access')
                 <a href="{{ route("admin.po.index") }}" class="dropdown-item {{ request()->is('admin/po') || request()->is('admin/po/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
+                    <i class="fa fa-upload nav-icon">
 
-                    </i> --}}
+                    </i>
                     {{ trans('cruds.purchase-order.title') }}
                 </a>
                @endcan
@@ -120,11 +120,19 @@
                 @endcan
                 @can('customer_access')
                 <a href="{{ route("admin.program.index") }}" class="dropdown-item {{ request()->is('admin/program') || request()->is('admin/program/*') ? 'active' : '' }}">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-cubes nav-icon">
 
                     </i>
-                    {{-- {{ trans('cruds.program.title') }} --}}
                     {{ trans('cruds.program.title') }}
+                </a>
+                @endcan
+
+                @can('member_access')
+                <a href="{{ route("admin.master-member.index") }}" class="dropdown-item {{ request()->is('admin/master-member') || request()->is('admin/master-member/*') ? 'active' : '' }}">
+                    <i class="fa fa-id-card nav-icon">
+
+                    </i>
+                    {{ trans('cruds.member.title') }}
                 </a>
                 @endcan
 
