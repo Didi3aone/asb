@@ -11,7 +11,7 @@
             @csrf
             <input type="hidden" name="tipe" value="1">
             <div class="form-group {{ $errors->has('nomor_ijin') ? 'has-error' : '' }}">
-                {{-- <label for="nomor_ijin">{{ trans('cruds.transaction-stock.fields.nomor_ijin') }}*</label> --}}
+                {{-- <label for="nomor_ijin">{{ trans('cruds.request-order.fields.nomor_ijin') }}*</label> --}}
                 <label for="nomor_ijin">No Request*</label>
                 <input type="text" id="nomor_ijin" name="nomor_ijin" class="form-control" value="{{ old('nomor_ijin', '') }}">
                 @if($errors->has('nomor_ijin'))
@@ -24,11 +24,11 @@
                 </p>
             </div>
             <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                {{-- <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label> --}}
+                {{-- <label for="roles">{{ trans('cruds.request-order.fields.gudang_id') }}*</label> --}}
                 <label for="roles">Program ID *</label>
                 <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
                     <option value="">{{ trans('global.pleaseSelect') }}</option>
-                    @foreach($gudang as $id => $gd)
+                    @foreach($program as $id => $gd)
                         <option value="{{ $id }}">{{ $gd }}</option>
                     @endforeach
                 </select>
@@ -40,65 +40,48 @@
                 <p class="helper-block">
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('tanggal_transaksi') ? 'has-error' : '' }}">
-                <label for="tanggal_transaksi">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
-                <input type="text" id="tanggal_transaksi" name="tanggal_transaksi" class="form-control date" value="{{ old('tanggal_transaksi', date('Y-m-d')) }}">
-                @if($errors->has('tanggal_transaksi'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('tanggal_transaksi') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-
-                </p>
-            </div>
             <br>
             <div class="form-group">
                 <table class="table table-bordered">
                     <thead>
-                    <tr>
-                        <th>No Req</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    {{-- <tr>
-                        <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th>
-                        <th>&nbsp;</th>
-                    </tr> --}}
+                        <tr>
+                            <th>{{ trans('cruds.request-order.fields.member') }}</th>
+                            <th>{{ trans('cruds.request-order.fields.receive') }}</th>
+                            <th>{{ trans('cruds.request-order.fields.receive_date') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
                     </thead>
                     <tbody id="items">
                     <tr>
                         <td>
-                            <select name="barang_id[]" id="barang_id_0" class="form-control select2" required style="width: 100%; height:36px;">
+                            <select name="member[]" id="member_0" class="form-control select2" required style="width: 100%; height:36px;">
                                 <option value="">{{ trans('global.pleaseSelect') }}</option>
-                                @foreach($item as $id => $it)
+                                @foreach($member as $id => $it)
                                     <option value="{{ $id }}">{{ $it }}</option>
                                 @endforeach
                             </select>
-                            @if($errors->has('gudang_id'))
+                            @if($errors->has('member'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('gudang_id') }}
+                                    {{ $errors->first('member') }}
                                 </em>
                             @endif
                             <p class="helper-block">
                             </p>
                         </td>
                         <td>
-                            <input type="text" id="qty_0" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-                            @if($errors->has('qty'))
+                            <input type="checkbox" id="receive_0" name="receive[]">
+                            {{-- <input type="text" id="receive_0" name="receive[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('receive', '') }}">
+                            @if($errors->has('receive'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('qty') }}
+                                    {{ $errors->first('receive') }}
                                 </em>
-                            @endif
+                            @endif --}}
                         </td>
                         <td>
-                            <input type="text" id="nomor_sparepart_0" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                            @if($errors->has('nomor_sparepart'))
+                            <input type="text" id="receive_date_0" name="receive_date[]" class="form-control date" value="{{ old('receive_date', date('Y-m-d')) }}">
+                            @if($errors->has('receive_date'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('nomor_sparepart') }}
+                                    {{ $errors->first('receive_date') }}
                                 </em>
                             @endif
                         </td>
@@ -138,33 +121,28 @@
             let html = `
                     <tr data-id="${index}">
                         <td>
-                            <select name="barang_id[]" id="barang_id_${index}" class="form-control select2" required style="width: 100%; height:36px;">
+                            <select name="member[]" id="member_${index}" class="form-control select2" required style="width: 100%; height:36px;">
                                 <option value="">{{ trans('global.pleaseSelect') }}</option>
-                                @foreach($item as $id => $it)
+                                @foreach($member as $id => $it)
                                     <option value="{{ $id }}">{{ $it }}</option>
                                 @endforeach
                             </select>
-                            @if($errors->has('barang_id'))
+                            @if($errors->has('member'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('barang_id') }}
+                                    {{ $errors->first('member') }}
                                 </em>
                             @endif
                             <p class="helper-block">
                             </p>
                         </td>
                         <td>
-                            <input type="text" id="qty_${index}" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-                            @if($errors->has('qty'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('qty') }}
-                                </em>
-                            @endif
+                            <input type="checkbox" id="receive_${index}" name="receive[]">
                         </td>
                         <td>
-                            <input type="text" id="nomor_sparepart_${index}" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                            @if($errors->has('nomor_sparepart'))
+                            <input type="text" id="receive_date_${index}" name="receive_date" class="form-control" value="{{ old('receive_date', '') }}">
+                            @if($errors->has('receive_date'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('nomor_sparepart') }}
+                                    {{ $errors->first('receive_date') }}
                                 </em>
                             @endif
                         </td>
@@ -175,11 +153,20 @@
                         </td>
                     </tr>
             `
-
+            listStartDate(index)
             $('#items').append(html)
             $('.select2').select2();
             index++
         })
     })
+    
+    function listStartDate (i) {
+        const $start = $('#receive_date_'+ i);
+        var dateNow = new Date();
+        
+        $start.datetimepicker({
+            defaultDate:dateNow
+        });
+    }
 </script>
 @endsection

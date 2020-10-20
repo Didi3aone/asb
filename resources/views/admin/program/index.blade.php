@@ -26,10 +26,10 @@
                             {{ trans('cruds.program.fields.nama') }}
                         </th>
                         <th>
-                            {{ trans('cruds.program.fields.start') }}
+                            {{ trans('cruds.program.fields.start_date') }}
                         </th>
                         <th>
-                            {{ trans('cruds.program.fields.end') }}
+                            {{ trans('cruds.program.fields.end_date') }}
                         </th>
                         <th>
                             {{ trans('cruds.program.fields.desc') }}

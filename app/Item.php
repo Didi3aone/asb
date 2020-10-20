@@ -35,7 +35,12 @@ class Item extends Model
     public const TypeStatus = [
         0 => 'Not Active',
         1 => 'Active'
-    ]; 
+    ];
+
+    public static function getItem($value)
+    {
+        return Item::where('id', $value)->select('nama')->first();
+    }
 
     public function getKategori()
     {

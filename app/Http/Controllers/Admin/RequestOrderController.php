@@ -8,7 +8,9 @@ use App\Http\Requests\MassDestroyRORequest;
 use App\Http\Requests\StoreRORequest;
 use App\Http\Requests\UpdateRORequest;
 use App\Request as Req;
+use App\PeriodeProgram;
 use App\MstGudang;
+use App\Member;
 use App\Item;
 
 class RequestOrderController extends Controller
@@ -45,10 +47,11 @@ class RequestOrderController extends Controller
     public function create()
     {
         abort_unless(\Gate::allows('transaction_create'), 403);
-        $gudang = MstGudang::all()->pluck('nama_gudang','id');
+        $program = PeriodeProgram::all()->pluck('name', 'id');
+        $member = Member::all()->pluck('nama', 'id');
         $item   = Item::all()->pluck('nama','id');
 
-        return view('admin.ro.create', compact('gudang', 'item'));
+        return view('admin.ro.create', compact('program', 'member', 'item'));
     }
 
     /**

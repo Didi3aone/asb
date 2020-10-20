@@ -21,36 +21,36 @@
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('no_telp') ? 'has-error' : '' }}">
-                <label for="no_telp">{{ trans('cruds.program.fields.start') }}*</label>
-                <input type="text" onkeypress="return isNumber(event)" id="no_telp" name="no_telp" class="form-control" value="{{ old('no_telp', '') }}">
-                @if($errors->has('no_telp'))
+            <div class="form-group {{ $errors->has('start_date') ? 'has-error' : '' }}">
+                <label for="start_date">{{ trans('cruds.program.fields.start_date') }}*</label>
+                <input type="text" id="start_date" name="start_date" class="form-control date" value="{{ old('start_date', date('Y-m-d')) }}">
+                @if($errors->has('start_date'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('no_telp') }}
+                        {{ $errors->first('start_date') }}
                     </em>
                 @endif
                 <p class="helper-block">
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('no_hp') ? 'has-error' : '' }}">
-                <label for="no_hp">{{ trans('cruds.program.fields.end') }}*</label>
-                <input type="text" onkeypress="return isNumber(event)" id="no_hp" name="no_hp" class="form-control" value="{{ old('no_hp', '') }}">
-                @if($errors->has('no_hp'))
+            <div class="form-group {{ $errors->has('end_date') ? 'has-error' : '' }}">
+                <label for="end_date">{{ trans('cruds.program.fields.end_date') }}*</label>
+                <input type="text" id="end_date" name="end_date" class="form-control date" value="{{ old('end_date', date('Y-m-d')) }}">
+                @if($errors->has('end_date'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('no_hp') }}
+                        {{ $errors->first('end_date') }}
                     </em>
                 @endif
                 <p class="helper-block">
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                <label for="email">{{ trans('cruds.program.fields.description') }}*</label>
-                <input type="text" id="email" name="email" class="form-control" value="{{ old('email', '') }}">
-                @if($errors->has('email'))
+            <div class="form-group {{ $errors->has('desc') ? 'has-error' : '' }}">
+                <label for="desc">{{ trans('cruds.program.fields.desc') }}*</label>
+                <textarea class ="form-control" name="desc" value="{{ old('alamat', isset($user) ? $member->alamat : '') }}" id="desc"> </textarea>
+                @if($errors->has('desc'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('email') }}
+                        {{ $errors->first('desc') }}
                     </em>
                 @endif
                 <p class="helper-block">
@@ -58,8 +58,8 @@
                 </p>
             </div>
             
-            <div class="form-group {{ $errors->has('ppn') ? 'has-error' : '' }}">
-                {{ trans('cruds.program.fields.ppn') }}
+            {{-- <div class="form-group {{ $errors->has('ppn') ? 'has-error' : '' }}">
+                PPN*
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="ppn" id="inlineRadio1" value="{{ \App\MstSupplier::YesPpn }}">
                     <label class="form-check-label" for="inlineRadio1">Yes</label>
@@ -76,30 +76,56 @@
                 <p class="helper-block">
 
                 </p>
-            </div>
-            <div class="form-group {{ $errors->has('alamat') ? 'has-error' : '' }}">
-                <label for="alamat">{{ trans('cruds.program.fields.alamat') }}*</label>
-                <input type="text" id="alamat" name="alamat" class="form-control" value="{{ old('alamat', '') }}">
-                @if($errors->has('alamat'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('alamat') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-
-                </p>
-            </div>
-            <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
-                <label for="password">{{ trans('cruds.program.fields.password') }}*</label>
-                <input type="password" id="password" name="password" class="form-control" value="{{ old('password', '') }}">
-                @if($errors->has('password'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('password') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-
-                </p>
+            </div> --}}
+            <div class="form-group">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
+                        {{-- <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
+                        <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th> --}}
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody id="items">
+                    <tr>
+                        <td>
+                            <select name="barang_id[]" id="barang_id_0" class="form-control select2" required style="width: 100%; height:36px;">
+                                <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                @foreach($item as $id => $it)
+                                    <option value="{{ $id }}">{{ $it }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('gudang_id'))
+                                <em class="invalid-feedback">
+                                    {{ $errors->first('gudang_id') }}
+                                </em>
+                            @endif
+                            <p class="helper-block">
+                            </p>
+                        </td>
+                        {{-- <td>
+                            <input type="text" id="qty_0" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
+                            @if($errors->has('qty'))
+                                <em class="invalid-feedback">
+                                    {{ $errors->first('qty') }}
+                                </em>
+                            @endif
+                        </td>
+                        <td>
+                            <input type="text" id="nomor_sparepart_0" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
+                            @if($errors->has('nomor_sparepart'))
+                                <em class="invalid-feedback">
+                                    {{ $errors->first('nomor_sparepart') }}
+                                </em>
+                            @endif
+                        </td> --}}
+                        <td>
+                            <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div>
                 <button class="btn btn-primary" id="save" type="submit">
@@ -115,4 +141,63 @@
 
     </div>
 </div>
+@endsection
+@section('scripts')
+@parent
+<script>
+    /* <td>
+        <input type="text" id="qty_${index}" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
+        @if($errors->has('qty'))
+            <em class="invalid-feedback">
+                {{ $errors->first('qty') }}
+            </em>
+        @endif
+    </td>
+    <td>
+        <input type="text" id="nomor_sparepart_${index}" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
+        @if($errors->has('nomor_sparepart'))
+            <em class="invalid-feedback">
+                {{ $errors->first('nomor_sparepart') }}
+            </em>
+        @endif
+    </td> */
+    $("body").on("click",".btn-remove",function(){
+        $(this).parents(".control-group").remove();
+    });
+    let index = 1
+    $(document).ready(function () {
+        $('#add_item').on('click', function (e) {
+            e.preventDefault()
+
+            let html = `
+                    <tr data-id="${index}">
+                        <td>
+                            <select name="barang_id[]" id="barang_id_${index}" class="form-control select2" required style="width: 100%; height:36px;">
+                                <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                @foreach($item as $id => $it)
+                                    <option value="{{ $id }}">{{ $it }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('barang_id'))
+                                <em class="invalid-feedback">
+                                    {{ $errors->first('barang_id') }}
+                                </em>
+                            @endif
+                            <p class="helper-block">
+                            </p>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="remove-item btn btn-danger btn-sm" onclick="this.parentNode.parentNode.remove()">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+            `
+
+            $('#items').append(html)
+            $('.select2').select2();
+            index++
+        })
+    })
+</script>
 @endsection

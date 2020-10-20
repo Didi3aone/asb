@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        Show Request Order
+        {{ trans('global.show') }} {{ trans('cruds.program.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -15,7 +15,7 @@
                             Name
                         </th>
                         <td>
-                            {{ $ro->name }}
+                            {{ $program->name }}
                         </td>
                     </tr>
                     <tr>
@@ -23,7 +23,7 @@
                             Start Date
                         </th>
                         <td>
-                            {{ $ro->start_date }}
+                            {{ $program->start_date }}
                         </td>
                     </tr>
                     <tr>
@@ -31,7 +31,7 @@
                             End Date
                         </th>
                         <td>
-                            {{ $ro->end_date }}
+                            {{ $program->end_date }}
                         </td>
                     </tr>
                     <tr>
@@ -39,7 +39,7 @@
                             Description
                         </th>
                         <td>
-                            {{ $ro->description }}
+                            {{ $program->description }}
                         </td>
                     </tr>
                     <tr>
@@ -47,74 +47,45 @@
                             Created By
                         </th>
                         <td>
-                            {{ $ro->created_by }}
+                            @php
+                                $name = \App\User::getName($program->created_by);
+                            @endphp
+                            {{ $name->name ?? '-' }}
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            Provinsi
-                        </th>
-                        <td>
-                            Provinsi
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kabupaten / Kota
-                        </th>
-                        <td>
-                            Kabupaten
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kecamatan
-                        </th>
-                        <td>
-                            Kecamatan
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kelurahan
-                        </th>
-                        <td>
-                            Kelurahan
-                        </td>
-                    </tr>
-                    
                 </tbody>
             </table>
-            <h2>Detail Penerima</h2>
+            <div class="card-header">
+                {{ trans('cruds.program.item') }}
+            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>
-                            NIK
+                            No.
                         </th>
                         <th>
-                            No. KK 
-                        </th>
-                        <th>
-                            Nama Penerima 
-                        </th>
-                        <th>
-                            No. Telp 
-                        </th>
-                        <th>
-                            No. Handphone 
-                        </th>
-                        <th>
-                            Email 
-                        </th>
-                        <th>
-                            Pekerjaan
+                            {{ trans('cruds.program.fields.nama') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    
-                </thead>
+                    @if(count($detail) > 0)
+                        @foreach($detail as $key => $rows)
+                            <tr>
+                                <td>
+                                    {{ $key +1 }}
+                                </td>
+                                <td>
+                                    @php
+                                        $name = \App\Item::getItem($rows->id_barang);
+                                    @endphp
+                                    {{ $name->nama }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
                 {{ trans('global.back_to_list') }}
