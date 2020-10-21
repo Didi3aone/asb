@@ -98,6 +98,7 @@
 	<script src="{{ asset('js/main.js') }}"></script>
 	<script src="{{ asset('js/custom.js') }}"></script>
 	<script src="{{ asset('js/custom.js') }}"></script>
+	<script src="{{ asset('js/tinymce/tinymce.js') }}"></script>
 	<script>
 		$(".spin-save").hide()
 		var app = angular.module('app',[])

@@ -31,7 +31,7 @@
                             Permissions
                         </th>
                         <td>
-                            @foreach($role->permissions()->pluck('name') as $permission)
+                            @foreach($role->permissions()->pluck('title') as $permission)
                                 <span class="label label-info label-many">{{ $permission }}</span>
                             @endforeach
                         </td>

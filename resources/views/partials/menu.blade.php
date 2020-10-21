@@ -96,6 +96,31 @@
             </div>
         </li>
         @endcan
+        @can('modul_information_access')
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">
+                <i class="nav-icon fa fa-info-circle"></i> 
+                {{ trans('cruds.information.title') }} <span class="caret"></span></a>
+            <div class="dropdown-menu" aria-labelledby="download">
+                @can('information_access')
+                <a href="{{ route("admin.info.index") }}" class="dropdown-item {{ request()->is('admin/info') || request()->is('admin/info/*') ? 'active' : '' }}">
+                    <i class="fa fa-info nav-icon">
+
+                    </i>
+                    {{ trans('cruds.information.title') }}
+                </a>
+                @endcan
+                @can('category_access')
+                <a href="{{ route("admin.category.index") }}" class="dropdown-item {{ request()->is('admin/category') || request()->is('admin/category/*') ? 'active' : '' }}">
+                    <i class="fa fa-newspaper-o nav-icon">
+
+                    </i>
+                    {{ trans('cruds.category.title') }}
+                </a>
+                 @endcan
+            </div>
+        </li>
+        @endcan
         @can('modul_master_access')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">

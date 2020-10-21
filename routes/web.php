@@ -32,6 +32,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('ro', 'RequestOrderController');
     Route::resource('po', 'PurchaseOrderController');
 
+    //Information
+    Route::resource('info', 'InformationController');
+    Route::resource('category', 'ArticleCategoryController');
+
     //Master
     Route::resource('gudang', 'GudangController');
     Route::resource('supplier', 'SupplierController');
