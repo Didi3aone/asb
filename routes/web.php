@@ -6,6 +6,9 @@ Route::redirect('/home', '/admin');
 
 Auth::routes(['register' => false]);
 
+Route::get('/register', 'RegistrationController@create')->name('register');
+Route::post('/register', 'RegistrationController@store');
+
 Route::get('change-passwords', 'ChangePasswordController@index')->name('change-passwords');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
 
