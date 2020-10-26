@@ -189,7 +189,8 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'nama'              => 'Nama',
-            'nik'               => 'NIK',
+            'nickname'          => 'Nama Panggilan',
+            'nik'               => 'No. KTP',
             'telp'              => 'No. Telp',
             'hp'                => 'No. HP',
             'start'             => 'Tanggal Mulai',

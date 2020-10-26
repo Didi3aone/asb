@@ -214,7 +214,8 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'nama'              => 'Name',
-            'nik'               => 'NIK',
+            'nickname'          => 'Nickname',
+            'nik'               => 'No. KTP',
             'telp'              => 'No. Telp',
             'hp'                => 'No. HP',
             'email'             => 'Email',

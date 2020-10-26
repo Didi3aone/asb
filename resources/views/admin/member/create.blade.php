@@ -18,8 +18,26 @@
                     </em>
                 @endif
             </div>
+            <div class="form-group {{ $errors->has('nickname') ? 'has-error' : '' }}">
+                <label for="nickname">{{ trans('cruds.member.fields.nickname') }}*</label>
+                <input type="text" id="nickname" name="nickname" class="form-control" value="{{ old('nickname', isset($user) ? $user->nickname : '') }}" required>
+                @if($errors->has('nickname'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('nickname') }}
+                    </em>
+                @endif
+            </div>
             <div class="form-group {{ $errors->has('nik') ? 'has-error' : '' }}">
-                <label for="nik">NIK*</label>
+                <label for="nik">{{ trans('cruds.member.fields.nik') }}*</label>
+                <input type="text" id="nik" name="nik" class="form-control" value="{{ old('nik', isset($user) ? $user->nik : '') }}" required>
+                @if($errors->has('nik'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('nik') }}
+                    </em>
+                @endif
+            </div>
+            <div class="form-group {{ $errors->has('nik') ? 'has-error' : '' }}">
+                <label for="nik">No. KK*</label>
                 <input type="text" id="nik" name="nik" class="form-control" value="{{ old('nik', isset($user) ? $user->nik : '') }}" required>
                 @if($errors->has('nik'))
                     <em class="invalid-feedback">
@@ -44,30 +62,6 @@
                         {{ $errors->first('password') }}
                     </em>
                 @endif
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group {{ $errors->has('no_telp') ? 'has-error' : '' }}">
-                        <label for="no_telp">{{ trans('cruds.member.fields.telp') }}*</label>
-                        <input type="text" id="no_telp" name="no_telp" class="form-control" value="{{ old('no_telp', isset($user) ? $user->no_telp : '') }}" required>
-                        @if($errors->has('no_telp'))
-                            <em class="invalid-feedback">
-                                {{ $errors->first('no_telp') }}
-                            </em>
-                        @endif
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group {{ $errors->has('no_hp') ? 'has-error' : '' }}">
-                        <label for="no_hp">{{ trans('cruds.member.fields.hp') }}*</label>
-                        <input type="text" id="no_hp" name="no_hp" class="form-control" required>
-                        @if($errors->has('no_hp'))
-                            <em class="invalid-feedback">
-                                {{ $errors->first('no_hp') }}
-                            </em>
-                        @endif
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col">
@@ -102,6 +96,31 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group {{ $errors->has('no_telp') ? 'has-error' : '' }}">
+                        <label for="no_telp">{{ trans('cruds.member.fields.telp') }}*</label>
+                        <input type="text" id="no_telp" name="no_telp" class="form-control" value="{{ old('no_telp', isset($user) ? $user->no_telp : '') }}" required>
+                        @if($errors->has('no_telp'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('no_telp') }}
+                            </em>
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group {{ $errors->has('no_hp') ? 'has-error' : '' }}">
+                        <label for="no_hp">{{ trans('cruds.member.fields.hp') }}*</label>
+                        <input type="text" id="no_hp" name="no_hp" class="form-control" required>
+                        @if($errors->has('no_hp'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('no_hp') }}
+                            </em>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            
             <div class="row">
                 <div class="col">
                     <div class="form-group {{ $errors->has('job') ? 'has-error' : '' }}">

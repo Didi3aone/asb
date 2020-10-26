@@ -44,13 +44,22 @@ class InformationController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->file('foto')) {
+        if ($request->hasFile('foto')) {
             $pict = $request->file('foto');
             $pict_name = time() . $pict->getClientOriginalName();
             $pict->move(public_path() . '/images/', $pict_name);
         } else {
             $pict_name = 'noimage.jpg';
         }
+
+        // if($file = $request->hasFile('fotos')) {
+        //     $file = $request->file('fotos') ;
+        //     $name = time() . $file->getClientOriginalName();
+        //     $file->move(public_path() . '/images/item/', $name);
+        //     $request->merge(['foto' => serialize($name)]);
+        // } else {
+        //     $pict_name = 'noimage.jpg';
+        // }
 
         $info = Information::create([
             'kategori_id'   => $request->kategori_id,
