@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Users;
+use Illuminate\Support\Str;
+use Hash;
+use App\User;
 use App\DetailUsers;
 use App\MaritalStatus;
 use App\Job;
@@ -22,7 +24,13 @@ class RegistrationController extends Controller
      */
     public function index()
     {
-        //
+        $marital = MaritalStatus::where('status', 1)->pluck('name', 'id');
+        $provinsi = Provinsi::where('status', 1)->pluck('name', 'id_prov');
+        $kabupaten =  Kabupaten::where('status', 1)->pluck('name', 'id_kab');
+        $job = Job::where('status', 1)->pluck('name', 'id');
+
+        // return view('admin.registration.create', compact('marital','provinsi', 'job'));
+        return view('layouts.reg', compact('marital','provinsi', 'kabupaten', 'job'));
     }
 
     /**
@@ -32,11 +40,39 @@ class RegistrationController extends Controller
      */
     public function create()
     {
-        $marital = MaritalStatus::where('status', 1)->pluck('name', 'id');
-        $provinsi = Provinsi::where('status', 1)->pluck('name', 'id_prov');
-        $job = Job::where('status', 1)->pluck('name', 'id');
+        
+    }
 
-        return view('admin.registration.create', compact('marital','provinsi', 'job'));
+    public function getKelurahan(Request $request)
+    {
+        $data = Kelurahan::where('id_kec', $request->val)
+            ->get();
+
+        return \Response::json($data);
+    }
+
+    public function getKecamatan(Request $request)
+    {
+        $data = Kecamatan::where('id_kab', $request->val)
+            ->get();
+
+        return \Response::json($data);
+    }
+
+    public function getKabupaten(Request $request)
+    {
+        $data = Kabupaten::where('id_prov', $request->val)
+            ->get();
+
+        return \Response::json($data);
+    }
+
+    public function checkEmail($email)
+    {
+        $check = User::where('email', $email)
+                ->first();
+        
+        return $check;
     }
 
     /**
@@ -47,7 +83,79 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            $message['is_error'] = true;
+            $message['error_msg'] = "";
+            $dob = date("Y-m-d", strtotime($request->tgl_lahir));
+            $count = DetailUsers::count();
+            $no_member = str_pad($count+1,12,"0",STR_PAD_LEFT);
+            
+            if ($request->file('foto_kk')) {
+                $kk = $request->file('foto_kk');
+                $kk_name = time() . $kk->getClientOriginalName();
+                $kk->move(public_path() . '/images/kk/', $kk_name);
+            } else {
+                $kk_name = 'noimage.jpg';
+            }
+            if ($request->file('foto_ktp')) {
+                $ktp = $request->file('foto_ktp');
+                $ktp_name = time() . $ktp->getClientOriginalName();
+                $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+            } else {
+                $ktp_name = 'noimage.jpg';
+            }
+
+            $users = User::create([
+                'name'          => $request->name,
+                'email'         => $request->emailaddress,
+                'password'      => $request->password,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'updated_at'    => date('Y-m-d H:i:s'),
+                'theme_color'   => 1,
+                'is_active'     => 1,
+            ]);
+
+            $data = array(
+                'userid'            => $users->id,
+                'no_member'         => $no_member,
+                'nickname'          => $request->nickname,
+                'nik'               => $request->nik,
+                'no_kk'             => $request->no_kk,
+                'gender'            => $request->gender,
+                'birth_place'       => $request->tempat_lahir,
+                'tgl_lahir'         => $dob,
+                'status_kawin'      => $request->marital,
+                'pekerjaan'         => $request->job,
+                'no_hp'             => $request->no_hp,
+                'alamat'            => $request->address,
+                'provinsi'          => $request->provinsi,
+                'kabupaten'         => $request->kabupaten,
+                'kecamatan'         => $request->kecamatan,
+                'kelurahan'         => $request->kelurahan,
+                'alamat_domisili'   => $request->alamat_domisili,
+                'provinsi_domisili' => $request->provinsi_domisili,
+                'kabupaten_domisili'=> $request->kabupaten_domisili,
+                'kecamatan_domisili'=> $request->kecamatan_domisili,
+                'kelurahan_domisili'=> $request->kelurahan_domisili,
+                'activation_code'   => Str::random(40).$request->input('email'),
+                'foto_ktp'          => $ktp_name,
+                'foto_kk'           => $kk_name,
+                'status_korlap'     => 1,
+                'created_at'        => date('Y-m-d H:i:s')
+            );
+            $detail = DetailUsers::insert($data);
+            \DB::commit();
+            $message['is_error'] = false;
+            $message['error_msg'] = "Pendaftaran Berhasil";
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            $message['is_error'] = true;
+            $message['error_msg'] = "Pendaftaran Gagal";
+        }
+        
+        return response()->json($message);
     }
 
     /**

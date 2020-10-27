@@ -1,155 +1,769 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <meta charset="UTF-8">
- <title>Registration</title>
- 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
-	<link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet" />
-	<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-	<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
-	<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
-	<link href="https://cdn.datatables.net/select/1.3.0/css/select.dataTables.min.css" rel="stylesheet" />
-	{{-- <link href="https://unpkg.com/@coreui/coreui@2.1.16/dist/css/coreui.min.css" rel="stylesheet" /> --}}
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
-	<link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
-	<link href="{{ asset('css/custom.min.css') }}" rel="stylesheet" />
-</head>
-<body>
-    <div class="container">
-        @yield('content')
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-	{{-- <script src="https://unpkg.com/@coreui/coreui@2.1.16/dist/js/coreui.min.js"></script> --}}
-	<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-	<script src="//cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
-	<script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.colVis.min.js"></script>
-	<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-	<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-	<script src="https://cdn.datatables.net/select/1.3.0/js/dataTables.select.min.js"></script>
-	<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-	<script src="{{ asset('js/notify.min.js') }}"></script>
-	<script src="{{ asset('js/angular.min.js') }}"></script>
-	<script src="{{ asset('js/main.js') }}"></script>
-	<script src="{{ asset('js/custom.js') }}"></script>
-	<script src="{{ asset('js/custom.js') }}"></script>
-	<script src="{{ asset('js/tinymce/tinymce.js') }}"></script>
-	<script>
-		$(".spin-save").hide()
-		var app = angular.module('app',[])
-		@if(session('success'))
-			let success = '{{ session('success') }}'
-			console.log(success)
-			$.notify(success, "success");
-		@endif
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
+		{{-- <link href="{{ asset('datepicker/css/bootstrap.min.css') }}" rel="stylesheet" />
+		<link href="{{ asset('datepicker/css/font-awesome.min.css') }}" rel="stylesheet" />
+		<link href="{{ asset('datepicker/css/bootstrap-datepicker.css') }}" rel="stylesheet" /> --}}
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet">
+		<link href="{{ asset('datepicker/css/font-awesome.min.css') }}" rel="stylesheet" />
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet">
+		{{-- <link href="{{ asset('datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" /> 
+		<link href="{{ asset('datepicker/libraries/fontawesome/css/all.min.css') }}" rel="stylesheet">
+		<link href="{{ asset('datepicker/libraries/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet">--}}
+        {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> --}}
+        <title>Pendaftaran</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="card mt-5">
+                <div class="card-header bg-info text-white text-center" >
+                    <strong>Pendaftaran Anggota JCUIM</strong>
+                </div>
+                <div class="card-body">
+					<form method="post" id="registrationForm" enctype="multipart/form-data">
+                    {{-- <form class="form-material mt-4" id="registrationForm" name="registrationForm" enctype="multipart/form-data"> --}}
+						{{ csrf_field() }}
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+									<label for="name">Nama Lengkap*</label>
+									<input type="text" id="name" name="name" class="form-control" placeholder="Nama" value="" onKeyUp="uppercase(this);">
+									@if($errors->has('name'))
+										<em class="invalid-feedback">
+											{{ $errors->first('name') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('nickname') ? 'has-error' : '' }}">
+									<label for="name">Nama Panggilan*</label>
+									<input type="text" id="nickname" name="nickname" class="form-control" placeholder="Nama Panggilan" value="" onKeyUp="uppercase(this);" required>
+									@if($errors->has('nickname'))
+										<em class="invalid-feedback">
+											{{ $errors->first('nickname') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('nik') ? 'has-error' : '' }}">
+									<label for="nik">No KTP*</label>
+									<input type="text" id="nik" name="nik" class="form-control" placeholder="Nomor KTP" value="" onKeyUp="numericFilter(this);" required>
+									@if($errors->has('nik'))
+										<em class="invalid-feedback">
+											{{ $errors->first('nik') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('no_kk') ? 'has-error' : '' }}">
+									<label for="no_kk">No KK*</label>
+									<input type="text" id="no_kk" name="no_kk" class="form-control" placeholder="Nomor KK" value="" onKeyUp="numericFilter(this);" required>
+									@if($errors->has('no_kk'))
+										<em class="invalid-feedback">
+											{{ $errors->first('no_kk') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+							<label for="emailaddress">{{ trans('cruds.member.fields.email') }}*</label>
+							<input type="text" id="emailaddress" name="emailaddress" class="form-control" placeholder="Alamat Email" value="" required>
+							@if($errors->has('emailaddress'))
+								<em class="invalid-feedback">
+									{{ $errors->first('emailaddress') }}
+								</em>
+							@endif
+						</div>
+						<div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+							<label for="password">{{ trans('cruds.member.fields.password') }}*</label>
+							<input type="password" id="password" name="password" class="form-control" required>
+							@if($errors->has('password'))
+								<em class="invalid-feedback">
+									{{ $errors->first('password') }}
+								</em>
+							@endif
+						</div>
+						<div class="form-group {{ $errors->has('gender') ? 'has-error' : '' }}">
+							<label for="gender">Jenis Kelamin*</label>
+							<select name="gender" id="gender" class="form-control select2" required style="width: 100%; height:36px;">
+								<option value="">-- Pilih --</option>
+								<option value="0">Perempuan</option>
+								<option value="1">Laki-Laki</option>
+							</select>
+							@if($errors->has('gender'))
+								<em class="invalid-feedback">
+									{{ $errors->first('gender') }}
+								</em>
+							@endif
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('tempat_lahir') ? 'has-error' : '' }}">
+									<label for="tempat_lahir">Tempat Lahir*</label>
+									<select name="tempat_lahir" id="tempat_lahir" class="form-control selectpicker" style="width: 100%; height:36px;" data-live-search="true" required>
+										<option value="">-- Pilih --</option>
+										@foreach($kabupaten as $data => $row)
+											<option value="{{ $data }}" >{{ $row }}</option>
+										@endforeach
+									</select>
+									@if($errors->has('tempat_lahir'))
+										<em class="invalid-feedback">
+											{{ $errors->first('tempat_lahir') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('tgl_lahir') ? 'has-error' : '' }}">
+									<label for="tgl_lahir">Tanggal Lahir*</label>
+									<input type="text" id="tgl_lahir" name="tgl_lahir" class="form-control datepicker" placeholder = "01-01-1900" value="">
+									<div class="input-group-addon">
+										<span class="glyphicon glyphicon-th"></span>
+									</div>
+								</div>	
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('marital_status') ? 'has-error' : '' }}">
+									<label for="marital_status">Status Pernikahan*</label>
+									<select name="marital" id="marital" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+										@foreach($marital as $data => $row)
+											<option value="{{ $data }}" >{{ $row }}</option>
+										@endforeach
+									</select>
+									@if($errors->has('marital_status'))
+										<em class="invalid-feedback">
+											{{ $errors->first('marital_status') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('job') ? 'has-error' : '' }}">
+									<label for="job">Pekerjaan*</label>
+									<select name="job" id="job" class="form-control selectpicker" style="width: 100%; height:36px;" data-live-search="true" required>
+										<option value="">-- Pilih --</option>
+										@foreach($job as $data => $row)
+											<option value="{{ $data }}" >{{ $row }}</option>
+										@endforeach
+									</select>
+									@if($errors->has('job'))
+										<em class="invalid-feedback">
+											{{ $errors->first('job') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="form-group {{ $errors->has('no_hp') ? 'has-error' : '' }}">
+							<label for="no_hp">{{ trans('cruds.member.fields.hp') }}*</label>
+							<input type="text" id="no_hp" name="no_hp" placeholder="Nomor HP" class="form-control" onKeyUp="numericFilter(this);" required>
+							@if($errors->has('no_hp'))
+								<em class="invalid-feedback">
+									{{ $errors->first('no_hp') }}
+								</em>
+							@endif
+						</div>
+						{{-- <div class="row">
+							
+							<div class="col">
+								<div class="form-group {{ $errors->has('level') ? 'has-error' : '' }}">
+									<label for="level">Status Anggota*</label>
+									<select name="level" id="level" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+										<option value="0">Non Korlap</option>
+										<option value="1">Korlap</option>
+									</select>
+									@if($errors->has('level'))
+										<em class="invalid-feedback">
+											{{ $errors->first('level') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div> --}}
+						<div class="form-group">
+							<label for="address">Alamat*</label>
+							<textarea name="address" id="address" class="form-control" cols="20" rows="10" placeholder="Alamat Sesuai KTP"></textarea>
+							@if($errors->has('address'))
+								<em class="invalid-feedback">
+									{{ $errors->first('address') }}
+								</em>
+							@endif
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('provinsi') ? 'has-error' : '' }}">
+									<label for="provinsi">Provinsi*</label>
+									<select name="provinsi" id="provinsi" class="form-control select2" style="width: 100%; height:36px;" required>
+										<option value="">-- Pilih --</option>
+										@foreach($provinsi as $data => $row)
+											<option value="{{ $data }}" name="{{ $row }}">{{ $row }}</option>
+										@endforeach
+									</select>
+									@if($errors->has('provinsi'))
+										<em class="invalid-feedback">
+											{{ $errors->first('provinsi') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('kabupaten') ? 'has-error' : '' }}">
+									<label for="kabupaten">{{ trans('cruds.member.fields.kabupaten') }}*</label>
+									<select name="kabupaten" id="kabupaten" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+									</select>
+									@if($errors->has('kabupaten'))
+										<em class="invalid-feedback">
+											{{ $errors->first('kabupaten') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('kecamatan') ? 'has-error' : '' }}">
+									<label for="kecamatan">{{ trans('cruds.member.fields.kecamatan') }}*</label>
+									<select name="kecamatan" id="kecamatan" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+									</select>
+									@if($errors->has('kecamatan'))
+										<em class="invalid-feedback">
+											{{ $errors->first('kecamatan') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('kelurahan') ? 'has-error' : '' }}">
+									<label for="kelurahan">{{ trans('cruds.member.fields.kelurahan') }}*</label>
+									<select name="kelurahan" id="kelurahan" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+									</select>
+									@if($errors->has('kelurahan'))
+										<em class="invalid-feedback">
+											{{ $errors->first('kelurahan') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('foto_ktp') ? 'has-error' : '' }}">
+									<label for="foto_ktp">{{ trans('cruds.member.fields.foto_ktp') }}*</label>
+									<input type="file" id="foto_ktp" name="foto_ktp" class="form-control" value="">
+									@if($errors->has('foto_ktp'))
+										<em class="invalid-feedback">
+											{{ $errors->first('foto_ktp') }}
+										</em>
+									@endif
+									<p class="helper-block">
+									</p>
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('foto_kk') ? 'has-error' : '' }}">
+									<label for="foto_kk">{{ trans('cruds.member.fields.foto_kk') }}*</label>
+									<input type="file" id="foto_kk" name="foto_kk" class="form-control" value="">
+									@if($errors->has('foto_kk'))
+										<em class="invalid-feedback">
+											{{ $errors->first('foto_kk') }}
+										</em>
+									@endif
+									<p class="helper-block">
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="check" value="FALSE">
+							<label class="form-check-label" for="check">Alamat Sesuai KTP</label>
+						</div>
+						<br>
+						<div class="form-group">
+							<label for="alamat_domisili">Alamat Domisili*</label>
+							<textarea name="alamat_domisili" id="alamat_domisili" class="form-control" cols="20" rows="10" placeholder="Alamat Domisili"></textarea>
+							@if($errors->has('alamat_domisili'))
+								<em class="invalid-feedback">
+									{{ $errors->first('alamat_domisili') }}
+								</em>
+							@endif
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('provinsi_domisili') ? 'has-error' : '' }}">
+									<label for="provinsi_domisili">Provinsi Domisili*</label>
+									<select name="provinsi_domisili" id="provinsi_domisili" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+										@foreach($provinsi as $data => $row)
+											<option value="{{ $data }}" >{{ $row }}</option>
+										@endforeach
+									</select>
+									@if($errors->has('provinsi_domisili'))
+										<em class="invalid-feedback">
+											{{ $errors->first('provinsi_domisili') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('kabupaten_domisili') ? 'has-error' : '' }}">
+									<label for="kabupaten_domisili">Kabupaten Domisili*</label>
+									<select name="kabupaten_domisili" id="kabupaten_domisili" class="form-control select2" style="width: 100%; height:36px;" required>
+										<option value="">-- Pilih --</option>
+									</select>
+									@if($errors->has('kabupaten_domisili'))
+										<em class="invalid-feedback">
+											{{ $errors->first('kabupaten_domisili') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group {{ $errors->has('kecamatan_domisili') ? 'has-error' : '' }}">
+									<label for="kecamatan_domisili">Kecamatan Domisili*</label>
+									<select name="kecamatan_domisili" id="kecamatan_domisili" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+									</select>
+									@if($errors->has('kecamatan_domisili'))
+										<em class="invalid-feedback">
+											{{ $errors->first('kecamatan_domisili') }}
+										</em>
+									@endif
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group {{ $errors->has('kelurahan_domisili') ? 'has-error' : '' }}">
+									<label for="kelurahan_domisili">kelurahan Domisili*</label>
+									<select name="kelurahan_domisili" id="kelurahan_domisili" class="form-control select2" required style="width: 100%; height:36px;">
+										<option value="">-- Pilih --</option>
+									</select>
+									@if($errors->has('kelurahan_domisili'))
+										<em class="invalid-feedback">
+											{{ $errors->first('kelurahan_domisili') }}
+										</em>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div>
+							<button type="submit" class="btn btn-primary">
+								<i class="fa fa-save"></i> Daftar
+							</button>
+						</div>
+                    </form>
+                </div>
+            </div>
+		</div>
+		{{-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> --}}
+		<script src="{{ asset('datepicker/js/jquery-3.5.1.min.js') }}"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>" --}}
+		{{-- <script src="{{ asset('datepicker/js/bootstrap.bundle.min.js') }}"></script>
+		<script href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" rel="stylesheet"></script>
+		<script src="{{ asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script> --}}
+		<!-- Include file jquery.min.js -->
+		{{-- <script src="{{ asset('datepicker/js/jquery-3.5.1.min.js') }}"></script> 
+		<script src="{{ asset('datepicker/js/jquery-3.3.1.slim.min.js') }}"></script>
+		<script src="{{ asset('datepicker/js/bootstrap.bundle.min.js') }}"></script>
+		<script src="{{ asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script> --}}
+		<!-- Include file boootstrap.min.js -->
+		{{-- <script src="{{ asset('datepicker/js/bootstrap.min.js') }}"></script> --}}
+		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		<!-- Include library Moment JS -->
+		<script src="{{ asset('datepicker/libraries/moment/moment.min.js') }}"></script>
+		<!-- Include library Datepicker Gijgo -->
+		<script src="{{ asset('datepicker/libraries/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+		<!-- Include file custom.js -->
+		<script src="{{ asset('datepicker/js/custom.js') }}"></script> --}}
+		<script>
+			$(document).ready(function (e) {
+			// $(function () {
+				$.ajaxSetup({
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					}
+				});
 
-		@if(session('error'))
-			let error = '{{ session('error') }}'
-			$.notify(error, "error");
-		@endif
+				$("#check").change(function () {
+					let alamat = $('#address').val();
+					let prov = $('#provinsi').find('option:selected').val();
+					let kab = $('#kabupaten').find('option:selected').val();
+					let kec = $('#kecamatan').find('option:selected').val();
+					let kel = $('#kelurahan').find('option:selected').val();
+					
+					let prov_name = $('#provinsi').find('option:selected').attr("name");
+					let kab_name = $('#kabupaten').find('option:selected').attr("name");
+					let kec_name = $('#kecamatan').find('option:selected').attr("name");
+					let kel_name = $('#kelurahan').find('option:selected').attr("name");
+					
+					if (this.checked) {
+						$("#alamat_domisili").val(alamat);
+						$("#provinsi_domisili").prop('readonly', true);				
+						$("#kabupaten_domisili").prop('readonly', true);				
+						$("#kecamatan_domisili").prop('readonly', true);				
+						$("#kelurahan_domisili").prop('readonly', true);	
+						$("#provinsi_domisili").append('<option value="' + prov + '" selected>' + prov_name + '</option>');
+						$("#kabupaten_domisili").append('<option value="' + kab + '" selected>' + kab_name + '</option>');
+						$("#kecamatan_domisili").append('<option value="' + kec + '" selected>' + kec_name + '</option>');
+						$("#kelurahan_domisili").append('<option value="' + kel + '" selected>' + kel_name + '</option>');
+					} else {
+						$("#alamat_domisili").val("");
+						$("#provinsi_domisili").prop('readonly', false);				
+						$("#kabupaten_domisili").prop('readonly', true);				
+						$("#kecamatan_domisili").prop('readonly', true);				
+						$("#kelurahan_domisili").prop('readonly', true);
+						$('#provinsi_domisili').find('option').remove();		
+						$('#kabupaten_domisili').find('option').remove();		
+						$('#kecamatan_domisili').find('option').remove();		
+						$('#kelurahan_domisili').find('option').remove();		
+						$("#provinsi_domisili").append('<option value="">--Pilih--</option>');
+						$("#kabupaten_domisili").append('<option value="">--Pilih--</option>');
+						$("#kecamatan_domisili").append('<option value="">--Pilih--</option>');
+						$("#kelurahan_domisili").append('<option value="">--Pilih--</option>');
+					}
+				});
 
-		$(function() {
-			let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
-			let csvButtonTrans = '{{ trans('global.datatables.csv') }}'
-			let excelButtonTrans = '{{ trans('global.datatables.excel') }}'
-			let pdfButtonTrans = '{{ trans('global.datatables.pdf') }}'
-			let printButtonTrans = '{{ trans('global.datatables.print') }}'
-			let colvisButtonTrans = '{{ trans('global.datatables.colvis') }}'
-			let languages = {
-				'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'
-			};
+				// $('#saveBtn').click(function (e) {
+				$('#registrationForm').on('submit', function(e){
+					e.preventDefault();
+					// $(this).html('Sending..');
+					var name 				= $("#name").val();
+					var nickname 			= $("#nickname").val();
+					var nik 				= $("#nik").val();
+					var no_kk 				= $("#no_kk").val();
+					var email 				= $("#emailaddress").val();
+					var password 			= $("#password").val();
+					var gender 				= $("#gender").val();
+					var tempat_lahir 		= $("#tempat_lahir").val();
+					var tgl_lahir 			= $("#tgl_lahir").val();
+					var marital 			= $("#marital").val();
+					var job 				= $("#job").val();
+					var no_hp 				= $("#no_hp").val();
+					var nickname 			= $("#nickname").val();
+					var address 			= $("#address").val();
+					var provinsi 			= $("#provinsi").val();
+					var kabupaten 			= $("#kabupaten").val();
+					var kecamatan 			= $("#kecamatan").val();
+					var kelurahan 			= $("#kelurahan").val();
+					var alamat_domisili		= $("#alamat_domisili").val();
+					var provinsi_domisili	= $("#provinsi_domisili").val();
+					var kabupaten_domisili	= $("#kabupaten_domisili").val();
+					var kecamatan_domisili	= $("#kecamatan_domisili").val();
+					var kelurahan_domisili	= $("#kelurahan_domisili").val();
+					var ktp					= $("#foto_ktp").val();
+					var kk					= $("#foto_kk").val();
 
-			$.extend(true, $.fn.dataTable.Buttons.defaults.dom.button, { className: 'btn' })
-			$.extend(true, $.fn.dataTable.defaults, {
-				language: {
-				url: languages.{{ app()->getLocale() }}
-			},
-			columnDefs: [{
-				orderable: false,
-				className: 'select-checkbox',
-				targets: 0
-			}, {
-				orderable: false,
-				searchable: false,
-				targets: -1
-			}],
-			select: {
-				style:    'multi+shift',
-				selector: 'td:first-child'
-			},
-			order: [],
-			scrollX: true,
-			pageLength: 25,
-			dom: 'lBfrtip<"actions">',
-			buttons: [
-			{
-				extend: 'copy',
-				className: 'btn-default',
-				text: copyButtonTrans,
-				exportOptions: {
-				columns: ':visible'
-				}
-			},
-			{
-				extend: 'csv',
-				className: 'btn-default',
-				text: csvButtonTrans,
-				exportOptions: {
-				columns: ':visible'
-				}
-			},
-			{
-				extend: 'excel',
-				className: 'btn-default',
-				text: excelButtonTrans,
-				exportOptions: {
-				columns: ':visible'
-				}
-			},
-			{
-				extend: 'pdf',
-				className: 'btn-default',
-				text: pdfButtonTrans,
-				exportOptions: {
-				columns: ':visible'
-				}
-			},
-			{
-				extend: 'print',
-				className: 'btn-default',
-				text: printButtonTrans,
-				exportOptions: {
-				columns: ':visible'
-				}
-			},
-			{
-				extend: 'colvis',
-				className: 'btn-default',
-				text: colvisButtonTrans,
-				exportOptions: {
-				columns: ':visible'
-				}
+					if(name == '') {
+						swal('Error','nama tidak boleh kosong');
+						return false;
+					}
+					if(nickname == '') {
+						swal('Error','nama panggilan tidak boleh kosong');
+						return false;
+					}
+					if(nik == '') {
+						swal('Error','nomor KTP tidak boleh kosong');
+						return false;
+					}
+					if(no_kk == '') {
+						swal('Error','nomor KK tidak boleh kosong');
+						return false;
+					}
+					if(email == '') {
+						swal('Error','email tidak boleh kosong');
+						return false;
+					}
+					if(!validateEmail(email)) {
+						swal('Error','masukkan email benar');
+						return false;
+					}
+					if(password == '') {
+						swal('Error','password tidak boleh kosong');
+						return false;
+					}
+					if(password.length < 7 ) {
+						swal('Error','password harus 6 karakter');
+						return false;
+					}
+					if(gender == '') {
+						swal('Error','jenis kelamin tidak boleh kosong');
+						return false;
+					}
+					if(tempat_lahir == '') {
+						swal('Error','tempat lahir tidak boleh kosong');
+						return false;
+					}
+					if(tgl_lahir == '') {
+						swal('Error','tanggal lahir tidak boleh kosong');
+						return false;
+					}
+					if(marital == '') {
+						swal('Error','status pernikahan tidak boleh kosong');
+						return false;
+					}
+					if(job == '') {
+						swal('Error','pekerjaan tidak boleh kosong');
+						return false;
+					}
+					if(no_hp == '') {
+						swal('Error','nomor hp tidak boleh kosong');
+						return false;
+					}
+					if(address == '') {
+						swal('Error','alamat tidak boleh kosong');
+						return false;
+					}
+					if(provinsi == '') {
+						swal('Error','provinsi tidak boleh kosong');
+						return false;
+					}
+					if(kabupaten == '') {
+						swal('Error','kabupaten tidak boleh kosong');
+						return false;
+					}
+					if(kecamatan == '') {
+						swal('Error','kecamatan tidak boleh kosong');
+						return false;
+					}
+					if(kelurahan == '') {
+						swal('Error','kelurahan tidak boleh kosong');
+						return false;
+					}
+					if(alamat_domisili == '') {
+						swal('Error','alamat domisili tidak boleh kosong');
+						return false;
+					}
+					if(kabupaten_domisili == '') {
+						swal('Error','kabupaten domisili tidak boleh kosong');
+						return false;
+					}
+					if(provinsi_domisili == '') {
+						swal('Error','provinsi domisili tidak boleh kosong');
+						return false;
+					}
+					if(kecamatan_domisili == '') {
+						swal('Error','kecamatan domisili tidak boleh kosong');
+						return false;
+					}
+					if(kelurahan_domisili == '') {
+						swal('Error','kelurahan domisili tidak boleh kosong');
+						return false;
+					}
+					var formData = new FormData(this);
+					
+					$.ajax({
+						url: "{{ route('daftar.store') }}",
+						type: "POST",
+						data: formData,
+						// dataType: 'JSON',
+						success: function (data) {
+							console.log(data);
+							swal('Info',data.error_msg);
+							$('#registrationForm').reset();
+							parent.history.back();
+							// table.draw();
+						},
+						cache: false,
+						contentType: false,
+						processData: false,
+						error: function (data) {
+							console.log('Error:', data);
+							swal('error',data.error_msg);
+						}
+					});
+    			});
+			});
+
+			function validateEmail($email) {
+				var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+				return emailReg.test( $email );
 			}
-		]
-	});
-	$.fn.dataTable.ext.classes.sPageButton = '';
-});
 
-</script>
-</body>
+			function uppercase(obj){
+				obj.value = obj.value.toUpperCase();
+			}
+
+			$("#provinsi_domisili").change(function() {
+				let val = $(this).val();
+				$.ajax({
+					url: '{{ route('kab') }}',
+					data: {
+						val : val
+					},
+					dataType:'json',
+					type:'GET',
+					success: function(response) {
+						var len = response.length;
+						$('#kabupaten_domisili').find('option').remove();
+						$("#kabupaten_domisili").prop('readonly', false);
+						$("#kabupaten_domisili").append('<option value="">--Pilih--</option>');
+						if(len > 1) {
+							for( var i = 0; i<len; i++){
+								var code = response[i]['id_kab'];
+								var name = response[i]['name'];
+								$("#kabupaten_domisili").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+							}
+						}
+					}
+				});
+    		});
+
+			$("#kabupaten_domisili").change(function() {
+				let val = $(this).val();
+				$.ajax({
+					url: '{{ route('kec') }}',
+					data: {
+						val : val
+					},
+					dataType:'json',
+					type:'GET',
+					success: function(response) {
+						var len = response.length;
+						$('#kecamatan_domisili').find('option').remove();
+						$("#kecamatan_domisili").prop('readonly', false);
+						$("#kecamatan_domisili").append('<option value="">--Pilih--</option>');
+						if(len > 1) {
+							for( var i = 0; i<len; i++){
+								var code = response[i]['id_kec'];
+								var name = response[i]['name'];
+								$("#kecamatan_domisili").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+							}
+						}
+					}
+				});
+			});
+
+			$("#kecamatan_domisili").change(function() {
+				let val = $(this).val();
+				$.ajax({
+					url: '{{ route('kel') }}',
+					data: {
+						val : val
+					},
+					dataType:'json',
+					type:'GET',
+					success: function(response) {
+						var len = response.length;
+						$('#kelurahan_domisili').find('option').remove();
+						$("#kelurahan_domisili").prop('readonly', false);
+						$("#kelurahan_domisili").append('<option value="">--Pilih--</option>');
+						if(len > 1) {
+							for( var i = 0; i<len; i++){
+								var code = response[i]['id_kel'];
+								var name = response[i]['name'];
+								$("#kelurahan_domisili").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+							}
+						}
+					}
+				});
+			});
+
+			$("#provinsi").change(function() {
+				let val = $(this).val();
+				$.ajax({
+					url: '{{ route('kab') }}',
+					data: {
+						val : val
+					},
+					dataType:'json',
+					type:'GET',
+					success: function(response) {
+						var len = response.length;
+						$('#kabupaten').find('option').remove();
+						$("#kabupaten").prop('readonly', false);
+						$("#kabupaten").append('<option value="">--Pilih--</option>');
+						if(len > 1) {
+							for( var i = 0; i<len; i++){
+								var code = response[i]['id_kab'];
+								var name = response[i]['name'];
+								$("#kabupaten").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+							}
+						}
+					}
+				});
+    		});
+
+			$("#kabupaten").change(function() {
+				let val = $(this).val();
+				$.ajax({
+					url: '{{ route('kec') }}',
+					data: {
+						val : val
+					},
+					dataType:'json',
+					type:'GET',
+					success: function(response) {
+						var len = response.length;
+						$('#kecamatan').find('option').remove();
+						$("#kecamatan").prop('readonly', false);
+						$("#kecamatan").append('<option value="">--Pilih--</option>');
+						if(len > 1) {
+							for( var i = 0; i<len; i++){
+								var code = response[i]['id_kec'];
+								var name = response[i]['name'];
+								$("#kecamatan").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+							}
+						}
+					}
+				});
+			});
+
+			$("#kecamatan").change(function() {
+				let val = $(this).val();
+				$.ajax({
+					url: '{{ route('kel') }}',
+					data: {
+						val : val
+					},
+					dataType:'json',
+					type:'GET',
+					success: function(response) {
+						var len = response.length;
+						$('#kelurahan').find('option').remove();
+						$("#kelurahan").prop('readonly', false);
+						$("#kelurahan").append('<option value="">--Pilih--</option>');
+						if(len > 1) {
+							for( var i = 0; i<len; i++){
+								var code = response[i]['id_kel'];
+								var name = response[i]['name'];
+								$("#kelurahan").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+							}
+						}
+					}
+				});
+			});
+			$('.datepicker').datepicker({
+				clearBtn: true,
+				format: "dd-mm-yyyy",
+				autoclose: true
+			});
+
+			function numericFilter(txb) {
+				txb.value = txb.value.replace(/[^\0-9]/ig, "");
+			}
+		</script>
+    </body>
 </html>

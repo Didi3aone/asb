@@ -6,8 +6,11 @@ Route::redirect('/home', '/admin');
 
 Auth::routes(['register' => false]);
 
-Route::get('/register', 'RegistrationController@create')->name('register');
-Route::post('/register', 'RegistrationController@store');
+Route::resource('daftar','RegistrationController');
+Route::post('post-register', 'RegistrationController@store')->name('post-register');
+Route::get('kel', 'RegistrationController@getKelurahan')->name('kel');
+Route::get('kec', 'RegistrationController@getKecamatan')->name('kec');
+Route::get('kab', 'RegistrationController@getKabupaten')->name('kab');
 
 Route::get('change-passwords', 'ChangePasswordController@index')->name('change-passwords');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
@@ -67,4 +70,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('get-kel', 'HelperController@getKelurahan')->name('get-kel');
     Route::get('get-kec', 'HelperController@getKecamatan')->name('get-kec');
     Route::get('get-kab', 'HelperController@getKabupaten')->name('get-kab');
+    
 });

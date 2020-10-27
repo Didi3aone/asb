@@ -26,6 +26,15 @@
                     </em>
                 @endif
             </div>
+            <div class="form-group {{ $errors->has('no_kk') ? 'has-error' : '' }}">
+                <label for="no_kk">No KK*</label>
+                <input type="text" id="no_kk" name="no_kk" class="form-control" value="{{ old('no_kk', isset($user) ? $user->no_kk : '') }}" required>
+                @if($errors->has('no_kk'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('no_kk') }}
+                    </em>
+                @endif
+            </div>
             <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
                 <label for="email">{{ trans('cruds.member.fields.email') }}*</label>
                 <input type="email" id="email" name="email" class="form-control" value="{{ old('email', isset($user) ? $user->email : '') }}" required>
