@@ -4,18 +4,13 @@
         <meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
-		{{-- <link href="{{ asset('datepicker/css/bootstrap.min.css') }}" rel="stylesheet" />
-		<link href="{{ asset('datepicker/css/font-awesome.min.css') }}" rel="stylesheet" />
-		<link href="{{ asset('datepicker/css/bootstrap-datepicker.css') }}" rel="stylesheet" /> --}}
+		
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet">
 		<link href="{{ asset('datepicker/css/font-awesome.min.css') }}" rel="stylesheet" />
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet">
-		{{-- <link href="{{ asset('datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" /> 
-		<link href="{{ asset('datepicker/libraries/fontawesome/css/all.min.css') }}" rel="stylesheet">
-		<link href="{{ asset('datepicker/libraries/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet">--}}
-        {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> --}}
+		
         <title>Pendaftaran</title>
     </head>
     <body>
@@ -373,31 +368,13 @@
                 </div>
             </div>
 		</div>
-		{{-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> --}}
+		
 		<script src="{{ asset('datepicker/js/jquery-3.5.1.min.js') }}"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>" --}}
-		{{-- <script src="{{ asset('datepicker/js/bootstrap.bundle.min.js') }}"></script>
-		<script href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" rel="stylesheet"></script>
-		<script src="{{ asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script> --}}
-		<!-- Include file jquery.min.js -->
-		{{-- <script src="{{ asset('datepicker/js/jquery-3.5.1.min.js') }}"></script> 
-		<script src="{{ asset('datepicker/js/jquery-3.3.1.slim.min.js') }}"></script>
-		<script src="{{ asset('datepicker/js/bootstrap.bundle.min.js') }}"></script>
-		<script src="{{ asset('datepicker/js/bootstrap-datepicker.min.js') }}"></script> --}}
-		<!-- Include file boootstrap.min.js -->
-		{{-- <script src="{{ asset('datepicker/js/bootstrap.min.js') }}"></script> --}}
-		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-		<!-- Include library Moment JS -->
-		<script src="{{ asset('datepicker/libraries/moment/moment.min.js') }}"></script>
-		<!-- Include library Datepicker Gijgo -->
-		<script src="{{ asset('datepicker/libraries/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-		<!-- Include file custom.js -->
-		<script src="{{ asset('datepicker/js/custom.js') }}"></script> --}}
+		
 		<script>
 			$(document).ready(function (e) {
 			// $(function () {
@@ -581,9 +558,14 @@
 						// dataType: 'JSON',
 						success: function (data) {
 							console.log(data);
-							swal('Info',data.error_msg);
-							$('#registrationForm').reset();
-							parent.history.back();
+							if ((data.is_error) === true) {
+								swal('Error',data.error_msg);
+							} else {
+								swal('Info',data.error_msg);
+								document.getElementById("registrationForm").reset();
+								// $('#registrationForm').reset();
+								parent.history.back();
+							}
 							// table.draw();
 						},
 						cache: false,

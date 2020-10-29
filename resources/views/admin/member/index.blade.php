@@ -109,7 +109,7 @@
 
                             </td>
                             <td>
-                                {{ $rows->nama ?? '-' }}
+                                {{ $rows->name ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->nik ?? '-' }}

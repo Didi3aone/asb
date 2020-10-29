@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyMemberRequest;
 use App\Http\Requests\StoreMemberRequest;
 use App\Http\Requests\UpdateMemberRequest;
 use Hash;
-use App\Member;
+use App\User;
+use App\DetailUsers;
 use App\MaritalStatus;
 use App\Job;
 use App\Provinsi;
@@ -26,8 +28,11 @@ class MemberController extends Controller
     public function index()
     {
         abort_unless(\Gate::allows('member_access'), 403);
-
-        $member = Member::all();
+        
+        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->get();
         // dd($program);
         return view('admin.member.index', compact('member'));
     }
@@ -43,9 +48,10 @@ class MemberController extends Controller
 
         $marital = MaritalStatus::where('status', 1)->pluck('name', 'id');
         $provinsi = Provinsi::where('status', 1)->pluck('name', 'id_prov');
+        $kabupaten =  Kabupaten::where('status', 1)->pluck('name', 'id_kab');
         $job = Job::where('status', 1)->pluck('name', 'id');
         
-        return view('admin.member.create', compact('marital', 'provinsi', 'job'));
+        return view('admin.member.create', compact('marital', 'provinsi', 'kabupaten', 'job'));
     }
 
     /**
@@ -56,47 +62,102 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $count = Member::count();
-        $no_member = str_pad($count+1,12,"0",STR_PAD_LEFT);
+        \DB::beginTransaction();
+        try {
+            $message['is_error'] = true;
+            $message['error_msg'] = "";
+            $dob = date("Y-m-d", strtotime($request->tgl_lahir));
+            $count = DetailUsers::count();
+            $no_member = str_pad($count+1,12,"0",STR_PAD_LEFT);
+            
+            $check = User::where('email', $request->emailaddress)
+                    ->select('id')
+                    ->first();
+            if(isset($check->id)) {
+                $message['is_error'] = true;
+                $message['error_msg'] = "Email Sudah Ada";
+            } else {
+                if ($request->file('avatar')) {
+                    $avatar = $request->file('avatar');
+                    $avatar_name = time() . $avatar->getClientOriginalName();
+                    $avatar->move(public_path() . '/images/avatar/', $avatar_name);
+                } else {
+                    $kk_name = 'noimage.jpg';
+                }
+                if ($request->file('foto_kk')) {
+                    $kk = $request->file('foto_kk');
+                    $kk_name = time() . $kk->getClientOriginalName();
+                    $kk->move(public_path() . '/images/kk/', $kk_name);
+                } else {
+                    $kk_name = 'noimage.jpg';
+                }
+                if ($request->file('foto_ktp')) {
+                    $ktp = $request->file('foto_ktp');
+                    $ktp_name = time() . $ktp->getClientOriginalName();
+                    $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+                } else {
+                    $ktp_name = 'noimage.jpg';
+                }
+
+                $users = User::create([
+                    'name'          => $request->name,
+                    'email'         => $request->emailaddress,
+                    'password'      => $request->password,
+                    'created_at'    => date('Y-m-d H:i:s'),
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                    'theme_color'   => 1,
+                    'is_active'     => 1,
+                ]);
+
+                $roles = \DB::table('role_user')
+                        ->insert([
+                            'user_id' => $users->id, 
+                            'role_id' => 3
+                ]);
+
+                $data = array(
+                    'userid'            => $users->id,
+                    'no_member'         => $no_member,
+                    'nickname'          => $request->nickname,
+                    'nik'               => $request->nik,
+                    'no_kk'             => $request->no_kk,
+                    'gender'            => $request->gender,
+                    'birth_place'       => $request->tempat_lahir,
+                    'tgl_lahir'         => $dob,
+                    'status_kawin'      => $request->marital,
+                    'pekerjaan'         => $request->job,
+                    'no_hp'             => $request->no_hp,
+                    'alamat'            => $request->address,
+                    'provinsi'          => $request->provinsi,
+                    'kabupaten'         => $request->kabupaten,
+                    'kecamatan'         => $request->kecamatan,
+                    'kelurahan'         => $request->kelurahan,
+                    'alamat_domisili'   => $request->alamat_domisili,
+                    'provinsi_domisili' => $request->provinsi_domisili,
+                    'kabupaten_domisili'=> $request->kabupaten_domisili,
+                    'kecamatan_domisili'=> $request->kecamatan_domisili,
+                    'kelurahan_domisili'=> $request->kelurahan_domisili,
+                    'activation_code'   => Str::random(40).$request->input('email'),
+                    'avatar'            => $avatar_name,
+                    'foto_ktp'          => $ktp_name,
+                    'foto_kk'           => $kk_name,
+                    'created_by'        => \Auth::user()->id,
+                    'status_korlap'     => 1,
+                    'created_at'        => date('Y-m-d H:i:s')
+                );
+                $detail = DetailUsers::insert($data);
+                \DB::commit();
+                $message['is_error'] = false;
+                $message['error_msg'] = "Pendaftaran Berhasil";
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            $message['is_error'] = true;
+            $message['error_msg'] = "Pendaftaran Gagal";
+        }
         
-        if ($request->file('foto_kk')) {
-            $kk = $request->file('foto_kk');
-            $kk_name = time() . $kk->getClientOriginalName();
-            $kk->move(public_path() . '/images/kk/', $kk_name);
-        } else {
-            $kk_name = 'noimage.jpg';
-        }
-        if ($request->file('foto_ktp')) {
-            $ktp = $request->file('foto_ktp');
-            $ktp_name = time() . $ktp->getClientOriginalName();
-            $ktp->move(public_path() . '/images/ktp/', $ktp_name);
-        } else {
-            $ktp_name = 'noimage.jpg';
-        }
-
-        $member = Member::create([
-            'no_member'     => $no_member,
-            'nama'          => $request->name,
-            'nik'           => $request->nik,
-            'email'         => $request->email,
-            'password'      => Hash::make($request->password),
-            'no_telp'       => $request->no_telp,
-            'no_hp'         => $request->no_hp,
-            'gender'        => $request->gender,
-            'status_kawin'  => $request->marital,
-            'pekerjaan'     => $request->job,
-            'status_korlap' => $request->level,
-            'alamat'        => $request->address,
-            'provinsi'      => $request->provinsi,
-            'kabupaten'     => $request->kabupaten,
-            'kecamatan'     => $request->kecamatan,
-            'kelurahan'     => $request->kelurahan,
-            'created_by'    => \Auth::user()->id,
-            'foto_ktp'      => $ktp_name,
-            'foto_kk'       => $kk_name,
-        ]);
-
-        return \redirect()->route('admin.master-member.index')->with('success',\trans('notif.notification.save_data.success'));
+        return response()->json($message);
     }
 
     /**

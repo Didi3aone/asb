@@ -91,63 +91,77 @@ class RegistrationController extends Controller
             $count = DetailUsers::count();
             $no_member = str_pad($count+1,12,"0",STR_PAD_LEFT);
             
-            if ($request->file('foto_kk')) {
-                $kk = $request->file('foto_kk');
-                $kk_name = time() . $kk->getClientOriginalName();
-                $kk->move(public_path() . '/images/kk/', $kk_name);
+            $check = User::where('email', $request->emailaddress)
+                    ->select('id')
+                    ->first();
+            if(isset($check->id)) {
+                $message['is_error'] = true;
+                $message['error_msg'] = "Email Sudah Ada";
             } else {
-                $kk_name = 'noimage.jpg';
-            }
-            if ($request->file('foto_ktp')) {
-                $ktp = $request->file('foto_ktp');
-                $ktp_name = time() . $ktp->getClientOriginalName();
-                $ktp->move(public_path() . '/images/ktp/', $ktp_name);
-            } else {
-                $ktp_name = 'noimage.jpg';
-            }
+                if ($request->file('foto_kk')) {
+                    $kk = $request->file('foto_kk');
+                    $kk_name = time() . $kk->getClientOriginalName();
+                    $kk->move(public_path() . '/images/kk/', $kk_name);
+                } else {
+                    $kk_name = 'noimage.jpg';
+                }
+                if ($request->file('foto_ktp')) {
+                    $ktp = $request->file('foto_ktp');
+                    $ktp_name = time() . $ktp->getClientOriginalName();
+                    $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+                } else {
+                    $ktp_name = 'noimage.jpg';
+                }
 
-            $users = User::create([
-                'name'          => $request->name,
-                'email'         => $request->emailaddress,
-                'password'      => $request->password,
-                'created_at'    => date('Y-m-d H:i:s'),
-                'updated_at'    => date('Y-m-d H:i:s'),
-                'theme_color'   => 1,
-                'is_active'     => 1,
-            ]);
+                $users = User::create([
+                    'name'          => $request->name,
+                    'email'         => $request->emailaddress,
+                    'password'      => $request->password,
+                    'created_at'    => date('Y-m-d H:i:s'),
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                    'theme_color'   => 1,
+                    'is_active'     => 1,
+                ]);
 
-            $data = array(
-                'userid'            => $users->id,
-                'no_member'         => $no_member,
-                'nickname'          => $request->nickname,
-                'nik'               => $request->nik,
-                'no_kk'             => $request->no_kk,
-                'gender'            => $request->gender,
-                'birth_place'       => $request->tempat_lahir,
-                'tgl_lahir'         => $dob,
-                'status_kawin'      => $request->marital,
-                'pekerjaan'         => $request->job,
-                'no_hp'             => $request->no_hp,
-                'alamat'            => $request->address,
-                'provinsi'          => $request->provinsi,
-                'kabupaten'         => $request->kabupaten,
-                'kecamatan'         => $request->kecamatan,
-                'kelurahan'         => $request->kelurahan,
-                'alamat_domisili'   => $request->alamat_domisili,
-                'provinsi_domisili' => $request->provinsi_domisili,
-                'kabupaten_domisili'=> $request->kabupaten_domisili,
-                'kecamatan_domisili'=> $request->kecamatan_domisili,
-                'kelurahan_domisili'=> $request->kelurahan_domisili,
-                'activation_code'   => Str::random(40).$request->input('email'),
-                'foto_ktp'          => $ktp_name,
-                'foto_kk'           => $kk_name,
-                'status_korlap'     => 1,
-                'created_at'        => date('Y-m-d H:i:s')
-            );
-            $detail = DetailUsers::insert($data);
-            \DB::commit();
-            $message['is_error'] = false;
-            $message['error_msg'] = "Pendaftaran Berhasil";
+                $roles = \DB::table('role_user')
+                        ->insert([
+                            'user_id' => $users->id, 
+                            'role_id' => 3
+                ]);
+
+                $data = array(
+                    'userid'            => $users->id,
+                    'no_member'         => $no_member,
+                    'nickname'          => $request->nickname,
+                    'nik'               => $request->nik,
+                    'no_kk'             => $request->no_kk,
+                    'gender'            => $request->gender,
+                    'birth_place'       => $request->tempat_lahir,
+                    'tgl_lahir'         => $dob,
+                    'status_kawin'      => $request->marital,
+                    'pekerjaan'         => $request->job,
+                    'no_hp'             => $request->no_hp,
+                    'alamat'            => $request->address,
+                    'provinsi'          => $request->provinsi,
+                    'kabupaten'         => $request->kabupaten,
+                    'kecamatan'         => $request->kecamatan,
+                    'kelurahan'         => $request->kelurahan,
+                    'alamat_domisili'   => $request->alamat_domisili,
+                    'provinsi_domisili' => $request->provinsi_domisili,
+                    'kabupaten_domisili'=> $request->kabupaten_domisili,
+                    'kecamatan_domisili'=> $request->kecamatan_domisili,
+                    'kelurahan_domisili'=> $request->kelurahan_domisili,
+                    'activation_code'   => Str::random(40).$request->input('email'),
+                    'foto_ktp'          => $ktp_name,
+                    'foto_kk'           => $kk_name,
+                    'status_korlap'     => 1,
+                    'created_at'        => date('Y-m-d H:i:s')
+                );
+                $detail = DetailUsers::insert($data);
+                \DB::commit();
+                $message['is_error'] = false;
+                $message['error_msg'] = "Pendaftaran Berhasil";
+            }
         } catch (\Throwable $th) {
             throw $th;
             \DB::rollback();

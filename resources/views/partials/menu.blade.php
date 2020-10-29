@@ -8,7 +8,7 @@
                 {{ trans('global.dashboard') }}
             </a>
         </li> --}}
-        @can('modul_item_access')
+        {{-- @can('modul_item_access')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">
                 <i class="nav-icon fas fa-cubes"></i> 
@@ -16,31 +16,25 @@
             <div class="dropdown-menu" aria-labelledby="download">
                 @can('item_category_access')
                 <a href="{{ route("admin.item-category.index") }}" class="dropdown-item {{ request()->is('admin/item-category') || request()->is('admin/item-category/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
-
-                    </i> --}}
+                    
                     {{ trans('cruds.item-category.title') }}
                 </a>
                 @endcan
                 @can('item_unit_access')
                 <a href="{{ route("admin.item-unit.index") }}" class="dropdown-item {{ request()->is('admin/item-unit') || request()->is('admin/item-unit/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
-
-                    </i> --}}
+                    
                     {{ trans('cruds.item-unit.title') }}
                 </a>
                 @endcan
                 @can('item_access')
                 <a href="{{ route("admin.item.index") }}" class="dropdown-item {{ request()->is('admin/item') || request()->is('admin/item/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
-
-                    </i> --}}
+                    
                     {{ trans('cruds.item.title') }}
                 </a>
                 @endcan
             </div>
         </li>
-        @endcan
+        @endcan --}}
         @can('modul_member_access')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">
@@ -127,6 +121,30 @@
                 <i class="nav-icon fas fa-database"></i> {{ trans('cruds.masterManagement.title') }} <span class="caret"></span>
             </a>
             <div class="dropdown-menu" aria-labelledby="download">
+                @can('item_category_access')
+                <a href="{{ route("admin.item-category.index") }}" class="dropdown-item {{ request()->is('admin/item-category') || request()->is('admin/item-category/*') ? 'active' : '' }}">
+                    {{-- <i class="fas fa-building nav-icon">
+
+                    </i> --}}
+                    {{ trans('cruds.item-category.title') }}
+                </a>
+                @endcan
+                @can('item_unit_access')
+                <a href="{{ route("admin.item-unit.index") }}" class="dropdown-item {{ request()->is('admin/item-unit') || request()->is('admin/item-unit/*') ? 'active' : '' }}">
+                    {{-- <i class="fas fa-building nav-icon">
+
+                    </i> --}}
+                    {{ trans('cruds.item-unit.title') }}
+                </a>
+                @endcan
+                @can('item_access')
+                <a href="{{ route("admin.item.index") }}" class="dropdown-item {{ request()->is('admin/item') || request()->is('admin/item/*') ? 'active' : '' }}">
+                    {{-- <i class="fas fa-building nav-icon">
+
+                    </i> --}}
+                    {{ trans('cruds.item.title') }}
+                </a>
+                @endcan
                 @can('gudang_access')
                 <a href="{{ route("admin.gudang.index") }}" class="dropdown-item {{ request()->is('admin/gudang') || request()->is('admin/gudang/*') ? 'active' : '' }}">
                     <i class="fas fa-building nav-icon">

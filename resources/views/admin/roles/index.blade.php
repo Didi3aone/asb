@@ -44,7 +44,7 @@
                                 {{ $role->id ?? '' }}
                             </td>
                             <td>
-                                {{ $role->name ?? '' }}
+                                {{ $role->title ?? '' }}
                             </td>
                             <td>
                                 @foreach($role->permissions()->pluck('access_name') as $permission)
