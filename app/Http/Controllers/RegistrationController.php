@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Mail\VerifyEmail;
+use Mail;
+use Auth;
+use Crypt;
 use Hash;
 use App\User;
 use App\DetailUsers;
@@ -158,7 +162,11 @@ class RegistrationController extends Controller
                     'created_at'        => date('Y-m-d H:i:s')
                 );
                 $detail = DetailUsers::insert($data);
+                Mail::to($users->email)->send(new VerifyEmail($users));
+
                 \DB::commit();
+                
+                // send email verification
                 $message['is_error'] = false;
                 $message['error_msg'] = "Pendaftaran Berhasil";
             }
@@ -170,6 +178,35 @@ class RegistrationController extends Controller
         }
         
         return response()->json($message);
+    }
+
+    public function verify()
+    {
+        if (empty(request('token'))) {
+            // if token is not provided
+            return redirect()->route('daftar.index');
+        }
+
+        // descrypt token as email
+        $decryptedEmail = Crypt::decrypt(request('token'));
+
+        // find user by email
+        $user = User::whereEmail($decryptedEmail)->first();
+
+        if ($user->is_verified == 'verified') {
+            Auth::loginUsingId($user->id);
+
+            return redirect('/admin');
+        } else {
+            // otherwise change user status to "activated"
+            $user->is_verified = 'verified';
+            $user->save();
+
+            // autologin
+            Auth::loginUsingId($user->id);
+
+            return redirect('/admin');
+        }
     }
 
     /**

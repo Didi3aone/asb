@@ -11,6 +11,7 @@ Route::post('post-register', 'RegistrationController@store')->name('post-registe
 Route::get('kel', 'RegistrationController@getKelurahan')->name('kel');
 Route::get('kec', 'RegistrationController@getKecamatan')->name('kec');
 Route::get('kab', 'RegistrationController@getKabupaten')->name('kab');
+Route::get('verify', 'RegistrationController@verify')->name('daftar.verify');
 
 Route::get('change-passwords', 'ChangePasswordController@index')->name('change-passwords');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');

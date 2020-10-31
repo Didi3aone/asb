@@ -37,6 +37,7 @@ class User extends Authenticatable
         'remember_token',
         'gudang_id',
         'email_verified_at',
+        'is_verified'
     ];
 
     public static function getName($value)

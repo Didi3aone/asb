@@ -11,12 +11,32 @@
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet">
 		
-        <title>Pendaftaran</title>
+		<title>Pendaftaran</title>
+		<style>
+			.image-overlay {
+				background-image: url("insert image here");
+				display: inline-block;
+				position: relative;
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+			.image-overlay img {
+				opacity: 0;
+			}
+		</style>
     </head>
     <body>
         <div class="container">
             <div class="card mt-5">
-                <div class="card-header bg-info text-white text-center" >
+				<div class="category-overlay">
+					<center>
+						<img width=100 src="{{ asset('images/config/yryr-1-150x150.png') }}">
+						<br><br>
+					</center>
+				</div>
+				<br><br>
+                <div class="card-header bg-danger text-white text-center" >
                     <strong>Pendaftaran Anggota JCUIM</strong>
                 </div>
                 <div class="card-body">
