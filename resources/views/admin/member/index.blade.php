@@ -33,18 +33,9 @@
                     </p>
                 </div>
             </div>
-            
-            {{-- <div class="col">
-                <div class="form-group">
-                    <label></label>
-                    <a class="btn btn-primary" href="{{ route("admin.master-member.create") }}">
-                        <i class="fa fa-plus"></i> Show Report
-                    </a>
-                </div>
-            </div> --}}
         </div>
         <div class="text-xs-right">
-			<button type="submit" class="btn btn-info">Show Report</button>
+			<button type="submit" id="report" name="report" class="btn btn-info">Show Report</button>
 		</div>
     </div>
 </div>
@@ -69,6 +60,9 @@
                     <tr>
                         <th width="10">
 
+                        </th>
+                        <th>
+                            {{ trans('cruds.member.fields.no') }}
                         </th>
                         <th>
                             {{ trans('cruds.member.fields.nama') }}
@@ -107,6 +101,9 @@
                         <tr data-entry-id="{{ $rows->id }}">
                             <td>
 
+                            </td>
+                            <td>
+                                {{ $rows->no_member ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->name ?? '-' }}
@@ -208,8 +205,12 @@
         dtButtons.push(deleteButton)
         @endcan
         $('.datatable:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    })
+    });
 
+    $('#report').on('click', function () {
+        window.open("https://www.google.com");
+  
+    });
 </script>
 @endsection
 @endsection

@@ -10,6 +10,9 @@ app/storage/
 # Laravel 5 & Lumen specific
 public/storage
 public/hot
+public/images/kk
+public/images/ktp
+public/images/avatar
 
 # Laravel 5 & Lumen specific with changed public path
 public_html/storage

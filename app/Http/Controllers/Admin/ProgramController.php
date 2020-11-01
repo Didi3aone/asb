@@ -24,8 +24,9 @@ class ProgramController extends Controller
         abort_unless(\Gate::allows('customer_access'), 403);
 
         $program = Program::all();
+        $prog = Program::all()->pluck('name', 'id');
         // dd($program);
-        return view('admin.program.index', compact('program'));
+        return view('admin.program.index', compact('program', 'prog'));
     }
 
     /**
@@ -63,7 +64,7 @@ class ProgramController extends Controller
         if(isset($request->barang_id[$i])) {
             for($count = 0;$count < count($request->barang_id); $count++) {
                 $data = array(
-                    'id_periode'  => $program->id,
+                    'id_periode'    => $program->id,
                     'id_barang'     => $request->barang_id[$count],
                     'created_at'    => date('Y-m-d H:i:s')
                 );

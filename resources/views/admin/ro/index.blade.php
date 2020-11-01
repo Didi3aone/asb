@@ -1,5 +1,61 @@
 @extends('layouts.admin')
 @section('content')
+<div class="card">
+    <div class="card-header">
+        {{ trans('cruds.request-order.title_singular') }} {{ trans('global.report') }}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="form-group {{ $errors->has('start') ? 'has-error' : '' }}">
+                    <label for="start">{{ trans('cruds.member.fields.start') }}*</label>
+                    <input type="text" id="start" name="start" class="form-control date" value="{{ old('start', date('Y-m-d')) }}">
+                    @if($errors->has('start'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('start') }}
+                        </em>
+                    @endif
+                    <p class="helper-block">
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group {{ $errors->has('end') ? 'has-error' : '' }}">
+                    <label for="end">{{ trans('cruds.member.fields.end') }}*</label>
+                    <input type="text" id="end" name="end" class="form-control date" value="{{ old('end', date('Y-m-d')) }}">
+                    @if($errors->has('end'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('end') }}
+                        </em>
+                    @endif
+                    <p class="helper-block">
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group {{ $errors->has('end') ? 'has-error' : '' }}">
+                    <label for="program">{{ trans('cruds.request-order.fields.type') }}*</label>
+                    <select name="type" id="type" class="form-control select2" required style="width: 100%; height:36px;">
+                        <option value="">{{ trans('global.pleaseSelect') }}</option>
+                        <option value="1">{{ trans('cruds.request-order.fields.request') }}</option>
+                        <option value="2">{{ trans('cruds.request-order.fields.send') }}</option>
+                        <option value="3">{{ trans('cruds.request-order.fields.receive') }}</option>
+                    </select>
+                    @if($errors->has('type'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('type') }}
+                        </em>
+                    @endif
+                    <p class="helper-block">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="text-xs-right">
+			<button type="submit" id="report" name="report" class="btn btn-info">Show Report</button>
+		</div>
+    </div>
+</div>
 @can('transaction_create')
     <div style="margin-bottom: 10px;padding:10 10 10 10px" class="row">
         <div class="col-lg float-right" style="margin-bottom: 10px;padding:10 10 10 10 px;">
@@ -141,7 +197,11 @@
         dtButtons.push(deleteButton)
         @endcan
         $('.datatable:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    })
+    });
+    $('#report').on('click', function () {
+        window.open("https://www.google.com");
+  
+    });
 
 </script>
 @endsection

@@ -45,8 +45,8 @@ return [
         ],
     ],
     'category'        => [
-        'title'          => 'Categories',
-        'title_singular' => 'Categories',
+        'title'          => 'Article Categories',
+        'title_singular' => 'Article Categories',
         'fields'         => [
             'nama'              => 'Name',
             'content'           => 'Content',
@@ -213,6 +213,7 @@ return [
         'title_singular' => 'Members',
         'fields'         => [
             'id'                => 'ID',
+            'no'                => 'No Member',
             'nama'              => 'Name',
             'nickname'          => 'Nickname',
             'nik'               => 'No. KTP',
@@ -358,8 +359,8 @@ return [
         ],
     ],
     'item-category'          => [
-        'title'          => 'Category',
-        'title_singular' => 'Category',
+        'title'          => 'Item Categories',
+        'title_singular' => 'Item Categories',
         'fields'         => [
             'id'                 => 'ID',
             'nama'               => 'Name',
@@ -459,6 +460,10 @@ return [
             'receive_date'      => 'Receive Date',
             'total'             => 'Total',
             'tipe'              => 'Type',
+            'type'              => 'Report Type',
+            'request'           => 'Requested',
+            'send'              => 'Sent',
+            'receive'           => 'Received',
             'barang_id'         => 'Item',
             'total'             => 'Total',
             'nomor_sparepart'   => 'Sparepart Number',

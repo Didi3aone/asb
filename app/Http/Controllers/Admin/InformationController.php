@@ -52,15 +52,6 @@ class InformationController extends Controller
             $pict_name = 'noimage.jpg';
         }
 
-        // if($file = $request->hasFile('fotos')) {
-        //     $file = $request->file('fotos') ;
-        //     $name = time() . $file->getClientOriginalName();
-        //     $file->move(public_path() . '/images/item/', $name);
-        //     $request->merge(['foto' => serialize($name)]);
-        // } else {
-        //     $pict_name = 'noimage.jpg';
-        // }
-
         $info = Information::create([
             'kategori_id'   => $request->kategori_id,
             'name'          => $request->nama,
