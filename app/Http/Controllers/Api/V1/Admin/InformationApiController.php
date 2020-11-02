@@ -64,9 +64,9 @@ class InformationApiController extends Controller
                 }
 
                 $info = Information::create([
-                    'kategori_id'   => $request->kategori_id,
-                    'name'          => $request->nama,
-                    'content'       => $request->content,
+                    'kategori_id'   => $request->input('kategori_id'),
+                    'name'          => $request->input('nama'),
+                    'content'       => $request->input('content'),
                     'gambar'        => $pict_name,
                     'created_by'    => 1,
                     'created_at'    => date('Y-m-d H:i:s')
