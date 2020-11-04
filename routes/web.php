@@ -7,6 +7,7 @@ Route::redirect('/home', '/admin');
 Auth::routes(['register' => false]);
 
 Route::resource('daftar','RegistrationController');
+Route::get('daftar-sukses', 'RegistrationController@successReg')->name('daftar-sukses');
 Route::post('post-register', 'RegistrationController@store')->name('post-register');
 Route::get('kel', 'RegistrationController@getKelurahan')->name('kel');
 Route::get('kec', 'RegistrationController@getKecamatan')->name('kec');

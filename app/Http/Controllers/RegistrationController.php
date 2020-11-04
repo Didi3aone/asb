@@ -180,6 +180,11 @@ class RegistrationController extends Controller
         return response()->json($message);
     }
 
+    public function successReg()
+    {
+        return view('layouts.success');
+    }
+
     public function verify()
     {
         if (empty(request('token'))) {

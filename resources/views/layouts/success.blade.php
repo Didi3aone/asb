@@ -9,7 +9,7 @@
 <table style="width: 85%; height: auto; margin: 20px auto !important; background: #fff; border-spacing: 0; border: 0;">
 	<tr>
 		<td colspan="2" style="padding: 10px; line-height: 1.5; background: #dc3545; text-align: center; color: #fff; border-bottom: 3px solid #ddd;">
-			<h1 style="font-size: 20px; margin: 0;">Verifikasi Email</h1>
+			<h1 style="font-size: 20px; margin: 0;">PENDAFTARAN BERHASIL</h1>
 		</td>
 	</tr>
 
@@ -26,13 +26,12 @@
 				<table style="width: 100%; border-spacing: 0; background:#f2f2f2;">
 					<tr>
 						<td width="50%" style="font-size: 13px; padding: 25px; line-height: 1.5; border-right:1px dashed #ddd; border-left:1px dashed #ddd">
-                            Silahkan klik link di bawah ini <br> 
-							<a href="{{ $link }}">Verify Email</a>
+                            <center>Silahkan Cek Email anda untuk Verifikasi</center>
                         </td>
                     </tr>
                 </table>
 			</div>
-			<p style="font-size: 13px;">Terima Kasih,</p>
+			<p style="font-size: 13px;">Thanks,</p>
 
 		</td>
 	</tr>

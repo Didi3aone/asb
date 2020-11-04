@@ -582,9 +582,7 @@
 								swal('Error',data.error_msg);
 							} else {
 								swal('Info',data.error_msg);
-								document.getElementById("registrationForm").reset();
-								// $('#registrationForm').reset();
-								parent.history.back();
+								window.location.href = "{{ route('daftar-sukses') }}";
 							}
 							// table.draw();
 						},
