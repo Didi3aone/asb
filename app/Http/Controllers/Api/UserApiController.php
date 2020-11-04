@@ -1,51 +1,57 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Admin;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Auth;
-use Illuminate\Support\Str;
+use JWTAuth;
 use App\User;
 use App\DetailUsers;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
-
-class MemberApiController extends Controller
+class UserApiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function login(Request $request)
     {
-        $data = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
-                ->join('role_user', 'users.id', '=', 'role_user.user_id')
-                ->where('role_user.role_id', 3)
-                ->get();
+        $credentials = $request->only('email', 'password');
 
-        if(is_null($data)){
-            return Response([
-                'success'   => true,
-                'messages'  => 'Data Not Found',
-            ], 404);
+        try {
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'invalid_credentials'], 400);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
-        return response([
-            'success'   => true,
-            'message'   => 'List Semua Member',
-            'data'      => $data
-        ], 200);
+        return response()->json(compact('token'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $user = User::create([
+            'name'      => $request->get('name'),
+            'email'     => $request->get('email'),
+            'password'  => $request->get('password'),
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(compact('user','token'),201);
+    }
+
+    public function daftar(Request $request)
     {
         \DB::beginTransaction();
         try {
@@ -75,8 +81,8 @@ class MemberApiController extends Controller
                 'kabupaten_domisili'=> 'required',
                 'kecamatan_domisili'=> 'required',
                 'kelurahan_domisili'=> 'required',
-                'foto_kk'           => 'required|mimes:jpeg,jpg,png,gif|required|max:20000',
-                'foto_ktp'          => 'required|mimes:jpeg,jpg,png,gif|required|max:20000',
+                'foto_kk'           => 'required|mimes:jpeg,jpg,png,gif|required|max:2048',
+                'foto_ktp'          => 'required|mimes:jpeg,jpg,png,gif|required|max:2048',
             ],
             [
                 'name.required'             => 'Masukkan nama !',
@@ -196,37 +202,28 @@ class MemberApiController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function getAuthenticatedUser()
     {
-        //
-    }
+        try {
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['token_expired'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['token_invalid'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['token_absent'], $e->getStatusCode());
+
+        }
+
+        return response()->json(compact('user'));
     }
 }

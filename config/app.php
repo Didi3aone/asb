@@ -178,6 +178,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
 
     /*
@@ -231,6 +232,8 @@ return [
         'Bugsnag'       => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
         'DataTables'    => Yajra\DataTables\Facades\DataTables::class,
         'Image'         => Intervention\Image\Facades\Image::class,
+        'JWTAuth'       => Tymon\JWTAuth\Facades\JWTAuth::class, 
+        'JWTFactory'    => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
 
 ];

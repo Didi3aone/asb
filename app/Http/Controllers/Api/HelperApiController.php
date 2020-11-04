@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Admin;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Item;
 use App\Provinsi;
 use App\Kelurahan;
 use App\Kecamatan;
@@ -14,21 +15,8 @@ use App\Job;
 
 class HelperApiController extends Controller
 {
-    public function prov()
-    {
-        
-        $prov = Provinsi::all();
-
-        return response([
-            'success'   => true,
-            'message'   => 'List Semua Provinsi',
-            'data'      => $prov
-        ], 200);
-    }
-
     public function job()
     {
-        
         $job = Job::all();
 
         return response([
@@ -38,6 +26,16 @@ class HelperApiController extends Controller
         ], 200);
     }
 
+    public function item()
+    {
+        $item = Item::all();
+
+        return response([
+            'success'   => true,
+            'message'   => 'List Semua Barang',
+            'data'      => $item
+        ], 200);
+    }
     public function nikah()
     {
         
@@ -47,6 +45,18 @@ class HelperApiController extends Controller
             'success'   => true,
             'message'   => 'List Status Pernikahan',
             'data'      => $nikah
+        ], 200);
+    }
+
+    public function prov()
+    {
+        
+        $prov = Provinsi::all();
+
+        return response([
+            'success'   => true,
+            'message'   => 'List Semua Provinsi',
+            'data'      => $prov
         ], 200);
     }
 

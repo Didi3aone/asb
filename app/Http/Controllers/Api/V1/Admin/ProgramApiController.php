@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Auth;
 use App\PeriodeProgram as Program;
 use App\DetailPeriodeProgram;
 use App\MstGudang;
@@ -63,7 +64,7 @@ class ProgramApiController extends Controller
                     'start_date'    => $request->input('start_date'),
                     'end_date'      => $request->input('end_date'),
                     'description'   => $request->input('desc'),
-                    'created_by'    => 1,
+                    'created_by'    => Auth::user()->id,
                     'created_at'    => date('Y-m-d H:i:s'),
                 ]);
 
