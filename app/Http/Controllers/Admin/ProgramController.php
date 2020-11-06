@@ -86,10 +86,17 @@ class ProgramController extends Controller
         $program = Program::find($id);
         $detail = DetailPeriodeProgram::where('id_periode', $id)
                 ->get();
-        
+        // dd($detail);
         return view('admin.program.show', compact('program', 'detail')); 
     }
 
+    public function reportProgram(Request $request)
+    {
+        $program = Program::find($request->type);
+        $report = 1;
+
+        return view('admin.program.report', compact('report', 'program')); 
+    }
     /**
      * Show the form for editing the specified resource.
      *

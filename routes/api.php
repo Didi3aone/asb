@@ -27,5 +27,6 @@ Route::group(['prefix' => 'v1', 'as' => 'admin.',  'middleware' => ['jwt.verify'
     Route::apiResource('article-category', 'ArticleCategoryApiController');
     Route::apiResource('member', 'MemberApiController');
     Route::apiResource('ro', 'RequestOrderApiController');
+    Route::apiResource('slider', 'SliderApiController');
     
 });

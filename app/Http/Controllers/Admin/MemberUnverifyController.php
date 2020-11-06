@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\User;
 class MemberUnverifyController extends Controller
 {
     /**
@@ -14,7 +14,13 @@ class MemberUnverifyController extends Controller
      */
     public function index()
     {
-        //
+        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->where('users.is_verified', 'pending')
+                ->get();
+
+        return view('admin.unverified.index', compact('member'));
     }
 
     /**

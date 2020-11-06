@@ -202,6 +202,7 @@ return [
             'updated_by'        => 'Updated By',
             'count'             => 'Count',
             'password'          => 'Password',
+            'reporttype'        => 'Type Cannot be Empty',
             'alamat'            => 'Address',
             'created_at'        => 'Created at',
             'updated_at'        => 'Updated at',

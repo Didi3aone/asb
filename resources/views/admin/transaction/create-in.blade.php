@@ -11,7 +11,7 @@
             @csrf
             <input type="hidden" name="tipe" value="1">
             <div class="form-group {{ $errors->has('nomor_ijin') ? 'has-error' : '' }}">
-                <label for="nomor_ijin">{{ trans('cruds.transaction-stock.fields.nomor_ijin') }}*</label>
+                <label for="nomor_ijin">{{ trans('cruds.transaction-stock.fields.nomor_transaksi') }}*</label>
                 <input type="text" id="nomor_ijin" name="nomor_ijin" class="form-control" value="{{ old('nomor_ijin', '') }}">
                 @if($errors->has('nomor_ijin'))
                     <em class="invalid-feedback">

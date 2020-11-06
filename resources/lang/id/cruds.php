@@ -198,6 +198,7 @@ return [
             'desc'      => 'Deskripsi',
             'created_by'=> 'Pembuat',
             'updated_by'=> 'Update',
+            'reporttype'        => 'Tipe tidak boleh kosong',
             'count'     => 'Total',
             'alamat'    => 'Alamat',
             'created_at'=> 'Dibuat pada',
@@ -426,7 +427,7 @@ return [
         'title_singular' => 'Transaksi',
         'fields'         => [
             'id'                 => 'ID',
-            'nomor_transaksi'    => 'Transaksi Number',
+            'nomor_transaksi'    => 'Nomor Transaksi',
             'nomor_ijin'         => 'Nomor Ijin',
             'tanggal_transaksi'  => 'Tanggal Transaksi',
             'gudang_id'          => 'Gudang',

@@ -1,4 +1,6 @@
-<div class="collapse navbar-collapse" id="navbarResponsive">
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div style="font-size: 12">
     <ul class="navbar-nav">
         {{-- <li class="nav-item">
             <a href="{{ route("admin.home") }}" class="nav-link">
@@ -36,6 +38,7 @@
         </li>
         @endcan --}}
         @can('modul_member_access')
+        
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">
                 <i class="nav-icon fas fa-cubes"></i> 
@@ -306,3 +309,4 @@
         </a>
     </li>
 </ul>
+</div>

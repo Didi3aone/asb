@@ -48,6 +48,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('gudang', 'GudangController');
     Route::resource('supplier', 'SupplierController');
     Route::resource('program', 'ProgramController');
+    Route::get('report-program', 'ProgramController@reportProgram')->name('report-program');
     Route::resource('wilayah', 'WilayahController');
     Route::resource('provinsi', 'ProvinsiController');
     Route::resource('kabupaten', 'KabupatenController');
