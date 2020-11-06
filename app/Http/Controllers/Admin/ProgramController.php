@@ -93,8 +93,17 @@ class ProgramController extends Controller
     public function reportProgram(Request $request)
     {
         $program = Program::find($request->type);
-        $report = 1;
-
+        $detail = Program::join('p_detail_periode_programs', 'periode_programs.id', '=', 'p_detail_periode_programs.id_periode')
+                ->join('barang', 'p_detail_periode_programs.id_barang', '=', 'barang.id')
+                ->select('periode_programs.name', 'periode_programs.description', 'barang.nama')
+                ->where('periode_programs.id', $request->type);
+                if(isset($request->start) && isset($request->end))
+                {
+                    $detail->where('start_date', '>=', $request->start);
+                    $detail->where('end_date', '<=', $request->end);
+                }
+        $report = $detail->get();
+        // dd($detail);
         return view('admin.program.report', compact('report', 'program')); 
     }
     /**
