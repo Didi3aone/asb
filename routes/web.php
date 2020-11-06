@@ -38,7 +38,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('transaksi-out','TransaksiStokController@createOut')->name('transaksi-out');
     Route::post('transaksi-store-out','TransaksiStokController@storeOut')->name('transaksi-store-out');
     Route::resource('ro', 'RequestOrderController');
+    Route::get('report-ro', 'RequestOrderController@reportRO')->name('report-ro');
     Route::resource('po', 'PurchaseOrderController');
+    Route::get('report-po', 'PurchaseOrderController@reportPO')->name('report-po');
 
     //Information
     Route::resource('info', 'InformationController');
@@ -73,5 +75,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('get-kel', 'HelperController@getKelurahan')->name('get-kel');
     Route::get('get-kec', 'HelperController@getKecamatan')->name('get-kec');
     Route::get('get-kab', 'HelperController@getKabupaten')->name('get-kab');
+    Route::get('get-member', 'HelperController@getMember')->name('get-member');
     
 });

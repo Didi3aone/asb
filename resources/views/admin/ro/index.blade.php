@@ -9,7 +9,7 @@
             <div class="col">
                 <div class="form-group {{ $errors->has('start') ? 'has-error' : '' }}">
                     <label for="start">{{ trans('cruds.member.fields.start') }}*</label>
-                    <input type="text" id="start" name="start" class="form-control date" value="{{ old('start', date('Y-m-d')) }}">
+                    <input type="text" id="start" name="start" class="form-control date" value="{{ old('start') }}">
                     @if($errors->has('start'))
                         <em class="invalid-feedback">
                             {{ $errors->first('start') }}
@@ -22,7 +22,7 @@
             <div class="col">
                 <div class="form-group {{ $errors->has('end') ? 'has-error' : '' }}">
                     <label for="end">{{ trans('cruds.member.fields.end') }}*</label>
-                    <input type="text" id="end" name="end" class="form-control date" value="{{ old('end', date('Y-m-d')) }}">
+                    <input type="text" id="end" name="end" class="form-control date" value="{{ old('end') }}">
                     @if($errors->has('end'))
                         <em class="invalid-feedback">
                             {{ $errors->first('end') }}
@@ -199,8 +199,14 @@
         $('.datatable:not(.ajaxTable)').DataTable({ buttons: dtButtons })
     });
     $('#report').on('click', function () {
-        window.open("https://www.google.com");
-  
+        var start   = $("#start").val();
+        var end     = $("#end").val();
+        var type    = $("#type").val();
+        // if(type == '') {
+		// 	swal("Error","{{ trans('cruds.program.fields.reporttype') }}");
+		// 	return false;
+		// }
+        window.open("{{ route('admin.report-ro') }}?start="+ start +"&end="+ end +"&type="+ type);
     });
 
 </script>

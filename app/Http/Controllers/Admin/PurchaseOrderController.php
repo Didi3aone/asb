@@ -35,6 +35,42 @@ class PurchaseOrderController extends Controller
         //
     }
 
+    public function reportPO(Request $request)
+    {
+        abort_unless(\Gate::allows('transaction_create'), 503);
+        /* if($request->type == 1){
+            $title = 'Status Pengajuan';
+        } elseif ($request->type == 2) {
+            $title = 'Status Pengiriman';
+        } elseif ($request->type == 3) {
+            $title = 'Status Telah Diterima';
+        } else {
+            $title = 'Semua Status';
+        }
+
+        $detail = Req::join('periode_programs', 'requests.program_id', '=', 'periode_programs.id')
+                ->join('r_detail_requests', 'r_detail_requests.no_req', '=', 'requests.no_request')
+                ->leftJoin('users', 'r_detail_requests.receiver_id', '=', 'users.id')
+                ->selectRaw('requests.no_request , periode_programs.name, users.name as member,
+                    CASE 
+                        when r_detail_requests.status_penerima = 1 then "Diajukan"
+                        when r_detail_requests.status_penerima = 2 then "Dikirim"
+                        else "Diterima"
+                    end as status, r_detail_requests.status_penerima'
+                );
+        if(isset($request->type)) {
+            $detail->where('r_detail_requests.status_penerima', $request->type);
+        }
+        if(isset($request->start) && isset($request->end))
+        {
+            $detail->where('periode_programs.start_date', '>=', $request->start.'00:00:00');
+            $detail->where('periode_programs.end_date', '<=', $request->end.'24:00:00');
+        }
+        $report = $detail->get(); */
+
+        // return view('admin.po.report', compact('report', 'title')); 
+        return view('admin.po.report'); 
+    }
     /**
      * Store a newly created resource in storage.
      *

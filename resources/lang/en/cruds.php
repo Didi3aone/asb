@@ -486,6 +486,8 @@ return [
             'total'             => 'Total',
             'tipe'              => 'Type',
             'barang_id'         => 'Item',
+            'paid'              => 'Paid',
+            'unpaid'            => 'Unpaid',
             'qty'               => 'Qty',
             'nomor_sparepart'   => 'Sparepart Number',
             'in_out'            => 'In / Out',

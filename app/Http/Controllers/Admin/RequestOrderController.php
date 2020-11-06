@@ -10,7 +10,7 @@ use App\Http\Requests\UpdateRORequest;
 use App\Request as Req;
 use App\PeriodeProgram;
 use App\MstGudang;
-use App\Member;
+use App\User;
 use App\Item;
 
 class RequestOrderController extends Controller
@@ -47,11 +47,48 @@ class RequestOrderController extends Controller
     public function create()
     {
         abort_unless(\Gate::allows('transaction_create'), 403);
-        $program = PeriodeProgram::all()->pluck('name', 'id');
-        $member = Member::all()->pluck('nama', 'id');
+        
+        $program= PeriodeProgram::all()->pluck('name', 'id');
+        $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)->pluck('name', 'id');
         $item   = Item::all()->pluck('nama','id');
 
         return view('admin.ro.create', compact('program', 'member', 'item'));
+    }
+
+    public function reportRO(Request $request)
+    {
+        if($request->type == 1){
+            $title = 'Status Pengajuan';
+        } elseif ($request->type == 2) {
+            $title = 'Status Pengiriman';
+        } elseif ($request->type == 3) {
+            $title = 'Status Telah Diterima';
+        } else {
+            $title = 'Semua Status';
+        }
+
+        $detail = Req::join('periode_programs', 'requests.program_id', '=', 'periode_programs.id')
+                ->join('r_detail_requests', 'r_detail_requests.no_req', '=', 'requests.no_request')
+                ->leftJoin('users', 'r_detail_requests.receiver_id', '=', 'users.id')
+                ->selectRaw('requests.no_request , periode_programs.name, users.name as member,
+                    CASE 
+                        when r_detail_requests.status_penerima = 1 then "Diajukan"
+                        when r_detail_requests.status_penerima = 2 then "Dikirim"
+                        else "Diterima"
+                    end as status, r_detail_requests.status_penerima'
+                );
+        if(isset($request->type)) {
+            $detail->where('r_detail_requests.status_penerima', $request->type);
+        }
+        if(isset($request->start) && isset($request->end))
+        {
+            $detail->where('periode_programs.start_date', '>=', $request->start);
+            $detail->where('periode_programs.end_date', '<=', $request->end);
+        }
+        $report = $detail->get();
+
+        return view('admin.ro.report', compact('report', 'title')); 
     }
 
     /**

@@ -479,6 +479,8 @@ return [
             'program'           => 'Program',
             'total'             => 'Total',
             'tipe'              => 'Tipe',
+            'paid'              => 'Dibayar',
+            'unpaid'            => 'Belum Dibayar',
             'barang_id'         => 'Barang',
             'qty'               => 'Kuantitas',
             'nomor_sparepart'   => 'Nomor Sparepart',

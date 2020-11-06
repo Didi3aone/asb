@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Kelurahan;
 use App\Kecamatan;
 use App\Kabupaten;
+use App\User;
+use App\Item;
 
 class HelperController extends Controller
 {
@@ -31,6 +33,15 @@ class HelperController extends Controller
         $data = Kabupaten::where('id_prov', $request->val)
             ->get();
 
+        return \Response::json($data);
+    }
+
+    public function getMember(Request $request)
+    {
+        $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->get();
+                
         return \Response::json($data);
     }
 }

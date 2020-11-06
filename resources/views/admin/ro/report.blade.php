@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Report Program {{ trans('cruds.program.title_singular') }} - {{ $program->name }}</title>
+    <title>Report Request Order {{ $title }}</title>
     <!-- DataTables -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
     <div class="card">
         <div class="card-header">
-            <center>Report {{ trans('cruds.program.title_singular') }} - {{ $program->name }}</center>
+            <center>Report Request Order {{ $title }}</center>
         </div>
         <div class="card-body">
             <div class="mb-2">
@@ -25,9 +25,10 @@
                     <thead>
                         <tr>
                             <th scope="col">No.</th>
+                            <th scope="col">Nomor Request</th>
                             <th scope="col">Nama Program</th>
-                            <th scope="col">Deskripsi</th>
-                            <th scope="col">Barang</th>
+                            <th scope="col">Penerima</th>
+                            <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,13 +38,16 @@
                                     {{ $key+1 }}
                                 </td>
                                 <td>
+                                    {{ $rows->no_request ?? '' }}
+                                </td>
+                                <td>
                                     {{ $rows->name ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $rows->description ?? '' }}
+                                    {{ $rows->member ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $rows->nama ?? '' }}
+                                    {{ $rows->status ?? '' }}
                                 </td>
                             </tr>
                         @endforeach
