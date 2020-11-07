@@ -9,6 +9,8 @@ use App\Http\Requests\StorePORequest;
 use App\Http\Requests\UpdatePORequest;
 use App\PurchaseOrder;
 use App\MstGudang;
+use App\StokBarang;
+use App\LogStokBarang;
 use App\Item;
 
 class PurchaseOrderController extends Controller
@@ -32,7 +34,12 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        //
+        abort_unless(\Gate::allows('transaction_create'), 403);
+        
+        $gudang = MstGudang::all()->pluck('nama_gudang','id');
+        $item   = Item::all()->pluck('nama','id');
+
+        return view('admin.po.create',\compact('gudang','item'));
     }
 
     public function reportPO(Request $request)

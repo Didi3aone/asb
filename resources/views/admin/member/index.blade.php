@@ -208,8 +208,14 @@
     });
 
     $('#report').on('click', function () {
-        window.open("https://www.google.com");
-  
+        var start   = $("#start").val();
+        var end     = $("#end").val();
+        var type    = $("#type").val();
+        if(type == '') {
+			swal("Error","{{ trans('cruds.program.fields.reporttype') }}");
+			return false;
+		}
+        window.open("{{ route('admin.report-member') }}?start="+ start +"&end="+ end +"&type="+ type);
     });
 </script>
 @endsection

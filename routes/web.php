@@ -57,6 +57,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('kecamatan', 'KecamatanController');
     Route::resource('kelurahan', 'KelurahanController');
     Route::resource('master-member', 'MemberController');
+    Route::resource('master-member', 'MemberController');
 
     //Settings
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');

@@ -58,7 +58,7 @@
 @can('transaction_create')
     <div style="margin-bottom: 10px;padding:10 10 10 10px" class="row">
         <div class="col-lg float-right" style="margin-bottom: 10px;padding:10 10 10 10 px;">
-            <a class="btn btn-warning" href="{{ route("admin.ro.create") }}">
+            <a class="btn btn-warning" href="{{ route("admin.po.create") }}">
                 <i class="fa fa-plus"></i> {{ trans('cruds.purchase-order.title_singular') }}
             </a>
         </div>

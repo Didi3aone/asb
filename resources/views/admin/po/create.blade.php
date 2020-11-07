@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header bg-warning">
-        {{ trans('global.create') }} {{ trans('cruds.request-order.title_singular') }}
+        {{ trans('global.create') }} {{ trans('cruds.transaction-stock.title_transaction_in') }}
     </div>
 
     <div class="card-body">
@@ -11,8 +11,7 @@
             @csrf
             <input type="hidden" name="tipe" value="1">
             <div class="form-group {{ $errors->has('nomor_ijin') ? 'has-error' : '' }}">
-                {{-- <label for="nomor_ijin">{{ trans('cruds.transaction-stock.fields.nomor_ijin') }}*</label> --}}
-                <label for="nomor_ijin">No Request*</label>
+                <label for="nomor_ijin">{{ trans('cruds.transaction-stock.fields.nomor_transaksi') }}*</label>
                 <input type="text" id="nomor_ijin" name="nomor_ijin" class="form-control" value="{{ old('nomor_ijin', '') }}">
                 @if($errors->has('nomor_ijin'))
                     <em class="invalid-feedback">
@@ -24,8 +23,7 @@
                 </p>
             </div>
             <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                {{-- <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label> --}}
-                <label for="roles">Program ID *</label>
+                <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
                 <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
                     <option value="">{{ trans('global.pleaseSelect') }}</option>
                     @foreach($gudang as $id => $gd)
@@ -57,17 +55,11 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>No Req</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    {{-- <tr>
                         <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
                         <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th>
+                        <th>Price </th>
                         <th>&nbsp;</th>
-                    </tr> --}}
+                    </tr>
                     </thead>
                     <tbody id="items">
                     <tr>
