@@ -139,13 +139,15 @@ return [
         'title'          => 'Gudang',
         'title_singular' => 'Gudang',
         'fields'         => [
-            'id'                 => 'ID',
-            'name'               => 'Nama Gudang',
-            'status'             => 'Status',
-            'rak'                => 'Rak',
-            'created_at'         => 'Dibuat Pada',
-            'updated_at'         => 'Dirubah Pada',
-            'deleted_at'         => 'Dihapus Pada',
+            'id'                => 'ID',
+            'name'              => 'Nama Gudang',
+            'status'            => 'Status',
+            'rak'               => 'Rak',
+            'created_at'        => 'Dibuat Pada',
+            'updated_at'        => 'Dirubah Pada',
+            'deleted_at'        => 'Dihapus Pada',
+            'hapus_confirm'     => 'Hapus Rak ini ?',
+            'rak_val'           => 'Nama Rak Tidak Boleh Kosong !'
         ],
     ],
     'suppliers'          => [

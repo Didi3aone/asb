@@ -135,4 +135,51 @@ class GudangController extends Controller
 
         return \redirect()->route('admin.gudang.index')->with('success',\trans('notif.notification.delete_data.success'));
     }
+
+    public function addRakPartials(Request $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $message['is_error'] = true;
+            $message['error_msg'] = "";
+
+            $data = array(
+                'gudang_id'     => $request->gudang_id,
+                'name'          => $request->rak,
+                'created_by'    => \Auth::user()->id,
+                'created_at'    => date('Y-m-d H:i:s')
+            );
+            $mpp = RakGudang::insertGetId($data);
+            \DB::commit();
+            $message['is_error'] = false;
+            $message['error_msg'] = 'Save Sukses';
+        } catch (\Throwable $th) {
+            throw $th;
+            $message['is_error'] = true;
+            $message['error_msg'] = "Save Failed";
+        }
+    }
+
+    public function updateRakPartials(Request $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $message['is_error'] = true;
+            $message['error_msg'] = "";
+
+            $rak = RakGudang::find($request->id);
+            $rak->name          = $request->rak;
+            $rak->updated_by   = \Auth::user()->id;
+            $rak->updated_at   = date("Y-m-d H:i:s");
+            $rak->update();
+
+            \DB::commit();
+            $message['is_error'] = false;
+            $message['error_msg'] = 'Update Sukses';
+        } catch (\Throwable $th) {
+            throw $th;
+            $message['is_error'] = true;
+            $message['error_msg'] = "Update Failed";
+        }
+    }
 }

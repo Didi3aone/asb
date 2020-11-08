@@ -142,13 +142,15 @@ return [
         'title'          => 'Warehouse',
         'title_singular' => 'Warehouse',
         'fields'         => [
-            'id'                 => 'ID',
-            'name'               => 'Warehouse Name',
-            'status'             => 'Status',
-            'rak'                => 'Shelf',
-            'created_at'         => 'Created at',
-            'updated_at'         => 'Updated at',
-            'deleted_at'         => 'Deleted at',
+            'id'                => 'ID',
+            'name'              => 'Warehouse Name',
+            'status'            => 'Status',
+            'rak'               => 'Shelf',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+            'hapus_confirm'     => 'Delete This Shelf ?',
+            'rak_val'           => 'Shelf Name Cannot be Empty !'       
         ],
     ],
     'suppliers'          => [
