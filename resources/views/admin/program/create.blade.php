@@ -58,25 +58,6 @@
                 </p>
             </div>
             
-            {{-- <div class="form-group {{ $errors->has('ppn') ? 'has-error' : '' }}">
-                PPN*
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="ppn" id="inlineRadio1" value="{{ \App\MstSupplier::YesPpn }}">
-                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="ppn" checked id="inlineRadio2" value="{{ \App\MstSupplier::NoPpn }}">
-                    <label class="form-check-label" for="inlineRadio2">No</label>
-                </div>
-                 @if($errors->has('ppn'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('ppn') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-
-                </p>
-            </div> --}}
             <div class="form-group">
                 <table class="table table-bordered">
                     <thead>
@@ -104,22 +85,6 @@
                             <p class="helper-block">
                             </p>
                         </td>
-                        {{-- <td>
-                            <input type="text" id="qty_0" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-                            @if($errors->has('qty'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('qty') }}
-                                </em>
-                            @endif
-                        </td>
-                        <td>
-                            <input type="text" id="nomor_sparepart_0" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                            @if($errors->has('nomor_sparepart'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('nomor_sparepart') }}
-                                </em>
-                            @endif
-                        </td> --}}
                         <td>
                             <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
                         </td>
@@ -145,22 +110,6 @@
 @section('scripts')
 @parent
 <script>
-    /* <td>
-        <input type="text" id="qty_${index}" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-        @if($errors->has('qty'))
-            <em class="invalid-feedback">
-                {{ $errors->first('qty') }}
-            </em>
-        @endif
-    </td>
-    <td>
-        <input type="text" id="nomor_sparepart_${index}" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-        @if($errors->has('nomor_sparepart'))
-            <em class="invalid-feedback">
-                {{ $errors->first('nomor_sparepart') }}
-            </em>
-        @endif
-    </td> */
     $("body").on("click",".btn-remove",function(){
         $(this).parents(".control-group").remove();
     });

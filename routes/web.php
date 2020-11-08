@@ -48,6 +48,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Master
     Route::resource('gudang', 'GudangController');
+    Route::put('rak-update-partial', 'GudangController@updateRakPartials')->name('rak-update-partial');
+    Route::put('rak-add-partial', 'GudangController@addRakPartials')->name('rak-add-partial');
+    Route::put('rak-del-partial', 'GudangController@delRakPartials')->name('rak-del-partial');
     Route::resource('supplier', 'SupplierController');
     Route::resource('program', 'ProgramController');
     Route::get('report-program', 'ProgramController@reportProgram')->name('report-program');

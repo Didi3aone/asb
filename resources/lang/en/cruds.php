@@ -145,6 +145,7 @@ return [
             'id'                 => 'ID',
             'name'               => 'Warehouse Name',
             'status'             => 'Status',
+            'rak'                => 'Shelf',
             'created_at'         => 'Created at',
             'updated_at'         => 'Updated at',
             'deleted_at'         => 'Deleted at',

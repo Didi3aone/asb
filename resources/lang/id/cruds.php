@@ -142,6 +142,7 @@ return [
             'id'                 => 'ID',
             'name'               => 'Nama Gudang',
             'status'             => 'Status',
+            'rak'                => 'Rak',
             'created_at'         => 'Dibuat Pada',
             'updated_at'         => 'Dirubah Pada',
             'deleted_at'         => 'Dihapus Pada',

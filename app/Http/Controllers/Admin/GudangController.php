@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyGudangRequest;
 use App\Http\Requests\StoreGudangRequest;
 use App\Http\Requests\UpdateGudangRequest;
 use App\MstGudang;
+use App\RakGudang;
 
 class GudangController extends Controller
 {
@@ -45,7 +46,33 @@ class GudangController extends Controller
      */
     public function store(StoreGudangRequest $request)
     {
-        MstGudang::create($request->all());
+        \DB::beginTransaction();
+        try {
+            // dd($request);
+            $gudang = MstGudang::create([
+                'nama_gudang' => $request->nama_gudang
+            ]);
+
+            $i=0;
+
+            if(isset($request->rak[$i])) {
+                for($count = 0;$count < count($request->rak); $count++) {
+                    $data = array(
+                        'gudang_id' => $gudang->id,
+                        'name'      => $request->rak[$count],
+                        'created_by'=> \Auth::user()->id,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    );
+                    $insert_detail[] = $data;
+                }
+                RakGudang::insert($insert_detail);
+            }
+
+            \DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+        } 
 
         return \redirect()->route('admin.gudang.index')->with('success',\trans('notif.notification.save_data.success'));
     }
@@ -71,8 +98,10 @@ class GudangController extends Controller
     {
         abort_unless(\Gate::allows('gudang_edit'), 403);
         $gudang = MstGudang::find($id);
+        $rak    = RakGudang::where('gudang_id', $id)
+                ->get();
 
-        return view('admin.gudang.edit', compact('gudang'));
+        return view('admin.gudang.edit', compact('gudang', 'rak'));
     }
 
     /**
