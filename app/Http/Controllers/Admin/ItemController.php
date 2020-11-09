@@ -8,6 +8,9 @@ use App\Http\Requests\MassDestroyItemRequest;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Item;
+use App\ItemUnit;
+use App\ItemCategory;
+use App\DetailPacket;
 
 class ItemController extends Controller
 {
@@ -34,8 +37,8 @@ class ItemController extends Controller
     {
         abort_unless(\Gate::allows('item_create'), 403);
 
-        $kategori = \App\ItemCategory::all()->pluck('nama','id');
-        $unit = \App\ItemUnit::all()->pluck('nama','id');
+        $kategori   = ItemCategory::all()->pluck('nama','id');
+        $unit       = ItemUnit::all()->pluck('nama','id');
 
         return view('admin.item.create',\compact('kategori','unit'));
     }
@@ -82,8 +85,8 @@ class ItemController extends Controller
         abort_unless(\Gate::allows('item_edit'), 403);
 
         $item = Item::find($id);
-        $kategori = \App\ItemCategory::all()->pluck('nama','id');
-        $unit = \App\ItemUnit::all()->pluck('nama','id');
+        $kategori = ItemCategory::all()->pluck('nama','id');
+        $unit = ItemUnit::all()->pluck('nama','id');
 
         return view('admin.item.edit',\compact('item','kategori','unit'));
     }
@@ -126,5 +129,59 @@ class ItemController extends Controller
         $gudang->update();
 
         return \redirect()->route('admin.item.index')->with('success',\trans('notif.notification.delete_data.success'));
+    }
+
+    public function createPacket()
+    {
+        $kategori   = ItemCategory::all()->pluck('nama','id');
+        $unit       = ItemUnit::all()->pluck('nama','id');
+        $item       = Item::where('is_paket', 0)->pluck('nama','id');
+
+        return view('admin.item.create-packet',\compact('kategori', 'item', 'unit'));
+    }
+
+    public function postPacket(Request $request)
+    {
+        // dd($request);
+        \DB::beginTransaction();
+        try {
+            // if($file = $request->hasFile('fotos')) {
+            //     $file = $request->file('fotos') ;
+            //     $name = time() . $file->getClientOriginalName();
+            //     $file->move(public_path() . '/images/item/', $name);
+            //     $request->merge(['foto' => serialize($name)]);
+            // }
+
+            if ($request->file('fotos')) {
+                $fotos = $request->file('fotos');
+                $name = time() . $fotos->getClientOriginalName();
+                $fotos->move(public_path() . '/images/item/', $name);
+                $request->merge(['foto' => serialize($name)]);
+            } else {
+                $kk_name = 'noimage.jpg';
+            }
+            
+            $item = Item::create($request->all());
+
+            $i=0;
+            if(isset($request->barang_id[$i]) && isset($request->qty[$id])) {
+                for($count = 0;$count < count($request->barang_id); $count++) {
+                    $data = array(
+                        'kode_barang'   => $item->id,
+                        'id_barang'     => $program->id,
+                        'qty'           => $request->barang_id[$count],
+                        'created_at'    => date('Y-m-d H:i:s')
+                    );
+                    $insert_detail[] = $data;
+                }
+                DetailPacket::insert($insert_detail);
+            }
+
+            \DB::commit();
+            return \redirect()->route('admin.item.index')->with('success',\trans('notif.notification.save_data.success'));
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
     }
 }

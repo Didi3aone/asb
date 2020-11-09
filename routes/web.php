@@ -28,6 +28,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('item-unit', 'ItemUnitController');
 
     Route::resource('item', 'ItemController');
+    Route::get('create-packet', 'ItemController@createPacket')->name('create-packet');
+    Route::post('post-packet', 'ItemController@postPacket')->name('post-packet');
+    Route::get('edit-packet', 'ItemController@editPacket')->name('edit-packet');
 
     Route::resource('verify','MemberVerifyController');
     Route::resource('unverify','MemberUnverifyController');

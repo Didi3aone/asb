@@ -1,10 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 @can('item_create')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-primary float-right" href="{{ route("admin.item.create") }}">
-                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.item.title_singular') }}
+    <div style="margin-bottom: 10px;padding:10 10 10 10px" class="row">
+        <div class="col-lg float-right" style="margin-bottom: 10px;padding:10 10 10 10 px;">
+            <a class="btn btn-warning" href="{{ route("admin.item.create") }}">
+                <i class="fa fa-plus"></i> {{ trans('cruds.item.title') }}
+            </a>
+            <a class="btn btn-primary" href="{{ route("admin.create-packet") }}">
+                <i class="fa fa-plus"></i> {{ trans('cruds.item.fields.packet') }}
             </a>
         </div>
     </div>
@@ -82,6 +85,11 @@
                                             <i class="fa fa-eye"></i> {{ trans('global.view') }}
                                         </a>
                                     @endcan
+                                @endif
+                                @if($items->is_paket == 1)
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.edit-packet', $items->id) }}">
+                                        <i class="fa fa-eye"></i> {{ trans('global.view') }}
+                                    </a>
                                 @endif
                                 @can('item_unit_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.item.edit', $items->id) }}">

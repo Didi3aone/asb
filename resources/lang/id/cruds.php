@@ -410,6 +410,7 @@ return [
         'title_singular' => 'Barang',
         'fields'         => [
             'id'            => 'ID',
+            'packet'        => 'Paket',
             'nama'          => 'Nama',
             'status'        => 'Status',
             'kategori_id'   => 'Kategori',

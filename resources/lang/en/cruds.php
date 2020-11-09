@@ -416,6 +416,7 @@ return [
         'title_singular' => 'Item',
         'fields'         => [
             'id'            => 'ID',
+            'packet'        => 'Packet',
             'nama'          => 'Name',
             'status'        => 'Status',
             'kategori_id'   => 'Category',
