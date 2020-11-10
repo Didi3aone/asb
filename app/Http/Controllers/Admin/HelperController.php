@@ -9,6 +9,7 @@ use App\Kecamatan;
 use App\Kabupaten;
 use App\User;
 use App\Item;
+use App\RakGudang;
 
 class HelperController extends Controller
 {
@@ -40,6 +41,14 @@ class HelperController extends Controller
     {
         $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->where('role_user.role_id', 3)
+                ->get();
+                
+        return \Response::json($data);
+    }
+
+    public function getRak(Request $request)
+    {
+        $data = RakGudang::where('gudang_id', $request->val)
                 ->get();
                 
         return \Response::json($data);

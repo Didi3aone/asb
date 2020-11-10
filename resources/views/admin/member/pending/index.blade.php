@@ -103,7 +103,10 @@
 
                             </td>
                             <td>
-                                {{ $rows->no_member ?? '-' }}
+                                @php
+                                    $kec = str_pad($rows->kecid,4,"0",STR_PAD_LEFT);   
+                                @endphp
+                                {{ $rows->provid ?? '-' }}.{{ $kec ?? '-' }}.{{ $rows->no_member ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->name ?? '-' }}

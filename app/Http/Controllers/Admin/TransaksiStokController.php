@@ -27,7 +27,7 @@ class TransaksiStokController extends Controller
         abort_unless(\Gate::allows('transaction_access'), 403);
 
         $transaction = TransaksiStok::all();
-
+        // dd($transaction);
         return view('admin.transaction.index', compact('transaction'));
     }
 
@@ -43,6 +43,11 @@ class TransaksiStokController extends Controller
         $item   = Item::all()->pluck('nama','id');
 
         return view('admin.transaction.create-in',\compact('gudang','item'));
+    }
+
+    public function reportTransaksi()
+    {
+        return view('admin.transaction.report');
     }
 
     /**
@@ -69,10 +74,15 @@ class TransaksiStokController extends Controller
     {
         \DB::beginTransaction();
         try {
+            if(!isset($request->rak_id)) {
+                $request->merge(['rak_id' => 0]);
+            }
+            
             $header = TransaksiStok::create([
                 'nomor_transaksi'   => time(),
                 'tipe'              => $request->tipe,
                 'nomor_ijin'        => $request->nomor_ijin,
+                'rak_id'            => $request->rak_id,
                 'gudang_id'         => $request->gudang_id,
                 'tanggal_transaksi' => $request->tanggal_transaksi,
             ]);
@@ -168,7 +178,6 @@ class TransaksiStokController extends Controller
             foreach( $request->barang_id as $key => $detail ) {
                 TransaksiStokDetail::create([
                     'transaksi_id'      => $header->id,
-                    'nomor_sparepart'   => $request->nomor_sparepart[$key],
                     'barang_id'         => $request->barang_id[$key],
                     'qty'               => $request->qty[$key],
                 ]);

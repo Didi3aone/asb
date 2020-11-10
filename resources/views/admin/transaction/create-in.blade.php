@@ -22,21 +22,41 @@
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
-                <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
-                    <option value="">{{ trans('global.pleaseSelect') }}</option>
-                    @foreach($gudang as $id => $gd)
-                        <option value="{{ $id }}">{{ $gd }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('gudang_id'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('gudang_id') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                </p>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
+                        <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
+                        <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
+                            <option value="">{{ trans('global.pleaseSelect') }}</option>
+                            @foreach($gudang as $id => $gd)
+                                <option value="{{ $id }}">{{ $gd }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('gudang_id'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('gudang_id') }}
+                            </em>
+                        @endif
+                        <p class="helper-block">
+                        </p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group {{ $errors->has('rak_id') ? 'has-error' : '' }}">
+                        <label for="roles">{{ trans('cruds.transaction-stock.fields.rak_id') }}*</label>
+                        <select name="rak_id" id="rak_id" class="form-control select2" style="width: 100%; height:36px;" disabled>
+                            <option value="">{{ trans('global.pleaseSelect') }}</option>
+                        </select>
+                        @if($errors->has('rak_id'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('rak_id') }}
+                            </em>
+                        @endif
+                        <p class="helper-block">
+                        </p>
+                    </div>
+                </div>
+
             </div>
             <div class="form-group {{ $errors->has('tanggal_transaksi') ? 'has-error' : '' }}">
                 <label for="tanggal_transaksi">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
@@ -163,6 +183,29 @@
             $('#items').append(html)
             $('.select2').select2();
             index++
+        })
+    });
+    $("#gudang_id").change(function() {
+        let val = $(this).val();
+        $.ajax({
+            url: '{{ route('admin.get-rak') }}',
+            data: {
+                val: val
+            },
+            dataType: 'json',
+            type: 'GET',
+            success: function(response) {
+                var len = response.length;
+                if(len > 1) {
+					for( var i = 0; i<len; i++){
+						console.log(response);
+                        $('#rak_id').prop('disabled', false);
+                        var code = response[i]['id'];
+                        var name = response[i]['name'];
+                        $("#rak_id").append("<option value='"+code+"' name='"+name+"'>"+name+"</option>");
+					}
+				}
+            }
         })
     })
 </script>

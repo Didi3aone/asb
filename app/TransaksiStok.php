@@ -19,6 +19,7 @@ class TransaksiStok extends Model
         'nomor_transaksi',
         'nomor_ijin',
         'gudang_id',
+        'rak_id',
         'tanggal_transaksi',
         'tipe',
         'is_active',

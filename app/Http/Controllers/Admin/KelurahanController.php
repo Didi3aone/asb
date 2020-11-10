@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DataTables;
 use App\Kelurahan;
+use App\DetailUsers;
 
 class KelurahanController extends Controller
 {
@@ -28,6 +29,30 @@ class KelurahanController extends Controller
         // return response()->json($kel);
         return view('admin.kel.index');
         // return view('admin.kel.index', compact('kel'));
+    }
+
+    public function reportMember(Request $request)
+    {
+        $report = DetailUsers::join('kelurahans', 'detail_users.kelurahan', '=', 'kelurahans.id_kel')
+                ->selectRaw('kelurahans.name , count(detail_users.id) as count')
+                ->groupBy('kelurahans.name');
+                if(isset($request->start) && isset($request->end))
+                {
+                    $report->where('detail_users.created_at', '>=', $request->start .'00:00:00');
+                    $report->where('detail_users.created_at', '<=', $request->end .'23:00:00');
+                }
+        $report = $report->get();
+
+        if(isset($request->start) && isset($request->end))
+        {
+            $reportCount = DetailUsers::where('detail_users.created_at', '>=', $request->start .'00:00:00')
+                        ->where('detail_users.created_at', '<=', $request->end .'23:00:00')
+                        ->count('id');
+        } else {
+            $reportCount = DetailUsers::count('id');
+        }
+        
+        return view('admin.kel.report', compact('report', 'reportCount'));
     }
 
     /**

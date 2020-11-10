@@ -24,7 +24,6 @@ class RakGudang extends Model
         'updated_by',
     ];
 
-
     public static function getName($value)
     {
         return RakGudang::where('id', $value)->select('name')->first();

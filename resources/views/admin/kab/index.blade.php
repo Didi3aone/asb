@@ -52,9 +52,9 @@
                                 {{ $name->name ?? '' }}
                             </td>
                             <td>
-                                @if($rows->is_active == 1)
+                                @if($rows->status == 1)
                                     {{ trans('cruds.kabupaten.fields.statusactive') }}
-                                @elseif($rows->is_active == 0)
+                                @elseif($rows->status == 0)
                                     {{ trans('cruds.kabupaten.fields.statusinactive') }}
                                 @endif
                             </td>

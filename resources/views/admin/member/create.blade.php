@@ -163,24 +163,6 @@
 					</em>
 				@endif
 			</div>
-			{{-- <div class="row">
-				
-				<div class="col">
-					<div class="form-group {{ $errors->has('level') ? 'has-error' : '' }}">
-						<label for="level">Status Anggota*</label>
-						<select name="level" id="level" class="form-control select2" required style="width: 100%; height:36px;">
-							<option value="">-- Pilih --</option>
-							<option value="0">Non Korlap</option>
-							<option value="1">Korlap</option>
-						</select>
-						@if($errors->has('level'))
-							<em class="invalid-feedback">
-								{{ $errors->first('level') }}
-							</em>
-						@endif
-					</div>
-				</div>
-			</div> --}}
 			<div class="form-group">
 				<label for="address">Alamat*</label>
 				<textarea name="address" id="address" class="form-control" cols="20" rows="10" placeholder="Alamat Sesuai KTP"></textarea>

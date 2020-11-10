@@ -71,19 +71,10 @@
                             {{ trans('cruds.member.fields.nik') }}
                         </th>
                         <th>
-                            {{ trans('cruds.member.fields.telp') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.member.fields.hp') }}
                         </th>
                         <th>
                             {{ trans('cruds.member.fields.email') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.member.fields.created_by') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.member.fields.updated_by') }}
                         </th>
                         <th>
                             {{ trans('cruds.member.fields.created_at') }}
@@ -103,7 +94,10 @@
 
                             </td>
                             <td>
-                                {{ $rows->no_member ?? '-' }}
+                                @php
+                                    $kec = str_pad($rows->kecid,4,"0",STR_PAD_LEFT);   
+                                @endphp
+                                {{ $rows->provid ?? '-' }}.{{ $kec ?? '-' }}.{{ $rows->no_member ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->name ?? '-' }}
@@ -112,25 +106,10 @@
                                 {{ $rows->nik ?? '-' }}
                             </td>
                             <td>
-                                {{ $rows->no_telp ?? '-' }}
-                            </td>
-                            <td>
                                 {{ $rows->no_hp ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->email ?? '-' }}
-                            </td>
-                            <td>
-                                @php
-                                    $name = \App\User::getName($rows->created_by);
-                                @endphp
-                                {{ $name->name ?? '-' }}
-                            </td>
-                            <td>
-                                @php
-                                    $name = \App\User::getName($rows->updated_by);
-                                @endphp
-                                {{ $name->name ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->created_at ?? '-' }}

@@ -22,6 +22,13 @@ class MemberApiController extends Controller
     {
         $data = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
+                ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                ->selectRaw('detail_users.userid ,provinsis.zona_waktu as provid ,
+                        kecamatans.id as kecid ,detail_users.no_member ,
+                        users.name ,detail_users.nik ,detail_users.no_hp ,
+                        users.email ,users.created_at ,
+                        users.is_active ,detail_users.status_korlap')
                 ->where('role_user.role_id', 3)
                 ->get();
 

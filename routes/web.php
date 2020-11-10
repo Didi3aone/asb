@@ -38,6 +38,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('transaksi-in','TransaksiStokController@createIn')->name('transaksi-in');
     Route::get('transaksi-out','TransaksiStokController@createOut')->name('transaksi-out');
     Route::post('transaksi-store-out','TransaksiStokController@storeOut')->name('transaksi-store-out');
+    Route::get('report-transaksi', 'TransaksiStokController@reportTransaksi')->name('report-transaksi');
+    
+
+    //RO
     Route::resource('ro', 'RequestOrderController');
     Route::get('report-ro', 'RequestOrderController@reportRO')->name('report-ro');
     Route::resource('po', 'PurchaseOrderController');
@@ -57,9 +61,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('report-program', 'ProgramController@reportProgram')->name('report-program');
     Route::resource('wilayah', 'WilayahController');
     Route::resource('provinsi', 'ProvinsiController');
+    Route::get('report-member-prov', 'ProvinsiController@reportMember')->name('report-member-prov');
     Route::resource('kabupaten', 'KabupatenController');
+    Route::get('report-member-kab', 'KabupatenController@reportMember')->name('report-member-kab');
     Route::resource('kecamatan', 'KecamatanController');
+    Route::get('report-member-kec', 'KecamatanController@reportMember')->name('report-member-kec');
     Route::resource('kelurahan', 'KelurahanController');
+    Route::get('report-member-kel', 'KelurahanController@reportMember')->name('report-member-kel');
     Route::resource('master-member', 'MemberController');
     Route::get('report-member', 'MemberController@reportMember')->name('report-member');
     Route::get('member-verified', 'MemberController@indexVerified')->name('member-verified');
@@ -87,5 +95,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('get-kec', 'HelperController@getKecamatan')->name('get-kec');
     Route::get('get-kab', 'HelperController@getKabupaten')->name('get-kab');
     Route::get('get-member', 'HelperController@getMember')->name('get-member');
+    Route::get('get-rak', 'HelperController@getRak')->name('get-rak');
     
 });
