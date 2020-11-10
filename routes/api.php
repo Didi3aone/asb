@@ -7,6 +7,7 @@ Route::post('daftar', 'Api\UserApiController@daftar'); //reg khusus member
 Route::get('job', 'Api\HelperApiController@job');
 Route::get('item', 'Api\HelperApiController@item');
 Route::get('marital-status', 'Api\HelperApiController@nikah');
+Route::get('pob', 'Api\HelperApiController@getPOB');
 Route::get('prov', 'Api\HelperApiController@prov');
 Route::get('kab', 'Api\HelperApiController@kab');
 Route::get('kec', 'Api\HelperApiController@kec');

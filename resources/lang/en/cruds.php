@@ -249,6 +249,9 @@ return [
             'created_at'        => 'Created at',
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
+            'pria'              => 'Men',
+            'wanita'            => 'Women',
+            'level_member'      => 'Member Level'
         ],
     ],
     'wilayah'          => [
@@ -421,6 +424,8 @@ return [
             'status'        => 'Status',
             'kategori_id'   => 'Category',
             'unit_id'       => 'Unit',
+            'qty'           => 'Quantity',
+            'detail'        => 'Detail Packet',
             'kode'          => 'Code',
             'foto'          => 'Foto',
             'stock'         => 'Stock',

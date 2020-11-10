@@ -48,6 +48,17 @@ class HelperApiController extends Controller
         ], 200);
     }
 
+    public function getPOB(Request $request)
+    {
+        $data = Kabupaten::all();
+        
+        return response([
+            'success'   => true,
+            'message'   => 'List Semua Kota',
+            'data'      => $data
+        ], 200);
+    }
+
     public function prov()
     {
         
@@ -138,7 +149,7 @@ class HelperApiController extends Controller
             'id_prov'  => 'required'
         ],
         [
-            'id_prov.required'         => 'Masukkan Kabupaten !',
+            'id_prov.required'         => 'Masukkan Provinsi !',
         ]);
 
         if($validator->fails()) {

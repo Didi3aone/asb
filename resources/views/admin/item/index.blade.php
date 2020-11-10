@@ -81,15 +81,10 @@
                             <td>
                                 @if($items->is_paket == 1)
                                     @can('item_unit_show')
-                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.item.show', $items->id) }}">
-                                            <i class="fa fa-eye"></i> {{ trans('global.view') }}
+                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.show-packet', $items->id) }}">
+                                            <i class="fa fa-eye"></i> {{ trans('global.view') }} Detail
                                         </a>
                                     @endcan
-                                @endif
-                                @if($items->is_paket == 1)
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.edit-packet', $items->id) }}">
-                                        <i class="fa fa-eye"></i> {{ trans('global.view') }}
-                                    </a>
                                 @endif
                                 @can('item_unit_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.item.edit', $items->id) }}">

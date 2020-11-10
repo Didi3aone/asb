@@ -22,22 +22,57 @@
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
-                <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
-                    <option value="">{{ trans('global.pleaseSelect') }}</option>
-                    @foreach($gudang as $id => $gd)
-                        <option value="{{ $id }}">{{ $gd }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('gudang_id'))
+            <div class="form-group {{ $errors->has('supplier_id') ? 'has-error' : '' }}">
+                <label for="supplier_id">Supplier *</label>
+                <input type="text" id="supplier_id" name="supplier_id" class="form-control" value="{{ old('supplier_id', '') }}">
+                @if($errors->has('supplier_id'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('gudang_id') }}
+                        {{ $errors->first('supplier_id') }}
                     </em>
                 @endif
                 <p class="helper-block">
+
                 </p>
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
+                        <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
+                        <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
+                            <option value="">{{ trans('global.pleaseSelect') }}</option>
+                            @foreach($gudang as $id => $gd)
+                                <option value="{{ $id }}">{{ $gd }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('gudang_id'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('gudang_id') }}
+                            </em>
+                        @endif
+                        <p class="helper-block">
+                        </p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
+                        <label for="roles">Rak *</label>
+                        <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
+                            <option value="">{{ trans('global.pleaseSelect') }}</option>
+                            @foreach($gudang as $id => $gd)
+                                <option value="{{ $id }}">{{ $gd }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('gudang_id'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('gudang_id') }}
+                            </em>
+                        @endif
+                        <p class="helper-block">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
             <div class="form-group {{ $errors->has('tanggal_transaksi') ? 'has-error' : '' }}">
                 <label for="tanggal_transaksi">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
                 <input type="text" id="tanggal_transaksi" name="tanggal_transaksi" class="form-control date" value="{{ old('tanggal_transaksi', date('Y-m-d')) }}">

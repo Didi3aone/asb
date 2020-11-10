@@ -46,13 +46,13 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="download">
                 @can('verified_member_access')
-                <a href="{{ route("admin.verify.index") }}" class="dropdown-item {{ request()->is('admin/verify') || request()->is('admin/verify/*') ? 'active' : '' }}">
+                <a href="{{ route("admin.member-verified") }}" class="dropdown-item {{ request()->is('admin/member-verified') || request()->is('admin/member-verified/*') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-smile-o"></i> 
                     {{ trans('cruds.verified-member.title') }}
                 </a>
                 @endcan
                 @can('unverified_member_access')
-                <a href="{{ route("admin.unverify.index") }}" class="dropdown-item {{ request()->is('admin/unverify') || request()->is('admin/unverify/*') ? 'active' : '' }}">
+                <a href="{{ route("admin.member-pending") }}" class="dropdown-item {{ request()->is('admin/member-pending') || request()->is('admin/member-pending/*') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-frown-o"></i> 
                     {{ trans('cruds.unverified-member.title') }}
                 </a>

@@ -12,39 +12,55 @@
                 <tbody>
                     <tr>
                         <th>
-                            Name
+                            {{ trans('cruds.member.fields.no') }}
                         </th>
                         <td>
-                            {{ $member->nama }}
+                            {{ $detail->no_member }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            NIK
+                            {{ trans('cruds.member.fields.nama') }}
                         </th>
                         <td>
-                            {{ $member->nik }}
+                            {{ $member->name }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            No. Telp
+                            {{ trans('cruds.member.fields.nickname') }}
                         </th>
                         <td>
-                            {{ $member->no_telp }}
+                            {{ $detail->nickname }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            No. HP
+                            {{ trans('cruds.member.fields.nik') }}
                         </th>
                         <td>
-                            {{ $member->no_hp }}
+                            {{ $detail->nik }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            Email
+                            Nomor KK
+                        </th>
+                        <td>
+                            {{ $detail->no_kk }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.member.fields.hp') }}
+                        </th>
+                        <td>
+                            {{ $detail->no_hp }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.member.fields.email') }}
                         </th>
                         <td>
                             {{ $member->email }}
@@ -52,10 +68,24 @@
                     </tr>
                     <tr>
                         <th>
-                            Alamat
+                            {{ trans('cruds.member.fields.gender') }}
+                        </th>
+                        @if ($detail->gender == 0)
+                            <td>
+                                {{ trans('cruds.member.fields.wanita') }}
+                            </td>
+                        @elseif ($detail->gender == 1)
+                            <td>
+                                {{ trans('cruds.member.fields.pria') }}
+                            </td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.member.fields.address') }}
                         </th>
                         <td>
-                            {{ $member->alamat }}
+                            {{ $detail->alamat ?? '' }}
                         </td>
                     </tr>
                     <tr>
@@ -64,7 +94,7 @@
                         </th>
                         <td>
                             @php
-                                $name = \App\Provinsi::getProv($member->provinsi);
+                                $name = \App\Provinsi::getProv($detail->provinsi);
                             @endphp
                             {{ $name->name ?? '' }}
                         </td>
@@ -75,7 +105,7 @@
                         </th>
                         <td>
                             @php
-                                $name = \App\Kabupaten::getKab($member->kabupaten);
+                                $name = \App\Kabupaten::getKab($detail->kabupaten);
                             @endphp
                             {{ $name->name ?? '' }}
                         </td>
@@ -86,7 +116,7 @@
                         </th>
                         <td>
                             @php
-                                $name = \App\Kecamatan::getKec($member->kecamatan);
+                                $name = \App\Kecamatan::getKec($detail->kecamatan);
                             @endphp
                             {{ $name->name ?? '' }}
                         </td>
@@ -97,7 +127,7 @@
                         </th>
                         <td>
                             @php
-                                $name = \App\Kelurahan::getKel($member->kelurahan);
+                                $name = \App\Kelurahan::getKel($detail->kelurahan);
                             @endphp
                             {{ $name->name ?? '' }}
                         </td>

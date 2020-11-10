@@ -31,9 +31,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('create-packet', 'ItemController@createPacket')->name('create-packet');
     Route::post('post-packet', 'ItemController@postPacket')->name('post-packet');
     Route::get('edit-packet', 'ItemController@editPacket')->name('edit-packet');
-
-    Route::resource('verify','MemberVerifyController');
-    Route::resource('unverify','MemberUnverifyController');
+    Route::get('show-packet/{id}', 'ItemController@showPacket')->name('show-packet');
 
     //Transaction
     Route::resource('transaksi', 'TransaksiStokController');
@@ -63,7 +61,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('kecamatan', 'KecamatanController');
     Route::resource('kelurahan', 'KelurahanController');
     Route::resource('master-member', 'MemberController');
-    Route::resource('master-member', 'MemberController');
+    Route::get('report-member', 'MemberController@reportMember')->name('report-member');
+    Route::get('member-verified', 'MemberController@indexVerified')->name('member-verified');
+    Route::get('edit-verified', 'MemberController@editVerified')->name('edit-verified');
+    Route::put('update-verified', 'MemberController@editVerified')->name('update-verified');
+    Route::get('edit-korlap/{id}', 'MemberController@editKorlap')->name('edit-korlap');
+    Route::put('update-korlap/{id}', 'MemberController@updateKorlap')->name('update-korlap');
+    Route::get('member-pending', 'MemberController@indexPending')->name('member-pending');
 
     //Settings
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
@@ -75,7 +79,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('configuration','ConfigurationController@index')->name('configuration.index');
     Route::get('configuration/create','ConfigurationController@create')->name('configuration.create');
     Route::get('configuration/edit/{id}','ConfigurationController@edit')->name('configuration.edit');
-    Route::post('configuration/update/{id}','ConfigurationController@update')->name('configuration.update');
+    Route::put('configuration/update/{id}','ConfigurationController@update')->name('configuration.update');
     Route::post('configuration/store','ConfigurationController@store')->name('configuration.store');
 
     //helper

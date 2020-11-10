@@ -37,6 +37,32 @@ class MemberController extends Controller
         return view('admin.member.index', compact('member'));
     }
 
+    public function indexVerified()
+    {
+        abort_unless(\Gate::allows('member_access'), 403);
+
+        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->where('is_verified', 'verified')
+                ->get();
+        
+        return view('admin.member.verified.index', compact('member'));
+    }
+
+    public function indexPending()
+    {
+        abort_unless(\Gate::allows('member_access'), 403);
+
+        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->where('is_verified', 'pending')
+                ->get();
+        
+        return view('admin.member.pending.index', compact('member'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -142,7 +168,7 @@ class MemberController extends Controller
                     'foto_ktp'          => $ktp_name,
                     'foto_kk'           => $kk_name,
                     'created_by'        => \Auth::user()->id,
-                    'status_korlap'     => 1,
+                    'status_korlap'     => 0,
                     'created_at'        => date('Y-m-d H:i:s')
                 );
                 $detail = DetailUsers::insert($data);
@@ -170,8 +196,12 @@ class MemberController extends Controller
     {
         abort_unless(\Gate::allows('member_edit'), 403);
 
-        $member = Member::find($id);
-        return view('admin.member.show', compact('member'));
+        $member = User::find($id);
+        $detail = DetailUsers::where('userid', $id)
+                ->first();
+
+
+        return view('admin.member.show', compact('member', 'detail'));
     }
 
     /**
@@ -184,16 +214,16 @@ class MemberController extends Controller
     {
         abort_unless(\Gate::allows('member_edit'), 403);
 
-        $member = Member::find($id);
-        $marital = MaritalStatus::where('status', 1)->pluck('name', 'id');
-        $provinsi = Provinsi::where('status', 1)->pluck('name', 'id_prov');
-        $kabupaten = Kabupaten::where('id_prov', $member->provinsi)
+        $member     = Member::find($id);
+        $marital    = MaritalStatus::where('status', 1)->pluck('name', 'id');
+        $provinsi   = Provinsi::where('status', 1)->pluck('name', 'id_prov');
+        $kabupaten  = Kabupaten::where('id_prov', $member->provinsi)
                     ->pluck('name', 'id_kab');
-        $kecamatan = Kecamatan::where('id_kab', $member->kabupaten)
+        $kecamatan  = Kecamatan::where('id_kab', $member->kabupaten)
                     ->pluck('name', 'id_kec');
-        $kelurahan = Kelurahan::where('id_kec', $member->kecamatan)
+        $kelurahan  = Kelurahan::where('id_kec', $member->kecamatan)
                     ->pluck('name', 'id_kel');
-        $job = Job::where('status', 1)->pluck('name', 'id');
+        $job        = Job::where('status', 1)->pluck('name', 'id');
 
         return view('admin.member.edit', compact(
             'member', 
@@ -213,6 +243,30 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function editKorlap($id)
+    {
+        abort_unless(\Gate::allows('member_edit'), 403);
+
+        $member = User::find($id);
+        $detail = DetailUsers::where('userid', $id)
+                ->first();
+        
+        return view('admin.member.verified.update', compact('member', 'detail'));
+    }
+
+    public function updateKorlap(Request $request, $id)
+    {
+        $find = DetailUsers::where('userid', $id)->first();
+
+        $detail = DetailUsers::find($find->id);
+        $detail->status_korlap = 1;
+        $detail->updated_at    = date('Y-m-d H:i:s');
+        $detail->updated_by    = \Auth::user()->id;
+        $detail->update();
+
+        return \redirect()->route('admin.member-verified')->with('success',\trans('notif.notification.update_data.success'));
+    }
+
     public function update(Request $request, $id)
     {
         

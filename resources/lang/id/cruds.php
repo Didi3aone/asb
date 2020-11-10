@@ -237,7 +237,7 @@ return [
             'level'             => 'Level Anggota',
             'inactive'          => 'Tidak Aktif',
             'foto_ktp'          => 'KTP',
-            'foto_kk'          => 'KK',
+            'foto_kk'           => 'KK',
             'email'             => 'Email',
             'created_by'        => 'Pembuat',
             'updated_by'        => 'Update',
@@ -246,6 +246,7 @@ return [
             'created_at'        => 'Dibuat pada',
             'updated_at'        => 'Dirubah pada',
             'deleted_at'        => 'Dihapus pada',
+            'level_member'      => 'Level Anggota'
         ],
     ],
     'wilayah'          => [
@@ -416,6 +417,8 @@ return [
             'kategori_id'   => 'Kategori',
             'unit_id'       => 'Satuan',
             'kode'          => 'Kode',
+            'qty'           => 'Jumlah',
+            'detail'        => 'Detail Paket',
             'foto'          => 'Poto',
             'stock'         => 'Stok',
             'created_at'    => 'Dibuat Pada',

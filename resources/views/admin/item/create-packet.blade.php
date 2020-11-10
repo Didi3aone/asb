@@ -64,7 +64,7 @@
                 <p class="helper-block">
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('foto') ? 'has-error' : '' }}">
+            {{-- <div class="form-group {{ $errors->has('foto') ? 'has-error' : '' }}">
                 <label for="kode">{{ trans('cruds.item.fields.foto') }}*</label>
                 <input type="file" id="foto" name="fotos" class="form-control" value="{{ old('foto', '') }}">
                 @if($errors->has('foto'))
@@ -74,7 +74,7 @@
                 @endif
                 <p class="helper-block">
                 </p>
-            </div>
+            </div> --}}
             <div class="form-group">
                 <table class="table table-bordered">
                     <thead>

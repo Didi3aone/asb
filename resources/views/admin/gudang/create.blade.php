@@ -27,7 +27,6 @@
                     <tr>
                         <th>{{ trans('cruds.warehouse.fields.rak') }}</th>
                         <th>&nbsp;</th>
-                        
                     </tr>
                     </thead>
                     <tbody id="raks">

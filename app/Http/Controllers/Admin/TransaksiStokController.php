@@ -81,7 +81,6 @@ class TransaksiStokController extends Controller
                 foreach( $request->barang_id as $key => $detail ) {
                     TransaksiStokDetail::create([
                         'transaksi_id'      => $header->id,
-                        'nomor_sparepart'   => $request->nomor_sparepart[$key] ?? '',
                         'barang_id'         => $detail,
                         'qty'               => $request->qty[$key] ?? '',
                     ]);

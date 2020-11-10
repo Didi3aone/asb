@@ -29,5 +29,10 @@ class ItemUnit extends BaseModel
     public const TypeStatus = [
         0 => 'Not Active',
         1 => 'Active'
-    ]; 
+    ];
+
+    public static function getName($value)
+    {
+        return ItemUnit::where('id', $value)->select('nama')->first();
+    }
 }

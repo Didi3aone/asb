@@ -158,7 +158,7 @@ class RegistrationController extends Controller
                     'activation_code'   => Str::random(40).$request->input('email'),
                     'foto_ktp'          => $ktp_name,
                     'foto_kk'           => $kk_name,
-                    'status_korlap'     => 1,
+                    'status_korlap'     => 0,
                     'created_at'        => date('Y-m-d H:i:s')
                 );
                 $detail = DetailUsers::insert($data);

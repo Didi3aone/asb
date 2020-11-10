@@ -80,10 +80,7 @@
                             {{ trans('cruds.member.fields.email') }}
                         </th>
                         <th>
-                            {{ trans('cruds.member.fields.created_by') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.member.fields.updated_by') }}
+                            {{ trans('cruds.member.fields.level_member') }}
                         </th>
                         <th>
                             {{ trans('cruds.member.fields.created_at') }}
@@ -121,16 +118,11 @@
                                 {{ $rows->email ?? '-' }}
                             </td>
                             <td>
-                                @php
-                                    $name = \App\User::getName($rows->created_by);
-                                @endphp
-                                {{ $name->name ?? '-' }}
-                            </td>
-                            <td>
-                                @php
-                                    $name = \App\User::getName($rows->updated_by);
-                                @endphp
-                                {{ $name->name ?? '-' }}
+                                @if ($rows->status_korlap == 0)
+                                    Anggota
+                                @elseif ($rows->status_korlap == 1)
+                                    Korlap
+                                @endif
                             </td>
                             <td>
                                 {{ $rows->created_at ?? '-' }}
@@ -148,13 +140,25 @@
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
                                     </a>
                                 @endcan
-                                @can('member_edit')
+                                {{-- @can('member_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.master-member.edit', $rows->userid) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
+                                @endcan --}}
+                                @can('member_edit')
+                                    @if ($rows->status_korlap == 0)
+                                        <form action="{{ route('admin.update-korlap', $rows->userid) }}" method="POST" onsubmit="return confirm('Update User ini menjadi Korlap');" style="display: inline-block;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="userid" value="{{ $rows->userid }}">
+                                            @method('put')
+                                            <button type="submit" class="btn btn-xs btn-info">
+                                                <i class="fa fa-edit"></i>
+                                                Update Korlap
+                                            </button>
+                                        </form>        
+                                    @endif
                                 @endcan
                                 @can('member_delete')
-                                    
                                     <form action="{{ route('admin.master-member.destroy', $rows->userid) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -200,6 +204,7 @@
                 }
             }
         }
+        
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
         @can('gudang_delete')
         dtButtons.push(deleteButton)

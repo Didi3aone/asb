@@ -57,7 +57,7 @@
                     <tr>
                         <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
                         <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
-                        <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th>
+                        {{-- <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th> --}}
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
@@ -86,14 +86,14 @@
                                 </em>
                             @endif
                         </td>
-                        <td>
+                        {{-- <td>
                             <input type="text" id="nomor_sparepart_0" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
                             @if($errors->has('nomor_sparepart'))
                                 <em class="invalid-feedback">
                                     {{ $errors->first('nomor_sparepart') }}
                                 </em>
                             @endif
-                        </td>
+                        </td> --}}
                         <td>
                             <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
                         </td>
@@ -149,14 +149,6 @@
                             @if($errors->has('qty'))
                                 <em class="invalid-feedback">
                                     {{ $errors->first('qty') }}
-                                </em>
-                            @endif
-                        </td>
-                        <td>
-                            <input type="text" id="nomor_sparepart_${index}" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                            @if($errors->has('nomor_sparepart'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('nomor_sparepart') }}
                                 </em>
                             @endif
                         </td>

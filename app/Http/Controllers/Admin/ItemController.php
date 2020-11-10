@@ -145,31 +145,25 @@ class ItemController extends Controller
         // dd($request);
         \DB::beginTransaction();
         try {
-            // if($file = $request->hasFile('fotos')) {
-            //     $file = $request->file('fotos') ;
-            //     $name = time() . $file->getClientOriginalName();
-            //     $file->move(public_path() . '/images/item/', $name);
-            //     $request->merge(['foto' => serialize($name)]);
-            // }
-
             if ($request->file('fotos')) {
                 $fotos = $request->file('fotos');
                 $name = time() . $fotos->getClientOriginalName();
                 $fotos->move(public_path() . '/images/item/', $name);
                 $request->merge(['foto' => serialize($name)]);
             } else {
-                $kk_name = 'noimage.jpg';
+                $request->merge(['foto' => serialize('noimage.jpg')]);
             }
-            
+
             $item = Item::create($request->all());
 
             $i=0;
-            if(isset($request->barang_id[$i]) && isset($request->qty[$id])) {
+            if(isset($request->barang_id[$i]) && isset($request->qty[$i])) {
                 for($count = 0;$count < count($request->barang_id); $count++) {
                     $data = array(
-                        'kode_barang'   => $item->id,
-                        'id_barang'     => $program->id,
-                        'qty'           => $request->barang_id[$count],
+                        'kode_barang'   => $request->kode,
+                        'id_barang'     => $request->barang_id[$count],
+                        'qty'           => $request->qty[$count],
+                        'is_active'     => 1,
                         'created_at'    => date('Y-m-d H:i:s')
                     );
                     $insert_detail[] = $data;
@@ -183,5 +177,14 @@ class ItemController extends Controller
             \DB::rollback();
             throw $th;
         }
+    }
+
+    public function showPacket($id)
+    {
+        $barang     = Item::find($id);
+        $detail     = DetailPacket::where('kode_barang', $barang->kode)
+                    ->get();
+
+        return view('admin.item.show-packet', compact('barang', 'detail'));
     }
 }

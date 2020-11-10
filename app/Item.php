@@ -25,6 +25,7 @@ class Item extends Model
         'foto',
         'stok_akhir',
         'is_active',
+        'is_paket',
         'created_by',
         'deleted_by',
         'updated_by',
