@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Kabupaten;
 use App\DetailUsers;
+use App\User;
 
 class KabupatenController extends Controller
 {
@@ -21,28 +22,29 @@ class KabupatenController extends Controller
         return view('admin.kab.index', compact('kab'));
     }
 
-    public function reportMember(Request $request)
+    public function reportMember($id)
     {
-        $report = DetailUsers::join('kabupatens', 'detail_users.kabupaten', '=', 'kabupatens.id_kab')
-                ->selectRaw('kabupatens.name , count(detail_users.id) as count')
-                ->groupBy('kabupatens.name');
-                if(isset($request->start) && isset($request->end))
-                {
-                    $report->where('detail_users.created_at', '>=', $request->start .'00:00:00');
-                    $report->where('detail_users.created_at', '<=', $request->end .'23:00:00');
-                }
-        $report = $report->get();
+        $title = Kabupaten::find($id);
 
-        if(isset($request->start) && isset($request->end))
-        {
-            $reportCount = DetailUsers::where('detail_users.created_at', '>=', $request->start .'00:00:00')
-                        ->where('detail_users.created_at', '<=', $request->end .'23:00:00')
-                        ->count('id');
-        } else {
-            $reportCount = DetailUsers::count('id');
+        $report = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
+                ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                ->join('kabupatens', 'detail_users.kabupaten', '=', 'kabupatens.id_kab')
+                ->join('kelurahans', 'detail_users.kelurahan', '=', 'kelurahans.id_kel')
+                ->selectRaw('detail_users.userid ,provinsis.zona_waktu as provid ,
+                        kecamatans.id as kecid ,detail_users.no_member ,
+                        users.name ,detail_users.nik ,detail_users.no_hp ,
+                        users.email ,users.created_at ,
+                        users.is_active ,detail_users.status_korlap, provinsis.name as provname,
+                        kabupatens.name as kabname, kecamatans.name as kecname,kelurahans.name as kelname')
+                ->where('role_user.role_id', 3);
+        if(isset($id)) {
+            $report->where('kabupatens.id', $id);
         }
+        $report = $report->get();
         
-        return view('admin.kab.report', compact('report', 'reportCount'));
+        return view('admin.kab.report',compact('report', 'title'));
     }
 
     /**

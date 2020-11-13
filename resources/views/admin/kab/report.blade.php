@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> {{ trans('cruds.kabupaten.fields.report') }} </title>
+    <title> {{ trans('global.report') }} {{ trans('cruds.kabupaten.title_singular') }} {{ $title->name }}</title>
     <!-- DataTables -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet">
@@ -14,19 +14,51 @@
 <body>
     <div class="card">
         <div class="card-header">
-            <center> {{ trans('cruds.kabupaten.fields.report') }} </center>
+        <center> {{ trans('global.report') }} {{ trans('cruds.kabupaten.title_singular') }} {{ $title->name }}</center>
         </div>
         <div class="card-body">
             <div class="mb-2">
-                {{-- <div class="float-right">
-                    Download File : <button name="create_excel" id="create_excel" class="btn btn-success">Excel Export</button><br><br>
-                </div> --}}
                 <table class="table table-striped" id="table-datatables">
                     <thead>
                         <tr>
                             <th scope="col">No.</th>
-                            <th scope="col">{{ trans('cruds.provinsi.fields.nama') }}</th>
-                            <th scope="col">{{ trans('cruds.provinsi.fields.jumlah') }}</th>
+                            <th>
+                                {{ trans('cruds.member.fields.no') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.nama') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.nik') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.hp') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.email') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.level_member') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.created_at') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.member.fields.is_active') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.kabupaten.title_singular') }}
+                            </th>
+                            {{-- 
+                            <th>
+                                {{ trans('cruds.provinsi.title_singular') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.kecamatan.title_singular') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.kelurahan.title_singular') }}
+                            </th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -36,22 +68,57 @@
                                     {{ $key+1 }}
                                 </td>
                                 <td>
-                                    {{ $rows->name ?? '' }}
+                                    @php
+                                        $kec = str_pad($rows->kecid,4,"0",STR_PAD_LEFT);   
+                                    @endphp
+                                    <a href="{{ route('admin.master-member.show', $rows->userid) }}" target="_blank">
+                                        {{ $rows->provid ?? '-' }}.{{ $kec ?? '-' }}.{{ $rows->no_member ?? '-' }}
+                                    </a>
                                 </td>
                                 <td>
-                                    {{ $rows->count ?? '' }}
+                                    {{ $rows->name ?? '-' }}
                                 </td>
+                                <td>
+                                    {{ $rows->nik ?? '-' }}
+                                </td>
+                                <td>
+                                    {{ $rows->no_hp ?? '-' }}
+                                </td>
+                                <td>
+                                    {{ $rows->email ?? '-' }}
+                                </td>
+                                <td>
+                                    @if ($rows->status_korlap == 0)
+                                        Anggota
+                                    @elseif ($rows->status_korlap == 1)
+                                        Korlap
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $rows->created_at ?? '-' }}
+                                </td>
+                                <td>
+                                    @if($rows->is_active == 1)
+                                        {{ trans('cruds.member.fields.active') }}
+                                    @elseif($rows->is_active == 0)
+                                        {{ trans('cruds.member.fields.inactive') }}
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $rows->kabname ?? '' }}
+                                </td>
+                                {{-- 
+                                <td>
+                                    {{ $rows->provname ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $rows->kecname ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $rows->kelname ?? '' }}
+                                </td> --}}
                             </tr>
                         @endforeach
-                        <tr>
-                            <th colspan="2">{{ trans('cruds.provinsi.fields.total') }}</th>
-                            <th scope="col">
-                                @php
-                                    print_r($reportCount);
-                                    // array_sum($);   
-                                @endphp
-                            </th>
-                        </tr>
                     </tbody>
                 </table>
             </div>

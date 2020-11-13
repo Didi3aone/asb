@@ -72,7 +72,8 @@ class InformationController extends Controller
      */
     public function show($id)
     {
-        //
+        
+        
     }
 
     /**
@@ -83,7 +84,12 @@ class InformationController extends Controller
      */
     public function edit($id)
     {
-        //
+        abort_unless(\Gate::allows('information_edit'), 403);
+
+        $info = Information::find($id);
+        $category = Category::where('is_active', 1)->pluck('name', 'id');
+        
+        return view('admin.info.edit', compact('info', 'category'));
     }
 
     /**
@@ -95,7 +101,23 @@ class InformationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->hasFile('foto')) {
+            $pict = $request->file('foto');
+            $pict_name = time() . $pict->getClientOriginalName();
+            $pict->move(public_path() . '/images/', $pict_name);
+        }
+
+        $info = Information::find($id);
+        $info->name         = $request->nama;
+        $info->kategori_id  = $request->kategori_id;
+        if ($request->hasFile('foto')) {
+            $info->foto     = $pict_name;
+        }
+        $info->content      = $request->content;
+        $info->update();
+        
+        return \redirect()->route('admin.info.index')->with('success',\trans('notif.notification.update_data.success'));
+        
     }
 
     /**

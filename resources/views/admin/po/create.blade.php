@@ -7,7 +7,7 @@
     </div>
 
     <div class="card-body">
-        <form class="form-material mt-4" action="{{ route("admin.transaksi.store") }}" method="POST" enctype="multipart/form-data">
+        <form class="form-material mt-4" action="{{ route("admin.po.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="tipe" value="1">
             <div class="form-group {{ $errors->has('nomor_ijin') ? 'has-error' : '' }}">
@@ -22,20 +22,26 @@
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('supplier_id') ? 'has-error' : '' }}">
-                <label for="supplier_id">Supplier *</label>
-                <input type="text" id="supplier_id" name="supplier_id" class="form-control" value="{{ old('supplier_id', '') }}">
-                @if($errors->has('supplier_id'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('supplier_id') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-
-                </p>
-            </div>
             <div class="row">
                 <div class="col">
+                    <div class="form-group {{ $errors->has('supplier_id') ? 'has-error' : '' }}">
+                        <label for="roles">{{ trans('cruds.transaction-stock.fields.supplier') }}*</label>
+                        <select name="supplier_id" id="supplier_id" class="form-control select2" required style="width: 100%; height:36px;">
+                            <option value="">{{ trans('global.pleaseSelect') }}</option>
+                            @foreach($supplier as $id => $gd)
+                                <option value="{{ $id }}">{{ $gd }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('supplier_id'))
+                            <em class="invalid-feedback">
+                                {{ $errors->first('supplier_id') }}
+                            </em>
+                        @endif
+                        <p class="helper-block">
+                        </p>
+                    </div>
+                </div>
+                {{-- <div class="col">
                     <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
                         <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
                         <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
@@ -52,33 +58,14 @@
                         <p class="helper-block">
                         </p>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                        <label for="roles">Rak *</label>
-                        <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
-                            <option value="">{{ trans('global.pleaseSelect') }}</option>
-                            @foreach($gudang as $id => $gd)
-                                <option value="{{ $id }}">{{ $gd }}</option>
-                            @endforeach
-                        </select>
-                        @if($errors->has('gudang_id'))
-                            <em class="invalid-feedback">
-                                {{ $errors->first('gudang_id') }}
-                            </em>
-                        @endif
-                        <p class="helper-block">
-                        </p>
-                    </div>
-                </div>
+                </div> --}}
             </div>
-            
-            <div class="form-group {{ $errors->has('tanggal_transaksi') ? 'has-error' : '' }}">
-                <label for="tanggal_transaksi">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
-                <input type="text" id="tanggal_transaksi" name="tanggal_transaksi" class="form-control date" value="{{ old('tanggal_transaksi', date('Y-m-d')) }}">
-                @if($errors->has('tanggal_transaksi'))
+            <div class="form-group {{ $errors->has('transaction_date') ? 'has-error' : '' }}">
+                <label for="transaction_date">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
+                <input type="text" id="transaction_date" name="transaction_date" class="form-control date" value="{{ old('transaction_date', date('Y-m-d')) }}">
+                @if($errors->has('transaction_date'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('tanggal_transaksi') }}
+                        {{ $errors->first('transaction_date') }}
                     </em>
                 @endif
                 <p class="helper-block">
@@ -92,7 +79,8 @@
                     <tr>
                         <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
                         <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
-                        <th>Price </th>
+                        <th>PPN </th>
+                        <th>{{ trans('global.price') }}</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
@@ -122,10 +110,17 @@
                             @endif
                         </td>
                         <td>
-                            <input type="text" id="nomor_sparepart_0" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                            @if($errors->has('nomor_sparepart'))
+                            <select name="ppn[]" id="ppn_0" class="form-control select2" required style="width: 100%; height:36px;">
+                                <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                <option value="0">{{ trans('global.no') }}</option>
+                                <option value="1">{{ trans('global.yes') }}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" id="price_0" name="price[]" onkeyup="leadingZero(this.value, $(this), true)" class="form-control" value="{{ old('price', '') }}">
+                            @if($errors->has('price'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('nomor_sparepart') }}
+                                    {{ $errors->first('price') }}
                                 </em>
                             @endif
                         </td>
@@ -188,10 +183,17 @@
                             @endif
                         </td>
                         <td>
-                            <input type="text" id="nomor_sparepart_${index}" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                            @if($errors->has('nomor_sparepart'))
+                            <select name="ppn[]" id="ppn_${index}" class="form-control select2" required style="width: 100%; height:36px;">
+                                <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                <option value="0">{{ trans('global.no') }}</option>
+                                <option value="1">{{ trans('global.yes') }}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" id="price_${index}" name="price[]" onkeyup="leadingZero(this.value, $(this), true)" class="form-control" value="{{ old('price', '') }}">
+                            @if($errors->has('price'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('nomor_sparepart') }}
+                                    {{ $errors->first('price') }}
                                 </em>
                             @endif
                         </td>
@@ -207,6 +209,46 @@
             $('.select2').select2();
             index++
         })
-    })
+    });
+
+    function numericFilter(txb) {
+        txb.value = txb.value.replace(/[^\0-9]/ig, "");
+    }
+
+    window.leadingZero = function(value, element, decimal = false) {
+        var convert_number = removeChar(value);
+        if(decimal) {
+            if(value != '') {
+                element.val(keyupFormatUangWithDecimal(value));
+            } else {
+                element.val(0);
+            }
+        } else {
+            if(value != '') {
+            element.val(keyupFormatUang(parseInt(convert_number)));
+            } else {
+            element.val(0);
+            }
+        }
+    }
+
+    function removeChar(value) {
+        return value.toString().replace(/[.*+?^${}()|[\]\\]/g, '');
+    }
+
+    window.keyupFormatUang = function(value) {
+        var number = '';    
+        var value_rev = value.toString().split('').reverse().join('');
+            
+        for(var i = 0; i < value_rev.length; i++) {
+            if(i % 3 == 0) number += value_rev.substr(i, 3) + '.';
+        }
+            
+        return number.split('', number.length - 1).reverse().join('');
+    }
+
+    window.keyupFormatUangWithDecimal = function(value) {
+        return value.replace(/^0+/, '').replace(/(?!\.)\D/g, "").replace(/(?<=\..*)\./g, "").replace(/(?<=\.\d\d).*/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } 
 </script>
 @endsection

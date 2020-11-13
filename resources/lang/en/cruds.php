@@ -251,7 +251,11 @@ return [
             'deleted_at'        => 'Deleted at',
             'pria'              => 'Men',
             'wanita'            => 'Women',
-            'level_member'      => 'Member Level'
+            'level_member'      => 'Member Level',
+            'oldpassword'       => 'Old Password',
+            'newpassword'       => 'New Password',
+            'pob'               => 'Birth Place',
+            'dob'               => 'Birth Date'
         ],
     ],
     'wilayah'          => [
@@ -307,6 +311,7 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'nama'              => 'Name',
+            'provinsi'          => 'Provinsi',
             'desc'              => 'Description',
             'start'             => 'Start Date',
             'end'               => 'End Date',
@@ -372,6 +377,9 @@ return [
             'created_at'        => 'Created at',
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
+            'report'            => 'Report Member By Kelurahan',
+            'jumlah'            => 'Jumlah',
+            'total'             => 'Total',
         ],
     ],
     'item-category'          => [
@@ -463,6 +471,7 @@ return [
             'in_out'            => 'In / Out',
             'in'                => 'In',
             'out'               => 'Out',
+            'supplier'          => 'Supplier',
             'saldo'             => 'Last Stock',
             'created_at'        => 'Created at',
             'updated_at'        => 'Updated at',
@@ -516,6 +525,11 @@ return [
             'created_at'        => 'Created at',
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
+            'payment_status'    => 'Payment Status',
+            'set_payment_paid'  => 'Bayar Transaksi ini',
+            'set_payment_unpaid'=> 'Batalkan Pembayaran',
+            'pay'               => 'Bayar',
+            'cancel'            => 'Batal Bayar',
         ],
     ],
     

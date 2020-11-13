@@ -8,7 +8,9 @@ use App\Http\Requests\MassDestroyPORequest;
 use App\Http\Requests\StorePORequest;
 use App\Http\Requests\UpdatePORequest;
 use App\PurchaseOrder;
+use App\DetailPurchase;
 use App\MstGudang;
+use App\MstSupplier;
 use App\StokBarang;
 use App\LogStokBarang;
 use App\Item;
@@ -36,16 +38,67 @@ class PurchaseOrderController extends Controller
     {
         abort_unless(\Gate::allows('transaction_create'), 403);
         
+        $supplier = MstSupplier::all()->pluck('nama', 'id');
         $gudang = MstGudang::all()->pluck('nama_gudang','id');
         $item   = Item::all()->pluck('nama','id');
 
-        return view('admin.po.create',\compact('gudang','item'));
+        return view('admin.po.create', compact('supplier', 'gudang', 'item'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $po = PurchaseOrder::create([
+                'no_po'             => $request->nomor_ijin,
+                'supplier_id'       => $request->supplier_id,
+                'transaction_date'  => $request->transaction_date
+            ]);
+
+            $i=0;
+            if(isset($request->barang_id[$i])) {
+                for($count = 0;$count < count($request->barang_id); $count++) {
+                    $total = $request->qty[$count] * $this->clean($request->price[$count]);
+                    
+                    $data = array(
+                        'purchase_id'   => $po->id,
+                        'id_barang'     => $request->barang_id[$count],
+                        'qty'           => $request->qty[$count],
+                        'price'         => $this->clean($request->price[$count]),
+                        'ppn'           => $request->ppn[$count],
+                        'total'         => $total,
+                        'is_active'     => 1,
+                        'created_at'    => date('Y-m-d H:i:s')
+                    );
+                    $insert_detail[] = $data;
+                }
+                DetailPurchase::insert($insert_detail);
+            }
+            
+            \DB::commit();
+            return \redirect()->route('admin.po.index')->with('success',\trans('notif.notification.save_data.success'));
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
+    }
+
+    public function clean($string) {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+     
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
     }
 
     public function reportPO(Request $request)
     {
         abort_unless(\Gate::allows('transaction_create'), 503);
-        /* if($request->type == 1){
+        if($request->type == 1){
             $title = 'Status Pengajuan';
         } elseif ($request->type == 2) {
             $title = 'Status Pengiriman';
@@ -54,7 +107,8 @@ class PurchaseOrderController extends Controller
         } else {
             $title = 'Semua Status';
         }
-
+        $detail = PurchaseOrder::all();
+        /* 
         $detail = Req::join('periode_programs', 'requests.program_id', '=', 'periode_programs.id')
                 ->join('r_detail_requests', 'r_detail_requests.no_req', '=', 'requests.no_request')
                 ->leftJoin('users', 'r_detail_requests.receiver_id', '=', 'users.id')
@@ -76,17 +130,7 @@ class PurchaseOrderController extends Controller
         $report = $detail->get(); */
 
         // return view('admin.po.report', compact('report', 'title')); 
-        return view('admin.po.report'); 
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('admin.po.report', compact('detail')); 
     }
 
     /**
@@ -95,9 +139,27 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //
+    }
+
+    public function updatePayment(Request $request, $id)
+    {
+        \DB::beginTransaction();
+        try {
+            $detail = PurchaseOrder::find($id);
+            $detail->status_payment = $request->status;
+            $detail->updated_at     = date('Y-m-d H:i:s');
+            $detail->updated_by     = \Auth::user()->id;
+            $detail->update();
+
+            \DB::commit();
+            return \redirect()->route('admin.po.index')->with('success',\trans('notif.notification.update_data.success'));
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
     }
 
     /**

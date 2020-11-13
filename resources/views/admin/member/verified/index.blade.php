@@ -71,9 +71,6 @@
                             {{ trans('cruds.member.fields.nik') }}
                         </th>
                         <th>
-                            {{ trans('cruds.member.fields.telp') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.member.fields.hp') }}
                         </th>
                         <th>
@@ -110,9 +107,6 @@
                             </td>
                             <td>
                                 {{ $rows->nik ?? '-' }}
-                            </td>
-                            <td>
-                                {{ $rows->no_telp ?? '-' }}
                             </td>
                             <td>
                                 {{ $rows->no_hp ?? '-' }}
@@ -158,7 +152,7 @@
                                                 <i class="fa fa-edit"></i>
                                                 Update Korlap
                                             </button>
-                                        </form>        
+                                        </form>
                                     @endif
                                 @endcan
                                 @can('member_delete')

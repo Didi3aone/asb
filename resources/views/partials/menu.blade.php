@@ -182,15 +182,15 @@
                 </a>
                 @endcan
 
-                @can('customer_access')
+               {{--  @can('customer_access')
                 <a href="{{ route("admin.wilayah.index") }}" class="dropdown-item {{ request()->is('admin/wilayah') || request()->is('admin/wilayah/*') ? 'active' : '' }}">
                     <i class="fa fa-globe nav-icon">
 
                     </i>
-                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.program.title') }}
                     {{ trans('cruds.wilayah.title') }}
                 </a>
-                @endcan
+                @endcan --}}
 
                 @can('customer_access')
                 <a href="{{ route("admin.provinsi.index") }}" class="dropdown-item {{ request()->is('admin/provinsi') || request()->is('admin/provinsi/*') ? 'active' : '' }}">
@@ -222,15 +222,15 @@
                 </a>
                 @endcan
 
-                @can('customer_access')
+                {{-- @can('customer_access')
                 <a href="{{ route("admin.kelurahan.index") }}" class="dropdown-item {{ request()->is('admin/kelurahan') || request()->is('admin/kelurahan/*') ? 'active' : '' }}">
                     <i class="fa fa-globe nav-icon">
 
                     </i>
-                    {{-- {{ trans('cruds.program.title') }} --}}
+                    {{ trans('cruds.program.title') }}
                     {{ trans('cruds.kelurahan.title') }}
                 </a>
-                @endcan
+                @endcan --}}
                 
             </div>
         </li>

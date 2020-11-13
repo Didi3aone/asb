@@ -93,6 +93,9 @@
                             {{ trans('cruds.purchase-order.fields.total') }}
                         </th>
                         <th>
+                            {{ trans('cruds.purchase-order.fields.payment_status') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -107,22 +110,32 @@
                                 {{ $transactions->no_po ?? '' }}
                             </td>
                             <td>
-                                {{ $transactions->created_at ?? '' }}
+                                {{ $transactions->transaction_date ?? '' }}
                             </td>
                             <td>
                                 @php
-                                    $name = \App\User::getName($transactions->supplier_by);
+                                    $name = \App\User::getName($transactions->supplier_id);
                                 @endphp
                                 {{ $name->name ?? '' }}
                             </td>
                             <td>
                                 @php
-                                    $count = \App\DetailPurchase::countPO($transactions->no_po); 
+                                    $count = \App\DetailPurchase::countPO($transactions->id); 
                                 @endphp
                                 {{ $count ?? 0 }}
                             </td>
                             <td>
-                                Total
+                                @php
+                                    $sum = \App\DetailPurchase::sumPO($transactions->id); 
+                                @endphp
+                                {{ $sum ?? 0 }}
+                            </td>
+                            <td>
+                                @if ($transactions->status_payment == 0)
+                                    {{ trans('cruds.purchase-order.fields.unpaid') }}
+                                @elseif ($transactions->status_payment == 1)
+                                    {{ trans('cruds.purchase-order.fields.paid') }}
+                                @endif
                             </td>
                             <td>
                                 @can('transaction_show')
@@ -130,6 +143,27 @@
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
                                     </a>
                                 @endcan
+                                @if ($transactions->status_payment == 0)
+                                    <form action="{{ route('admin.update-payment', $transactions->id) }}" method="POST" onsubmit="return confirm('{{ trans('cruds.purchase-order.fields.set_payment_paid') }}');" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="status" value="1">
+                                        @method('put')
+                                        <button type="submit" class="btn btn-xs btn-info">
+                                            <i class="fa fa-edit"></i>
+                                            {{ trans('cruds.purchase-order.fields.pay') }}
+                                        </button>
+                                    </form>
+                                @elseif ($transactions->status_payment == 1)
+                                    <form action="{{ route('admin.update-payment', $transactions->id) }}" method="POST" onsubmit="return confirm('{{ trans('cruds.purchase-order.fields.set_payment_unpaid') }}');" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="status" value="0">
+                                        @method('put')
+                                        <button type="submit" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-edit"></i>
+                                            {{ trans('cruds.purchase-order.fields.cancel') }}
+                                        </button>
+                                    </form>
+                                @endif
                                 @can('transaction_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.ro.edit', $transactions->id) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}

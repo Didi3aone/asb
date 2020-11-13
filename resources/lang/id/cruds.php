@@ -246,7 +246,11 @@ return [
             'created_at'        => 'Dibuat pada',
             'updated_at'        => 'Dirubah pada',
             'deleted_at'        => 'Dihapus pada',
-            'level_member'      => 'Level Anggota'
+            'level_member'      => 'Level Anggota',
+            'oldpassword'       => 'Password Lama',
+            'newpassword'       => 'Password Baru',
+            'pob'               => 'Tempat Lahir',
+            'dob'               => 'Hari Lahir'
         ],
     ],
     'wilayah'          => [
@@ -458,10 +462,12 @@ return [
             'in_out'            => 'Masuk / Keluar',
             'in'                => 'Pemasukan',
             'out'               => 'Pengeluaran',
+            'Supplier'          => 'Penyuplai',
             'saldo'             => 'Stok Terakhir',
             'created_at'        => 'Dibuat Pada',
             'updated_at'        => 'Dirubah Pada',
             'deleted_at'        => 'Dihapus Pada',
+            'payment_status'    => 'Status Pembayaran',
         ],
     ],
 

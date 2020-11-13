@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Report Program {{ trans('cruds.program.title_singular') }} - {{ $program->name }}</title>
+    <title> {{ trans('cruds.provinsi.fields.report') }} </title>
     <!-- DataTables -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet">
@@ -14,20 +14,16 @@
 <body>
     <div class="card">
         <div class="card-header">
-            <center>Report {{ trans('cruds.program.title_singular') }} - {{ $program->name }}</center>
+            <center> {{ trans('cruds.provinsi.fields.report') }} </center>
         </div>
         <div class="card-body">
             <div class="mb-2">
-                {{-- <div class="float-right">
-                    Download File : <button name="create_excel" id="create_excel" class="btn btn-success">Excel Export</button><br><br>
-                </div> --}}
                 <table class="table table-striped" id="table-datatables">
                     <thead>
                         <tr>
                             <th scope="col">No.</th>
-                            <th scope="col">Nama Program</th>
-                            <th scope="col">Deskripsi</th>
-                            <th scope="col">Barang</th>
+                            <th scope="col">{{ trans('cruds.provinsi.fields.nama') }}</th>
+                            <th scope="col">{{ trans('cruds.provinsi.fields.jumlah') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,13 +36,19 @@
                                     {{ $rows->name ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $rows->description ?? '' }}
-                                </td>
-                                <td>
-                                    {{ $rows->nama ?? '' }}
+                                    {{ $rows->count ?? '' }}
                                 </td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <th colspan="2">{{ trans('cruds.provinsi.fields.total') }}</th>
+                            <th scope="col">
+                                @php
+                                    print_r($reportCount);
+                                    // array_sum($);   
+                                @endphp
+                            </th>
+                        </tr>
                     </tbody>
                 </table>
             </div>

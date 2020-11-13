@@ -235,24 +235,38 @@ class MemberController extends Controller
     {
         abort_unless(\Gate::allows('member_edit'), 403);
 
-        $member     = Member::find($id);
+        $member     = User::find($id);
+        $detail     = DetailUsers::where('userid', $id)->first();
+        $pob        = Kabupaten::all()->pluck('name', 'id_kab');
+
         $marital    = MaritalStatus::where('status', 1)->pluck('name', 'id');
         $provinsi   = Provinsi::where('status', 1)->pluck('name', 'id_prov');
-        $kabupaten  = Kabupaten::where('id_prov', $member->provinsi)
+        $kabupaten  = Kabupaten::where('id_prov', $detail->provinsi)
                     ->pluck('name', 'id_kab');
-        $kecamatan  = Kecamatan::where('id_kab', $member->kabupaten)
+        $kecamatan  = Kecamatan::where('id_kab', $detail->kabupaten)
                     ->pluck('name', 'id_kec');
-        $kelurahan  = Kelurahan::where('id_kec', $member->kecamatan)
+        $kelurahan  = Kelurahan::where('id_kec', $detail->kecamatan)
+                    ->pluck('name', 'id_kel');
+        $kabupatendomisili  = Kabupaten::where('id_prov', $detail->provinsi_domisili)
+                    ->pluck('name', 'id_kab');
+        $kecamatandomisili  = Kecamatan::where('id_kab', $detail->kabupaten_domisili)
+                    ->pluck('name', 'id_kec');
+        $kelurahandomisili  = Kelurahan::where('id_kec', $detail->kecamatan_domisili)
                     ->pluck('name', 'id_kel');
         $job        = Job::where('status', 1)->pluck('name', 'id');
 
         return view('admin.member.edit', compact(
-            'member', 
+            'member',
+            'detail',
+            'pob',
             'marital', 
             'provinsi', 
             'kabupaten', 
             'kecamatan', 
             'kelurahan', 
+            'kabupatendomisili', 
+            'kecamatandomisili', 
+            'kelurahandomisili', 
             'job'
         ));
     }
@@ -290,45 +304,61 @@ class MemberController extends Controller
 
     public function update(Request $request, $id)
     {
-        
-        if ($request->file('foto_kk')) {
-            $kk = $request->file('foto_kk');
-            $kk_name = time() . $kk->getClientOriginalName();
-            $kk->move(public_path() . '/images/kk/', $kk_name);
-        } 
+        \DB::beginTransaction();
+        try {
+            /* if ($request->file('foto_kk')) {
+                $kk = $request->file('foto_kk');
+                $kk_name = time() . $kk->getClientOriginalName();
+                $kk->move(public_path() . '/images/kk/', $kk_name);
+            } 
 
-        if ($request->file('foto_ktp')) {
-            $ktp = $request->file('foto_ktp');
-            $ktp_name = time() . $ktp->getClientOriginalName();
-            $ktp->move(public_path() . '/images/ktp/', $ktp_name);
-        }
+            if ($request->file('foto_ktp')) {
+                $ktp = $request->file('foto_ktp');
+                $ktp_name = time() . $ktp->getClientOriginalName();
+                $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+            } */
 
-        $member = Member::find($id);
-        $member->nama          = $request->name;
-        $member->nik           = $request->nik;
-        $member->email         = $request->email;
-        $member->password      = Hash::make($request->password);
-        $member->no_telp       = $request->no_telp;
-        $member->no_hp         = $request->no_hp;
-        $member->gender        = $request->gender;
-        $member->status_kawin  = $request->marital;
-        $member->pekerjaan     = $request->job;
-        $member->status_korlap = $request->level;
-        $member->alamat        = $request->address;
-        $member->provinsi      = $request->provinsi;
-        $member->kabupaten     = $request->kabupaten;
-        $member->kecamatan     = $request->kecamatan;
-        $member->kelurahan     = $request->kelurahan;
-        $member->updated_by    = \Auth::user()->id;
-        $member->updated_at    = date('Y-m-d H:i:s');
-        if ($request->file('foto_kk')) {
-            $member->foto_kk       = $kk_name;
+            $member = User::find($id);
+            $member->name          = $request->name;
+            $member->email         = $request->email;
+            $member->updated_at    = date('Y-m-d H:i:s');
+            $member->update();
+            
+            $find = DetailUsers::where('userid', $id)->first();
+            
+            $detail = DetailUsers::find($find->id);
+            $detail->nickname          = $request->nickname;
+            $detail->nik               = $request->nik;
+            $detail->no_kk             = $request->no_kk;
+            $detail->gender            = $request->gender;
+            $detail->birth_place       = $request->pob;
+            $detail->tgl_lahir         = $request->dob;
+            $detail->status_kawin      = $request->marital;
+            $detail->pekerjaan         = $request->job;
+            $detail->no_hp             = $request->no_hp;
+            $detail->alamat            = $request->address;
+            $detail->provinsi          = $request->provinsi;
+            $detail->kabupaten         = $request->kabupaten;
+            $detail->kecamatan         = $request->kecamatan;
+            $detail->kelurahan         = $request->kelurahan;
+            $detail->alamat_domisili   = $request->alamat_domisili;
+            $detail->provinsi_domisili = $request->provinsi_domisili;
+            $detail->kabupaten_domisili= $request->kabupaten_domisili;
+            $detail->kecamatan_domisili= $request->kecamatan_domisili;
+            $detail->kelurahan_domisili= $request->kelurahan_domisili;
+            /* $detail->avatar            = $avatar_name;
+            $detail->foto_ktp          = $ktp_name;
+            $detail->foto_kk           = $kk_name; */
+            $detail->updated_by        = \Auth::user()->id;
+            $detail->updated_at        = date('Y-m-d H:i:s');
+            $detail->update();
+
+            \DB::commit();
+            return \redirect()->route('admin.master-member.index')->with('success',\trans('notif.notification.update_data.success'));
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
         }
-        if ($request->file('foto_ktp')) {
-            $member->foto_ktp      = $ktp_name;
-        }
-        $member->update();
-        return \redirect()->route('admin.master-member.index')->with('success',\trans('notif.notification.update_data.success'));
     }
 
     /**

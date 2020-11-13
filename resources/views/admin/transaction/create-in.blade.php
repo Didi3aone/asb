@@ -56,7 +56,6 @@
                         </p>
                     </div>
                 </div>
-
             </div>
             <div class="form-group {{ $errors->has('tanggal_transaksi') ? 'has-error' : '' }}">
                 <label for="tanggal_transaksi">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
@@ -185,6 +184,7 @@
             index++
         })
     });
+
     $("#gudang_id").change(function() {
         let val = $(this).val();
         $.ajax({
@@ -207,6 +207,6 @@
 				}
             }
         })
-    })
+    });
 </script>
 @endsection

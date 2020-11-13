@@ -43,7 +43,9 @@
 
                             </td>
                             <td>
-                                {{ $rows->name ?? '' }}
+                                <a href="{{ route('admin.report-member-kab', $rows->id) }}" target="_blank">
+                                    {{ $rows->name ?? '' }}
+                                </a>
                             </td>
                             <td>
                                 @php
