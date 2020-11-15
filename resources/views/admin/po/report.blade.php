@@ -44,10 +44,58 @@
                                     {{ $rows->supplier_id ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $rows->nama ?? '' }}
+                                    Gula,
+                                    Minyak
+                                </td>
+                                <td>
+                                    3, 2
+                                </td>
+                                
+                                <td>
+                                    16000, 17000
+                                </td>
+                                <td>
+                                    No
+                                </td>
+                                <td>
+                                    48000, 34000
                                 </td>
                             </tr>
                         @endforeach
+                        {{-- <tr>
+                            <td rowspan="2">1</td>
+                            <td rowspan="2">TSC-0005</td>
+                            <td rowspan="2">Paijo</td>
+                            <td>Minyak</td>
+                            <td>2</td>
+                            <td>150000</td>
+                            <td>No</td>
+                            <td>300000</td>
+                        </tr>
+                        <tr>
+                            <td>Terigu</td>
+                            <td>2</td>
+                            <td>40000</td>
+                            <td>No</td>
+                            <td>80000</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">2</td>
+                            <td rowspan="2">TSC-0006</td>
+                            <td rowspan="2">Paino</td>
+                            <td>Minyak</td>
+                            <td>2</td>
+                            <td>150000</td>
+                            <td>No</td>
+                            <td>300000</td>
+                        </tr>
+                        <tr>
+                            <td>Terigu</td>
+                            <td>2</td>
+                            <td>40000</td>
+                            <td>No</td>
+                            <td>80000</td>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>

@@ -128,6 +128,12 @@ class InformationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $info = Information::find($id);
+        $info->is_active  = 0;
+        $info->deleted_at = date('Y-m-d H:i:s');
+        $info->updated_by = \Auth::user()->id;
+        $info->update();
+
+        return \redirect()->route('admin.info.index')->with('success',\trans('notif.notification.delete_data.success'));
     }
 }

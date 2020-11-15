@@ -103,6 +103,12 @@ class ArticleCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Category::find($id);
+        $data->is_active  = 0;
+        $data->deleted_at = date('Y-m-d H:i:s');
+        $data->updated_by = \Auth::user()->id;
+        $data->update();
+
+        return \redirect()->route('admin.category.index')->with('success',\trans('notif.notification.delete_data.success'));
     }
 }

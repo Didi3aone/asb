@@ -7,11 +7,11 @@
     </div>
 
     <div class="card-body">
-        <form class="form-material mt-4" action="{{ route("admin.program.store") }}" method="POST" enctype="multipart/form-data">
+        <form class="form-material mt-4" action="{{ route("admin.program.update", $program->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group {{ $errors->has('nama') ? 'has-error' : '' }}">
                 <label for="nama">{{ trans('cruds.program.fields.nama') }}*</label>
-                <input type="text" id="nama" name="nama" class="form-control" value="{{ old('nama', isset($program) ? $program->name : '') }}">
+                <input type="text" id="nama" name="nama" class="form-control" value="{{ $program->name }}">
                 @if($errors->has('nama'))
                     <em class="invalid-feedback">
                         {{ $errors->first('nama') }}
@@ -23,7 +23,7 @@
             </div>
             <div class="form-group {{ $errors->has('start_date') ? 'has-error' : '' }}">
                 <label for="start_date">{{ trans('cruds.program.fields.start_date') }}*</label>
-                <input type="text" id="start_date" name="start_date" class="form-control date" value="{{ old('start_date', isset($program) ? $program->start_date : '') }}">
+                <input type="text" id="start_date" name="start_date" class="form-control date" value="{{ $program->start_date }}">
                 @if($errors->has('start_date'))
                     <em class="invalid-feedback">
                         {{ $errors->first('start_date') }}
@@ -35,7 +35,7 @@
             </div>
             <div class="form-group {{ $errors->has('end_date') ? 'has-error' : '' }}">
                 <label for="end_date">{{ trans('cruds.program.fields.end_date') }}*</label>
-                <input type="text" id="end_date" name="end_date" class="form-control date" value="{{ old('end_date', isset($program) ? $program->end_date : '') }}">
+                <input type="text" id="end_date" name="end_date" class="form-control date" value="{{ $program->end_date }}">
                 @if($errors->has('end_date'))
                     <em class="invalid-feedback">
                         {{ $errors->first('end_date') }}
@@ -47,7 +47,7 @@
             </div>
             <div class="form-group {{ $errors->has('desc') ? 'has-error' : '' }}">
                 <label for="desc">{{ trans('cruds.program.fields.desc') }}*</label>
-                <textarea class ="form-control" name="desc" value="{{ old('alamat', isset($program) ? $program->description : '') }}" id="desc"> </textarea>
+                <textarea class ="form-control" name="desc" value="" id="desc"> {{ $program->description }} </textarea>
                 @if($errors->has('desc'))
                     <em class="invalid-feedback">
                         {{ $errors->first('desc') }}
@@ -58,25 +58,6 @@
                 </p>
             </div>
             
-            {{-- <div class="form-group {{ $errors->has('ppn') ? 'has-error' : '' }}">
-                PPN*
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="ppn" id="inlineRadio1" value="{{ \App\MstSupplier::YesPpn }}">
-                    <label class="form-check-label" for="inlineRadio1">Yes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="ppn" checked id="inlineRadio2" value="{{ \App\MstSupplier::NoPpn }}">
-                    <label class="form-check-label" for="inlineRadio2">No</label>
-                </div>
-                 @if($errors->has('ppn'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('ppn') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-
-                </p>
-            </div> --}}
             <div class="form-group">
                 <table class="table table-bordered">
                     <thead>
@@ -84,52 +65,56 @@
                         <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
                         {{-- <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
                         <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th> --}}
-                        <th><button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button></th>
+                        <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody id="items">
-                        @if(count($detail) > 0)
-                            @foreach($detail as $key => $rows)
-                                <tr>
-                                    <td>
-                                        <select name="barang_id[]" id="barang_id_0" class="form-control select2" required style="width: 100%; height:36px;">
-                                            <option value="">{{ trans('global.pleaseSelect') }}</option>
-                                            @foreach($item as $id => $it)
-                                                <option value="{{ $id }}"  @if($rows->id_barang == $id) @endif>{{ $it }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if($errors->has('gudang_id'))
-                                            <em class="invalid-feedback">
-                                                {{ $errors->first('gudang_id') }}
-                                            </em>
-                                        @endif
-                                        <p class="helper-block">
-                                        </p>
-                                    </td>
-                                    {{-- <td>
-                                        <input type="text" id="qty_0" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-                                        @if($errors->has('qty'))
-                                            <em class="invalid-feedback">
-                                                {{ $errors->first('qty') }}
-                                            </em>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <input type="text" id="nomor_sparepart_0" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-                                        @if($errors->has('nomor_sparepart'))
-                                            <em class="invalid-feedback">
-                                                {{ $errors->first('nomor_sparepart') }}
-                                            </em>
-                                        @endif
-                                    </td> --}}
-                                    <td>
-                                        <a href="javascript:;" class="remove-item btn btn-danger btn-sm" onclick="this.parentNode.parentNode.remove()">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif 
+                    @if(count($detail) > 0)
+                        @foreach ($detail as $key => $rows)
+                            <tr>
+                                <td>
+                                    <input id="id_detail_0" name="to_rcr[]" type="hidden" value="{{ $rows->id }}" />
+                                    <select name="id_barang[]" id="id_barang_0" class="form-control select2" required style="width: 100%; height:36px;">
+                                        <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                        @foreach($item as $id => $it)
+                                            <option value="{{ $id }}" @if($rows->id_barang == $id) selected @endif>{{ $it }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('gudang_id'))
+                                        <em class="invalid-feedback">
+                                            {{ $errors->first('gudang_id') }}
+                                        </em>
+                                    @endif
+                                    <p class="helper-block">
+                                    </p>
+                                </td>
+                                <td>
+                                    <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>
+                                <select name="id_barang[]" id="id_barang_0" class="form-control select2" required style="width: 100%; height:36px;">
+                                    <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                    @foreach($item as $id => $it)
+                                        <option value="{{ $id }}">{{ $it }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('gudang_id'))
+                                    <em class="invalid-feedback">
+                                        {{ $errors->first('gudang_id') }}
+                                    </em>
+                                @endif
+                                <p class="helper-block">
+                                </p>
+                            </td>
+                            <td>
+                                <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
+                            </td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>
@@ -151,22 +136,6 @@
 @section('scripts')
 @parent
 <script>
-    /* <td>
-        <input type="text" id="qty_${index}" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-        @if($errors->has('qty'))
-            <em class="invalid-feedback">
-                {{ $errors->first('qty') }}
-            </em>
-        @endif
-    </td>
-    <td>
-        <input type="text" id="nomor_sparepart_${index}" name="nomor_sparepart" class="form-control" value="{{ old('nomor_sparepart', '') }}">
-        @if($errors->has('nomor_sparepart'))
-            <em class="invalid-feedback">
-                {{ $errors->first('nomor_sparepart') }}
-            </em>
-        @endif
-    </td> */
     $("body").on("click",".btn-remove",function(){
         $(this).parents(".control-group").remove();
     });
@@ -178,15 +147,15 @@
             let html = `
                     <tr data-id="${index}">
                         <td>
-                            <select name="barang_id[]" id="barang_id_${index}" class="form-control select2" required style="width: 100%; height:36px;">
+                            <select name="id_barang[]" id="id_barang_${index}" class="form-control select2" required style="width: 100%; height:36px;">
                                 <option value="">{{ trans('global.pleaseSelect') }}</option>
                                 @foreach($item as $id => $it)
                                     <option value="{{ $id }}">{{ $it }}</option>
                                 @endforeach
                             </select>
-                            @if($errors->has('barang_id'))
+                            @if($errors->has('id_barang'))
                                 <em class="invalid-feedback">
-                                    {{ $errors->first('barang_id') }}
+                                    {{ $errors->first('id_barang') }}
                                 </em>
                             @endif
                             <p class="helper-block">

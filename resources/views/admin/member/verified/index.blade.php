@@ -144,18 +144,30 @@
                                 @endcan --}}
                                 @can('member_edit')
                                     @if ($rows->status_korlap == 0)
-                                        <form action="{{ route('admin.update-korlap', $rows->userid) }}" method="POST" onsubmit="return confirm('Update User ini menjadi Korlap');" style="display: inline-block;">
+                                        <form action="{{ route('admin.update-korlap', $rows->userid) }}" method="POST" onsubmit="return confirm('Ubah Status Member');" style="display: inline-block;">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <input type="hidden" name="userid" value="{{ $rows->userid }}">
+                                            <input type="hidden" name="status" value="1">
                                             @method('put')
                                             <button type="submit" class="btn btn-xs btn-info">
                                                 <i class="fa fa-edit"></i>
                                                 Update Korlap
                                             </button>
                                         </form>
+                                    @elseif($rows->status_korlap == 1) 
+                                        <form action="{{ route('admin.update-korlap', $rows->userid) }}" method="POST" onsubmit="return confirm('Ubah Status Member');" style="display: inline-block;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="userid" value="{{ $rows->userid }}">
+                                            <input type="hidden" name="status" value="0">
+                                            @method('put')
+                                            <button type="submit" class="btn btn-xs btn-danger">
+                                                <i class="fa fa-edit"></i>
+                                                Nonaktifkan Korlap
+                                            </button>
+                                        </form>
                                     @endif
                                 @endcan
-                                @can('member_delete')
+                                {{-- @can('member_delete')
                                     <form action="{{ route('admin.master-member.destroy', $rows->userid) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -164,7 +176,7 @@
                                             {{ trans('global.delete') }}
                                         </button>
                                     </form>
-                                @endcan
+                                @endcan --}}
                             </td>
 
                         </tr>

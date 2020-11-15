@@ -156,7 +156,7 @@
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('member_delete')
+                                {{-- @can('member_delete')
                                     
                                     <form action="{{ route('admin.master-member.destroy', $rows->userid) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
@@ -166,7 +166,7 @@
                                             {{ trans('global.delete') }}
                                         </button>
                                     </form>
-                                @endcan
+                                @endcan --}}
                             </td>
 
                         </tr>

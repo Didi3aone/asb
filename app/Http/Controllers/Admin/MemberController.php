@@ -10,6 +10,7 @@ use App\Http\Requests\StoreMemberRequest;
 use App\Http\Requests\UpdateMemberRequest;
 use Hash;
 use App\User;
+use App\RoleUser;
 use App\DetailUsers;
 use App\MaritalStatus;
 use App\Job;
@@ -28,8 +29,26 @@ class MemberController extends Controller
     public function index()
     {
         abort_unless(\Gate::allows('member_access'), 403);
-        
-        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+
+        $cekLevel = RoleUser::where('user_id', \Auth::user()->id)->first();
+
+        if ($cekLevel->role_id == 3) {
+            $findKec = DetailUsers::where('userid', \Auth::user()->id)->first();
+
+            $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
+                ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                ->selectRaw('detail_users.userid ,provinsis.zona_waktu as provid ,
+                        kecamatans.id as kecid ,detail_users.no_member ,
+                        users.name ,detail_users.nik ,detail_users.no_hp ,
+                        users.email ,users.created_at ,
+                        users.is_active ,detail_users.status_korlap')
+                ->where('role_user.role_id', 3)
+                ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->get();
+        } else {
+            $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
                 ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
@@ -40,6 +59,8 @@ class MemberController extends Controller
                         users.is_active ,detail_users.status_korlap')
                 ->where('role_user.role_id', 3)
                 ->get();
+        }
+        
         // dd($program);
         return view('admin.member.index', compact('member'));
     }
@@ -48,7 +69,26 @@ class MemberController extends Controller
     {
         abort_unless(\Gate::allows('member_access'), 403);
 
-        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+        $cekLevel = RoleUser::where('user_id', \Auth::user()->id)->first();
+
+        if ($cekLevel->role_id == 3) {
+            $findKec = DetailUsers::where('userid', \Auth::user()->id)->first();
+            
+            $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
+                ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                ->selectRaw('detail_users.userid ,provinsis.zona_waktu as provid ,
+                        kecamatans.id as kecid ,detail_users.no_member ,
+                        users.name ,detail_users.nik ,detail_users.no_hp ,
+                        users.email ,users.created_at ,
+                        users.is_active ,detail_users.status_korlap')
+                ->where('role_user.role_id', 3)
+                ->where('is_verified', 'verified')
+                ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->get();
+        } else {
+            $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
                 ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
@@ -60,6 +100,7 @@ class MemberController extends Controller
                 ->where('role_user.role_id', 3)
                 ->where('is_verified', 'verified')
                 ->get();
+        }
         
         return view('admin.member.verified.index', compact('member'));
     }
@@ -68,7 +109,26 @@ class MemberController extends Controller
     {
         abort_unless(\Gate::allows('member_access'), 403);
 
-        $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+        $cekLevel = RoleUser::where('user_id', \Auth::user()->id)->first();
+
+        if ($cekLevel->role_id == 3) {
+            $findKec = DetailUsers::where('userid', \Auth::user()->id)->first();
+            
+            $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
+                ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                ->selectRaw('detail_users.userid ,provinsis.zona_waktu as provid ,
+                        kecamatans.id as kecid ,detail_users.no_member ,
+                        users.name ,detail_users.nik ,detail_users.no_hp ,
+                        users.email ,users.created_at ,
+                        users.is_active ,detail_users.status_korlap')
+                ->where('role_user.role_id', 3)
+                ->where('is_verified', 'pending')
+                ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->get();
+        } else {
+            $member = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
                 ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
@@ -80,6 +140,7 @@ class MemberController extends Controller
                 ->where('role_user.role_id', 3)
                 ->where('is_verified', 'pending')
                 ->get();
+        }
         
         return view('admin.member.pending.index', compact('member'));
     }
@@ -294,7 +355,7 @@ class MemberController extends Controller
         $find = DetailUsers::where('userid', $id)->first();
 
         $detail = DetailUsers::find($find->id);
-        $detail->status_korlap = 1;
+        $detail->status_korlap = $request->status;
         $detail->updated_at    = date('Y-m-d H:i:s');
         $detail->updated_by    = \Auth::user()->id;
         $detail->update();
@@ -369,6 +430,12 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->is_active  = 0;
+        $user->deleted_at = date('Y-m-d H:i:s');
+        $user->updated_by = \Auth::user()->id;
+        $user->update();
+
+        return \redirect()->route('admin.master-member.index')->with('success',\trans('notif.notification.delete_data.success'));
     }
 }
