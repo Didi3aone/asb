@@ -40,6 +40,7 @@ class InformationApiController extends Controller
             $validator = Validator::make($request->all(), [
                 'nama'          => 'required',
                 'content'       => 'required',
+                'kategori_id'   => 'required',
                 'foto'          => 'mimes:jpeg,jpg,png,gif|required|max:10000'
             ],
             [
@@ -59,7 +60,8 @@ class InformationApiController extends Controller
                 if ($request->file('foto')) {
                     $pict = $request->file('foto');
                     $pict_name = time() . $pict->getClientOriginalName();
-                    $pict->move(public_path() . '/images/', $pict_name);
+                    $path = $pict->storeAs('articles', $pict_name);
+                    // $pict->move(public_path() . '/images/', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';
                 }

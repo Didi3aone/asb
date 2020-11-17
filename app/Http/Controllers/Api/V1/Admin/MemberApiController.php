@@ -121,21 +121,24 @@ class MemberApiController extends Controller
                 if ($request->file('avatar')) {
                     $avatar = $request->file('avatar');
                     $avatar_name = time() . $avatar->getClientOriginalName();
-                    $avatar->move(public_path() . '/images/avatar/', $avatar_name);
+                    $path = $avatar->storeAs('avatar', $avatar_name);
+                    // $avatar->move(public_path() . '/images/avatar/', $avatar_name);
                 } else {
                     $kk_name = 'noimage.jpg';
                 }
                 if ($request->file('foto_kk')) {
                     $kk = $request->file('foto_kk');
                     $kk_name = time() . $kk->getClientOriginalName();
-                    $kk->move(public_path() . '/images/kk/', $kk_name);
+                    $path = $kk->storeAs('kk', $kk_name);
+                    // $kk->move(public_path() . '/images/kk/', $kk_name);
                 } else {
                     $kk_name = 'noimage.jpg';
                 }
                 if ($request->file('foto_ktp')) {
                     $ktp = $request->file('foto_ktp');
                     $ktp_name = time() . $ktp->getClientOriginalName();
-                    $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+                    $path = $ktp->storeAs('ktp', $ktp_name);
+                    // $ktp->move(public_path() . '/images/ktp/', $ktp_name);
                 } else {
                     $ktp_name = 'noimage.jpg';
                 }

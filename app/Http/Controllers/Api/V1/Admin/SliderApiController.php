@@ -56,6 +56,7 @@ class SliderApiController extends Controller
                 if ($request->file('gambar')) {
                     $pict = $request->file('gambar');
                     $pict_name = time() . $pict->getClientOriginalName();
+                    $path = $pict->storeAs('file', $pict_name);
                     $pict->move(public_path() . '/images/slider/', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';

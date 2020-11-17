@@ -578,6 +578,7 @@
 						// dataType: 'JSON',
 						success: function (data) {
 							console.log(data);
+							$(this).find('input[type="submit"]').attr('disabled','disabled');
 							if ((data.is_error) === true) {
 								swal('Error',data.error_msg);
 							} else {
