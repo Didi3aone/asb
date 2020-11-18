@@ -104,6 +104,7 @@ class RegistrationController extends Controller
             } else {
                 if ($request->file('foto_kk')) {
                     $kk = $request->file('foto_kk');
+                    $size=$request->file('foto_kk')->getSize();
                     $kk_name = time() . $kk->getClientOriginalName();
                     $kk->move(public_path() . '/images/kk/', $kk_name);
                 } else {
@@ -111,6 +112,7 @@ class RegistrationController extends Controller
                 }
                 if ($request->file('foto_ktp')) {
                     $ktp = $request->file('foto_ktp');
+                    $size=$request->file('foto_ktp')->getSize();
                     $ktp_name = time() . $ktp->getClientOriginalName();
                     $ktp->move(public_path() . '/images/ktp/', $ktp_name);
                 } else {

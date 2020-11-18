@@ -25,6 +25,7 @@ return [
     'login_password_new'                   => 'New Password',
     'login_password_confirmation'          => 'Password baru lagi',
     'logout'                               => 'Keluar',
+    'welcome'                              => 'Selamat Datang',
     'month'                                => 'Bulan',
     'no'                                   => 'TIdak',
     'pleaseSelect'                         => 'Silahkan pilih',

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\VerifyEmail;
+use Mail;
 use JWTAuth;
+use Auth;
 use App\User;
 use App\DetailUsers;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -20,12 +24,20 @@ class UserApiController extends Controller
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 400);
+                $detail = '';
+            } else {
+                $detail = DetailUsers::where('userid', Auth::user()->id)->first();
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
+            $detail = '';
         }
 
-        return response()->json(compact('token'));
+        
+        return response()->json([
+            'token' => $token,
+            'data' => $detail
+        ]);
     }
 
     public function register(Request $request)
@@ -89,15 +101,15 @@ class UserApiController extends Controller
                 'emailaddress.required'     => 'Masukkan email yg Valid !',
                 'password.required'         => 'Masukkan password !',
                 'nickname.required'         => 'Masukkan nama panggilan !',
-                'no_ktp.required'           => 'Masukkan no_ktp / harus nomor !',
+                'no_ktp.required'           => 'Masukkan no ktp / harus nomor !',
                 'no_kk.required'            => 'Masukkan no kk / harus nomor !',
                 'gender.required'           => 'Masukkan Gender !',
                 'tgl_lahir.required'        => 'Masukkan tanggal lahir !',
                 'birth_place.required'      => 'Masukkan tempat lahir !',
                 'pekerjaan.required'        => 'Masukkan Pekerjaan !',
                 'no_hp.required'            => 'Masukkan nomor HP !',
-                'foto_ktp.required'         => 'Masukkan nomor HP !',
-                'foto_kk.required'          => 'Masukkan nomor HP !',
+                'foto_ktp.required'         => 'Masukkan foto KTP !',
+                'foto_kk.required'          => 'Masukkan Foto KK !',
                 'alamat.required'           => 'Masukkan Alamat !',
                 'provinsi.required'         => 'Masukkan provinsi !',
                 'kabupaten.required'        => 'Masukkan kabupaten !',
@@ -119,22 +131,28 @@ class UserApiController extends Controller
             } else {
                 if ($request->file('avatar')) {
                     $avatar = $request->file('avatar');
+                    $size=$request->file('avatar')->getSize();
                     $avatar_name = time() . $avatar->getClientOriginalName();
-                    $avatar->move(public_path() . '/images/avatar/', $avatar_name);
+                    $path = $avatar->storeAs('avatar', $avatar_name);
+                    // $avatar->move(public_path() . '/images/avatar/', $avatar_name);
                 } else {
-                    $kk_name = 'noimage.jpg';
+                    $avatar_name = 'noimage.jpg';
                 }
                 if ($request->file('foto_kk')) {
                     $kk = $request->file('foto_kk');
+                    $size=$request->file('foto_kk')->getSize();
                     $kk_name = time() . $kk->getClientOriginalName();
-                    $kk->move(public_path() . '/images/kk/', $kk_name);
+                    $path = $kk->storeAs('kk', $kk_name);
+                    // $kk->move(public_path() . '/images/kk/', $kk_name);
                 } else {
                     $kk_name = 'noimage.jpg';
                 }
                 if ($request->file('foto_ktp')) {
                     $ktp = $request->file('foto_ktp');
+                    $size=$request->file('foto_ktp')->getSize();
                     $ktp_name = time() . $ktp->getClientOriginalName();
-                    $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+                    $path = $ktp->storeAs('ktp', $ktp_name);
+                    // $ktp->move(public_path() . '/images/ktp/', $ktp_name);
                 } else {
                     $ktp_name = 'noimage.jpg';
                 }
@@ -159,7 +177,7 @@ class UserApiController extends Controller
                     'userid'            => $users->id,
                     'no_member'         => $no_member,
                     'nickname'          => $request->input('nickname'),
-                    'no_ktp'            => $request->input('no_ktp'),
+                    'nik'               => $request->input('no_ktp'),
                     'no_kk'             => $request->input('no_kk'),
                     'gender'            => $request->input('gender'),
                     'tgl_lahir'         => $request->input('tgl_lahir'),
@@ -182,7 +200,7 @@ class UserApiController extends Controller
                     'foto_ktp'          => $ktp_name,
                     'foto_kk'           => $kk_name,
                     'status_korlap'     => 1,
-                    'member'            => date('Y-m-d H:i:s')
+                    'created_at'        => date('Y-m-d H:i:s')
                 );
                 $detail = DetailUsers::insert($data);
                 Mail::to($users->email)->send(new VerifyEmail($users));

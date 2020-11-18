@@ -54,6 +54,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('info', 'InformationController');
     Route::resource('category', 'ArticleCategoryController');
 
+    //getImage
+    Route::get('img/ktp/{filename}', 'ImgController@displayKtp')->name('img.ktp');
+    Route::get('img/kk/{filename}', 'ImgController@displayKK')->name('img.kk');
+    Route::get('img/avatar/{filename}', 'ImgController@displayAvatar')->name('img.avatar');
+    Route::get('img/articles/{filename}', 'ImgController@displayArticles')->name('img.articles');
+    
+    
+
     //Master
     Route::resource('gudang', 'GudangController');
     Route::put('rak-update-partial', 'GudangController@updateRakPartials')->name('rak-update-partial');

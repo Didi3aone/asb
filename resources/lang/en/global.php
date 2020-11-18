@@ -40,6 +40,7 @@ return [
     'search_input_too_short'               => 'Please enter :count or more characters',
     'show'                                 => 'Show',
     'systemCalendar'                       => 'Calendar',
+    'welcome'                              => 'Welcome',
     'thankYouForUsingOurApplication'       => 'Thank you for using our website',
     'timeFrom'                             => 'From',
     'timeTo'                               => 'To',
