@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DetailPurchase extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
     
     public $table = 'r_detail_purchases';
 

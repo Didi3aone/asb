@@ -167,7 +167,7 @@
                     <span class="spinner-border spin-save spinner-border-sm" role="status" aria-hidden="true"></span>
                     <i class="fa fa-save"></i> {{ trans('global.save') }}
                 </button>
-                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-default"> 
+                <a href="{{ route('admin.po.index') }}" class="btn btn-default"> 
                     <i class="fa fa-arrow-left"> {{ trans('global.back_to_list') }}</i>
                 </a>
             </div>

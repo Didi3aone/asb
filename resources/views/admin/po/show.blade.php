@@ -12,108 +12,69 @@
                 <tbody>
                     <tr>
                         <th>
-                            Name
+                            No. Purchase Order
                         </th>
                         <td>
-                            {{ $ro->name }}
+                            {{ $po->no_po }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            Start Date
+                            Supplier
                         </th>
                         <td>
-                            {{ $ro->start_date }}
+                            @php
+                                $nama = \App\MstSupplier::getName($po->supplier_id);
+                            @endphp
+                            {{ $nama->nama }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            End Date
+                            Transaction Date
                         </th>
                         <td>
-                            {{ $ro->end_date }}
+                            {{ $po->transaction_date }}
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            Description
-                        </th>
-                        <td>
-                            {{ $ro->description }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Created By
-                        </th>
-                        <td>
-                            {{ $ro->created_by }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Provinsi
-                        </th>
-                        <td>
-                            Provinsi
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kabupaten / Kota
-                        </th>
-                        <td>
-                            Kabupaten
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kecamatan
-                        </th>
-                        <td>
-                            Kecamatan
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kelurahan
-                        </th>
-                        <td>
-                            Kelurahan
-                        </td>
-                    </tr>
-                    
                 </tbody>
             </table>
-            <h2>Detail Penerima</h2>
+            <h2>Detail</h2>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>
-                            NIK
-                        </th>
-                        <th>
-                            No. KK 
-                        </th>
-                        <th>
-                            Nama Penerima 
-                        </th>
-                        <th>
-                            No. Telp 
-                        </th>
-                        <th>
-                            No. Handphone 
-                        </th>
-                        <th>
-                            Email 
-                        </th>
-                        <th>
-                            Pekerjaan
-                        </th>
+                        <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
+                        <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
+                        <th>{{ trans('global.price') }}</th>
+                        <th>PPN </th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    @if(count($detail) > 0)
+                        @foreach ($detail as $key => $rows)
+                            <tr>
+                                <td>
+                                    @php
+                                        $name = \App\Item::getItem($rows->id_barang);
+                                    @endphp
+                                    {{ $name->nama }}
+                                </td>
+                                <td>
+                                    {{ $rows->qty }}
+                                </td>
+                                <td>
+                                    {{ $rows->price }}
+                                </td>
+                                <td>
+                                    @if ($rows->ppn == 0) 
+                                        No
+                                    @else
+                                        Yes 
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </thead>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">

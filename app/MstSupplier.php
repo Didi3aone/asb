@@ -41,4 +41,9 @@ class MstSupplier extends BaseModel
 
     public const YesPpn = 1;
     public const NoPpn  = 0;
+
+    public static function getName($value)
+    {
+        return MstSupplier::where('id', $value)->select('nama')->first();
+    }
 }

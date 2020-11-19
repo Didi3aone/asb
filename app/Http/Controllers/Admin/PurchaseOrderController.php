@@ -141,7 +141,11 @@ class PurchaseOrderController extends Controller
      */
     public function show(Request $request, $id)
     {
-        //
+        $po     = PurchaseOrder::find($id);
+        $detail = DetailPurchase::where('purchase_id', $id)
+                ->get();
+
+        return view('admin.po.show', compact('po', 'detail'));
     }
 
     public function updatePayment(Request $request, $id)
@@ -191,7 +195,50 @@ class PurchaseOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            $po = PurchaseOrder::find($id);
+            $po->no_po              = $request->nomor_ijin;
+            $po->supplier_id        = $request->supplier_id;
+            $po->updated_by         = \Auth::user()->id;
+            $po->transaction_date   = $request->transaction_date;
+            $po->update();
+            
+            $i=0;
+            if(isset($request->barang_id[$i])) {
+                for($count = 0;$count < count($request->barang_id); $count++) {
+                    $total = $request->qty[$count] * $this->clean($request->price[$count]);
+
+                    $findDetail = DetailPurchase::where('purchase_id', $id)
+                            ->where('id_barang', $request->barang_id[$count])
+                            ->first();
+                
+                    if($findDetail) {
+                        $detail = DetailPurchase::find($findDetail->id)
+                            ->delete();
+                    }
+                    
+                    $data = array(
+                        'purchase_id'   => $po->id,
+                        'id_barang'     => $request->barang_id[$count],
+                        'qty'           => $request->qty[$count],
+                        'price'         => $this->clean($request->price[$count]),
+                        'ppn'           => $request->ppn[$count],
+                        'total'         => $total,
+                        'is_active'     => 1,
+                        'updated_at'    => date('Y-m-d H:i:s')
+                    );
+                    $insert_detail[] = $data;
+                }
+                DetailPurchase::insert($insert_detail);
+            }
+            
+            \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
+        return \redirect()->route('admin.po.index')->with('success',\trans('notif.notification.update_data.success'));
     }
 
     /**
