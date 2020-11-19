@@ -16,6 +16,7 @@ class ArticleCategory extends Model
         'name',
         'is_active',
         'created_by',
+        'thumbnail',
         'updated_by',
         'deleted_at',
         'created_at',

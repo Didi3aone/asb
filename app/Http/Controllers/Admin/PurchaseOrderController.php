@@ -41,7 +41,7 @@ class PurchaseOrderController extends Controller
         $supplier = MstSupplier::all()->pluck('nama', 'id');
         $gudang = MstGudang::all()->pluck('nama_gudang','id');
         $item   = Item::all()->pluck('nama','id');
-
+        // dd($supplier);
         return view('admin.po.create', compact('supplier', 'gudang', 'item'));
     }
 
@@ -170,7 +170,16 @@ class PurchaseOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        abort_unless(\Gate::allows('transaction_edit'), 403);
+        
+        $po = PurchaseOrder::find($id);
+        $detail = DetailPurchase::where('purchase_id', $id)
+                ->get();
+        $supplier = MstSupplier::all()->pluck('nama', 'id');
+        $gudang = MstGudang::all()->pluck('nama_gudang','id');
+        $item   = Item::all()->pluck('nama','id');
+        // dd($supplier);
+        return view('admin.po.edit', compact('po', 'detail', 'supplier', 'gudang', 'item'));
     }
 
     /**

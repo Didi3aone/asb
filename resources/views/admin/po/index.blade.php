@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.request-order.title_singular') }} {{ trans('global.report') }}
+        Laporan Purchase Order
     </div>
     <div class="card-body">
         <div class="row">
@@ -165,7 +165,7 @@
                                     </form>
                                 @endif
                                 @can('transaction_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.ro.edit', $transactions->id) }}">
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.po.edit', $transactions->id) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
                                 @endcan

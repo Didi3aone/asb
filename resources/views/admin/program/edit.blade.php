@@ -9,6 +9,7 @@
     <div class="card-body">
         <form class="form-material mt-4" action="{{ route("admin.program.update", $program->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('put')
             <div class="form-group {{ $errors->has('nama') ? 'has-error' : '' }}">
                 <label for="nama">{{ trans('cruds.program.fields.nama') }}*</label>
                 <input type="text" id="nama" name="nama" class="form-control" value="{{ $program->name }}">

@@ -13,6 +13,8 @@ use App\StokBarang;
 use App\LogStokBarang;
 use App\Item;
 use App\MstGudang;
+use App\RakGudang;
+use App\LogTransaction;
 
 
 class TransaksiStokController extends Controller
@@ -82,19 +84,28 @@ class TransaksiStokController extends Controller
                 'nomor_transaksi'   => time(),
                 'tipe'              => $request->tipe,
                 'nomor_ijin'        => $request->nomor_ijin,
-                'rak_id'            => $request->rak_id,
+                'rak_id'            => $request->rak_id ?? 0,
                 'gudang_id'         => $request->gudang_id,
                 'tanggal_transaksi' => $request->tanggal_transaksi,
+                'created_by'        => \Auth::user()->id
             ]);
             
             if( $request->has('barang_id') ) {
                 foreach( $request->barang_id as $key => $detail ) {
-                    TransaksiStokDetail::create([
+                    $detail = TransaksiStokDetail::create([
                         'transaksi_id'      => $header->id,
-                        'barang_id'         => $detail,
-                        'qty'               => $request->qty[$key] ?? '',
+                        'barang_id'         => $request->barang_id[$key],
+                        'qty'               => $request->qty[$key] ?? 0,
                     ]);
-
+                    
+                    LogTransaction::create([
+                        'detail_id'     => $detail->id,
+                        'transaksi_id'  => $header->id,
+                        'type'          => 1,
+                        'barang_id'     => $request->barang_id[$key],
+                        'qty'           => $request->qty[$key] ?? 0,
+                    ]);
+                    
                     $qty = $request->qty[$key];
                     
                     //update last stock
@@ -111,15 +122,16 @@ class TransaksiStokController extends Controller
                     if( null == $check ) { 
                         $stock = [
                             'gudang_id' => $request->gudang_id,
-                            'barang_id' => $detail,
+                            'barang_id' => $request->barang_id[$key],
                             'stock'     => $request->qty[$key]
                         ];
                         $stockId = StokBarang::create($stock);
                         $stockAwal = $check->stock ?? 0;
+                        
                         LogStokBarang::create([
                             'id'                => \uniqid(),
                             'stock_barang_id'   => $stockId->id,
-                            'barang_id'         => $detail,
+                            'barang_id'         => $request->barang_id[$key],
                             'log_type'          => LogStokBarang::BarangMasuk,
                             'qty_before'        => $stockAwal ?? 0,
                             'qty_after'         => $stockAwal + $request->qty[$key],
@@ -129,17 +141,17 @@ class TransaksiStokController extends Controller
                     } else {
                         $stock = [
                             'gudang_id' => $request->gudang_id,
-                            'barang_id' => $detail,
+                            'barang_id' => $request->barang_id[$key],
                             'stock'     => \DB::raw("stock + $qty")
                         ];
-                        $stockId = StokBarang::where('barang_id',$request->barang_id)
+                        $stockId = StokBarang::where('barang_id', $request->barang_id[$key])
                                 ->where('gudang_id', $request->gudang_id)
                                 ->update($stock);
         
                         LogStokBarang::create([
                             'id'             => \uniqid(),
                             'stock_barang_id' => $stockId,
-                            'barang_id'      => $detail,
+                            'barang_id'      => $request->barang_id[$key],
                             'log_type'       => LogStokBarang::BarangMasuk,
                             'qty_before'     => $check->stock ?? 0,
                             'qty_after'      => $check->stock + $request->qty[$key],
@@ -173,13 +185,22 @@ class TransaksiStokController extends Controller
                 'nomor_ijin'        => $request->nomor_ijin,
                 'gudang_id'         => $request->gudang_id,
                 'tanggal_transaksi' => $request->tanggal_transaksi,
+                'created_by'        => \Auth::user()->id
             ]);
                 
             foreach( $request->barang_id as $key => $detail ) {
-                TransaksiStokDetail::create([
+                $detail = TransaksiStokDetail::create([
                     'transaksi_id'      => $header->id,
                     'barang_id'         => $request->barang_id[$key],
                     'qty'               => $request->qty[$key],
+                ]);
+
+                LogTransaction::create([
+                    'detail_id'     => $detail->id,
+                    'transaksi_id'  => $header->id,
+                    'type'          => 2,
+                    'barang_id'     => $request->barang_id[$key],
+                    'qty'           => $request->qty[$key] ?? 0,
                 ]);
 
                 $qty = $request->qty[$key];
@@ -212,7 +233,7 @@ class TransaksiStokController extends Controller
                         'created_by'        => \Auth::user()->id,
                         'transaksi_id'      => $header->id
                     ]);
-
+                    
                     $stockId = StokBarang::where('gudang_id',$request->gudang_id)
                         ->where('barang_id', $request->barang_id)
                         ->update($stock);
@@ -237,7 +258,10 @@ class TransaksiStokController extends Controller
      */
     public function show($id)
     {
-        //
+        $transaksi = TransaksiStok::find($id);
+        $detail = TransaksiStokDetail::where('transaksi_id', $id)->get();
+
+        return view('admin.transaction.show', compact('transaksi', 'detail'));
     }
 
     /**
@@ -248,7 +272,13 @@ class TransaksiStokController extends Controller
      */
     public function edit($id)
     {
-        //
+        $transaksi = TransaksiStok::find($id);
+        $detail = TransaksiStokDetail::where('transaksi_id', $id)->get();
+        $gudang = MstGudang::all()->pluck('nama_gudang','id');
+        $rak = RakGudang::where('gudang_id', $transaksi->gudang_id)->pluck('name', 'id');
+        $item   = Item::all()->pluck('nama','id');
+
+        return view('admin.transaction.edit', compact('transaksi','detail', 'gudang', 'item', 'rak'));
     }
 
     /**
@@ -260,7 +290,182 @@ class TransaksiStokController extends Controller
      */
     public function update(UpdateTransaksiRequest $request, $id)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            $transaksi = TransaksiStok::find($id);
+            $transaksi->nomor_transaksi = time();
+            $transaksi->tipe            = $request->tipe;
+            $transaksi->nomor_ijin      = $request->nomor_ijin;
+            $transaksi->gudang_id       = $request->gudang_id;
+            $transaksi->tanggal_transaksi= $request->tanggal_transaksi;
+            $transaksi->updated_by      = \Auth::user()->id;
+            $transaksi->update();
+
+            foreach( $request->barang_id as $key => $detail ) {
+                if($request->detail_id[$key]) {
+                    $lastVal = LogTransaction::where('transaksi_id', $id)
+                        ->where('detail_id', $request->detail_id[$key])
+                        ->select('qty')
+                        ->first();
+                }
+                
+                if(isset($lastVal->qty)) {
+                    $lastVal = $lastVal->qty;
+                } else {
+                    $lastVal = 0;
+                }
+
+                $findDetail = TransaksiStokDetail::where('transaksi_id', $id)
+                            ->where('barang_id', $request->barang_id[$key])
+                            ->first();
+                
+                if($findDetail) {
+                    $detail = TransaksiStokDetail::find($findDetail->id)
+                        ->delete();
+                }
+
+                $detail = TransaksiStokDetail::create([
+                    'transaksi_id'      => $id,
+                    'barang_id'         => $request->barang_id[$key],
+                    'qty'               => $request->qty[$key],
+                ]);
+
+                LogTransaction::create([
+                    'detail_id'     => $detail->id,
+                    'transaksi_id'  => $id,
+                    'type'          => $request->tipe,
+                    'barang_id'     => $request->barang_id[$key],
+                    'qty'           => $request->qty[$key] ?? 0,
+                ]);
+
+                $qty = $request->qty[$key];
+
+                //update last stock
+                if($request->tipe == 1) {
+                    $calc = Item::where('id', $request->barang_id[$key])
+                            ->select('stok_akhir')
+                            ->first();
+                    
+                    // value stok terakhir
+                    if($calc->stok_akhir > 0) {
+                        $val = $calc->stok_akhir - $lastVal ?? 0;
+                    } else {
+                        $val = 0;
+                    }
+
+                    Item::where('id', $request->barang_id[$key])
+                        ->update([
+                            'stok_akhir' => \DB::raw("$val + $qty")
+                        ]);
+                    
+                    //insert stock
+                    $check = StokBarang::where('gudang_id', $request->gudang_id)
+                            ->where('barang_id', $request->barang_id[$key])
+                            ->first();
+                            
+                    if( null == $check ) { 
+                        
+                        $stock = [
+                            'gudang_id' => $request->gudang_id,
+                            'barang_id' => $request->barang_id[$key],
+                            'stock'     => $request->qty[$key]
+                        ];
+                        $stockId = StokBarang::create($stock);
+                        $stockAwal = $check->stock ?? 0;
+                        LogStokBarang::create([
+                            'id'                => \uniqid(),
+                            'stock_barang_id'   => $stockId->id,
+                            'barang_id'         => $request->barang_id[$key],
+                            'log_type'          => LogStokBarang::BarangMasuk,
+                            'qty_before'        => $stockAwal ?? 0,
+                            'qty_after'         => $stockAwal + $request->qty[$key],
+                            'created_by'        => \Auth::user()->id,
+                            'transaksi_id'      => $id
+                        ]);
+                    } else {
+                        // echo "ada data";exit;
+                        $valStock = StokBarang::where('barang_id', $request->barang_id)
+                                    ->where('gudang_id', $request->gudang_id)
+                                    ->select('stock')
+                                    ->first();
+                        $val = $valStock->stock - $lastVal;
+                        $stock = [
+                            'gudang_id' => $request->gudang_id,
+                            'barang_id' => $request->barang_id[$key],
+                            'stock'     => \DB::raw("$val + $qty")
+                        ];
+                        $stockId = StokBarang::where('barang_id',$request->barang_id)
+                                ->where('gudang_id', $request->gudang_id)
+                                ->update($stock);
+        
+                        LogStokBarang::create([
+                            'id'             => \uniqid(),
+                            'stock_barang_id'=> $stockId,
+                            'barang_id'      => $request->barang_id[$key],
+                            'log_type'       => LogStokBarang::BarangMasuk,
+                            'qty_before'     => $check->stock ?? 0,
+                            'qty_after'      => $check->stock + $request->qty[$key],
+                            'created_by'     => \Auth::user()->id,
+                            'transaksi_id'   => $id
+                        ]);
+                    }
+                } elseif ($request->tipe == 2) {
+                    $calc = Item::where('id', $request->barang_id[$key])
+                            ->select('stok_akhir')
+                            ->first();
+                    // value stok terakhir
+                    $val = $calc->stok_akhir + $lastVal;
+                    
+                    Item::where('id', $request->barang_id[$key])
+                    ->update([
+                        'stok_akhir' => \DB::raw("$val - $qty")
+                    ]);
+
+                    //insert stock
+                    $check = StokBarang::where('gudang_id', $request->gudang_id)
+                            ->where('barang_id', $request->barang_id[$key])
+                            ->first();
+
+                    if( null != $check ) {
+                        
+                        $valStock = StokBarang::where('barang_id', $request->barang_id)
+                                    ->where('gudang_id', $request->gudang_id)
+                                    ->select('stock')
+                                    ->first();
+                        $val = $valStock->stock + $lastVal;
+
+                        $stock = [
+                            'gudang_id' => $request->gudang_id,
+                            'barang_id' => $request->barang_id[$key],
+                            'stock'     => \DB::raw("$val - $qty")
+                        ];
+
+                        LogStokBarang::create([
+                            'id'                => \uniqid(),
+                            'stock_barang_id'   => $check->id,
+                            'barang_id'         => $request->barang_id[$key],
+                            'log_type'          => LogStokBarang::BarangKeluar,
+                            'qty_before'        => $check->stock ?? 0,
+                            'qty_after'         => $check->stock - $request->qty[$key],
+                            'created_by'        => \Auth::user()->id,
+                            'transaksi_id'      => $id
+                        ]);
+                        
+                        $stockId = StokBarang::where('gudang_id',$request->gudang_id)
+                            ->where('barang_id', $request->barang_id[$key])
+                            ->update($stock);
+                            
+                    } else {
+                        echo "kesini";die;
+                    }
+                }
+            }
+            \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
+        return \redirect()->route('admin.transaksi.index')->with('success',\trans('notif.notification.update_data.success'));
     }
 
     /**

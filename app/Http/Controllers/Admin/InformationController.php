@@ -115,7 +115,7 @@ class InformationController extends Controller
         $info->name         = $request->nama;
         $info->kategori_id  = $request->kategori_id;
         if ($request->hasFile('foto')) {
-            $info->foto     = $pict_name;
+            $info->gambar     = $pict_name;
         }
         $info->content      = $request->content;
         $info->update();

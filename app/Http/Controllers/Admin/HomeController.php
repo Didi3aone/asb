@@ -26,7 +26,7 @@ class HomeController
         } else {
             $stock      = Item::join('kategori_barang', 'barang.kategori_id', '=', 'kategori_barang.id')
                     ->join('unit_barang', 'unit_barang.id', '=', 'barang.unit_id')
-                    ->leftJoin('stok_barang', 'stok_barang.id', '=', 'barang.id')
+                    ->leftJoin('stok_barang', 'stok_barang.barang_id', '=', 'barang.id')
                     ->leftJoin('mst_gudang', 'mst_gudang.id', '=', 'stok_barang.gudang_id')
                     ->select('barang.nama',
                             'kategori_barang.nama as kategori',

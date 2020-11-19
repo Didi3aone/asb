@@ -59,6 +59,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('img/kk/{filename}', 'ImgController@displayKK')->name('img.kk');
     Route::get('img/avatar/{filename}', 'ImgController@displayAvatar')->name('img.avatar');
     Route::get('img/articles/{filename}', 'ImgController@displayArticles')->name('img.articles');
+    Route::get('img/thumbnail/{filename}', 'ImgController@displayThumbnail')->name('img.thumbnail');
     
     
 

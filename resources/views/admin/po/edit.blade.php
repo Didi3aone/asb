@@ -3,16 +3,17 @@
 
 <div class="card">
     <div class="card-header bg-warning">
-        {{ trans('global.create') }} Purchase Order
+        {{ trans('global.edit') }} {{ trans('cruds.transaction-stock.title_transaction_in') }}
     </div>
 
     <div class="card-body">
-        <form class="form-material mt-4" action="{{ route("admin.po.store") }}" method="POST" enctype="multipart/form-data">
+        <form class="form-material mt-4" action="{{ route("admin.po.update", $po->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('put')
             <input type="hidden" name="tipe" value="1">
             <div class="form-group {{ $errors->has('nomor_ijin') ? 'has-error' : '' }}">
                 <label for="nomor_ijin">{{ trans('cruds.transaction-stock.fields.nomor_transaksi') }}*</label>
-                <input type="text" id="nomor_ijin" name="nomor_ijin" class="form-control" value="{{ old('nomor_ijin', '') }}">
+                <input type="text" id="nomor_ijin" name="nomor_ijin" class="form-control" value="{{ $po->no_po }}">
                 @if($errors->has('nomor_ijin'))
                     <em class="invalid-feedback">
                         {{ $errors->first('nomor_ijin') }}
@@ -29,7 +30,7 @@
                         <select name="supplier_id" id="supplier_id" class="form-control select2" required style="width: 100%; height:36px;">
                             <option value="">{{ trans('global.pleaseSelect') }}</option>
                             @foreach($supplier as $id => $gd)
-                                <option value="{{ $id }}">{{ $gd }}</option>
+                                <option value="{{ $id }}" @if ($po->supplier_id == $id) selected @endif>{{ $gd }}</option>
                             @endforeach
                         </select>
                         @if($errors->has('supplier_id'))
@@ -41,28 +42,10 @@
                         </p>
                     </div>
                 </div>
-                {{-- <div class="col">
-                    <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                        <label for="roles">{{ trans('cruds.transaction-stock.fields.gudang_id') }}*</label>
-                        <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
-                            <option value="">{{ trans('global.pleaseSelect') }}</option>
-                            @foreach($gudang as $id => $gd)
-                                <option value="{{ $id }}">{{ $gd }}</option>
-                            @endforeach
-                        </select>
-                        @if($errors->has('gudang_id'))
-                            <em class="invalid-feedback">
-                                {{ $errors->first('gudang_id') }}
-                            </em>
-                        @endif
-                        <p class="helper-block">
-                        </p>
-                    </div>
-                </div> --}}
             </div>
             <div class="form-group {{ $errors->has('transaction_date') ? 'has-error' : '' }}">
                 <label for="transaction_date">{{ trans('cruds.transaction-stock.fields.tanggal_transaksi') }}*</label>
-                <input type="text" id="transaction_date" name="transaction_date" class="form-control date" value="{{ old('transaction_date', date('Y-m-d')) }}">
+                <input type="text" id="transaction_date" name="transaction_date" class="form-control date" value="{{ $po->transaction_date }}">
                 @if($errors->has('transaction_date'))
                     <em class="invalid-feedback">
                         {{ $errors->first('transaction_date') }}
@@ -85,49 +68,97 @@
                     </tr>
                     </thead>
                     <tbody id="items">
-                    <tr>
-                        <td>
-                            <select name="barang_id[]" id="barang_id_0" class="form-control select2" required style="width: 100%; height:36px;">
-                                <option value="">{{ trans('global.pleaseSelect') }}</option>
-                                @foreach($item as $id => $it)
-                                    <option value="{{ $id }}">{{ $it }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('gudang_id'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('gudang_id') }}
-                                </em>
-                            @endif
-                            <p class="helper-block">
-                            </p>
-                        </td>
-                        <td>
-                            <input type="text" id="qty_0" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
-                            @if($errors->has('qty'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('qty') }}
-                                </em>
-                            @endif
-                        </td>
-                        <td>
-                            <select name="ppn[]" id="ppn_0" class="form-control select2" required style="width: 100%; height:36px;">
-                                <option value="">{{ trans('global.pleaseSelect') }}</option>
-                                <option value="0">{{ trans('global.no') }}</option>
-                                <option value="1">{{ trans('global.yes') }}</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" id="price_0" name="price[]" onkeyup="leadingZero(this.value, $(this), true)" class="form-control" value="{{ old('price', '') }}">
-                            @if($errors->has('price'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('price') }}
-                                </em>
-                            @endif
-                        </td>
-                        <td>
-                            <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
-                        </td>
-                    </tr>
+                    @if(count($detail) > 0)
+                        @foreach ($detail as $key => $rows)
+                            <tr>
+                                <td>
+                                    <select name="barang_id[]" id="barang_id_{{ $rows->id }}" class="form-control select2" required style="width: 100%; height:36px;">
+                                        <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                        @foreach($item as $id => $it)
+                                            <option value="{{ $id }}" @if ($rows->id_barang == $id) selected @endif>{{ $it }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('gudang_id'))
+                                        <em class="invalid-feedback">
+                                            {{ $errors->first('gudang_id') }}
+                                        </em>
+                                    @endif
+                                    <p class="helper-block">
+                                    </p>
+                                </td>
+                                <td>
+                                    <input type="text" id="qty_{{ $rows->id }}" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ $rows->qty }}">
+                                    @if($errors->has('qty'))
+                                        <em class="invalid-feedback">
+                                            {{ $errors->first('qty') }}
+                                        </em>
+                                    @endif
+                                </td>
+                                <td>
+                                    <select name="ppn[]" id="ppn_{{ $rows->id }}" class="form-control select2" required style="width: 100%; height:36px;">
+                                        <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                        <option value="0" @if ($rows->ppn == 0) selected @endif>{{ trans('global.no') }}</option>
+                                        <option value="1" @if ($rows->ppn == 1) selected @endif>{{ trans('global.yes') }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" id="price_{{ $rows->id }}" name="price[]" onkeyup="leadingZero(this.value, $(this), true)" class="form-control" value="{{ $rows->price }}">
+                                    @if($errors->has('price'))
+                                        <em class="invalid-feedback">
+                                            {{ $errors->first('price') }}
+                                        </em>
+                                    @endif
+                                </td>
+                                <td>
+                                    <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>
+                                <select name="barang_id[]" id="barang_id_0" class="form-control select2" required style="width: 100%; height:36px;">
+                                    <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                    @foreach($item as $id => $it)
+                                        <option value="{{ $id }}">{{ $it }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('gudang_id'))
+                                    <em class="invalid-feedback">
+                                        {{ $errors->first('gudang_id') }}
+                                    </em>
+                                @endif
+                                <p class="helper-block">
+                                </p>
+                            </td>
+                            <td>
+                                <input type="text" id="qty_0" name="qty[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('qty', '') }}">
+                                @if($errors->has('qty'))
+                                    <em class="invalid-feedback">
+                                        {{ $errors->first('qty') }}
+                                    </em>
+                                @endif
+                            </td>
+                            <td>
+                                <select name="ppn[]" id="ppn_0" class="form-control select2" required style="width: 100%; height:36px;">
+                                    <option value="">{{ trans('global.pleaseSelect') }}</option>
+                                    <option value="0">{{ trans('global.no') }}</option>
+                                    <option value="1">{{ trans('global.yes') }}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" id="price_0" name="price[]" onkeyup="leadingZero(this.value, $(this), true)" class="form-control" value="{{ old('price', '') }}">
+                                @if($errors->has('price'))
+                                    <em class="invalid-feedback">
+                                        {{ $errors->first('price') }}
+                                    </em>
+                                @endif
+                            </td>
+                            <td>
+                                <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
+                            </td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>

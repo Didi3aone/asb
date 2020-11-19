@@ -38,8 +38,8 @@ class CreateDetailUsersTable extends Migration
             $table->integer('kecamatan_domisili');
             $table->string('kabupaten_domisili');
             $table->integer('provinsi_domisili');
-            $table->string('foto_ktp', 100);
-            $table->string('foto_kk', 100);
+            $table->string('foto_ktp', 100)->nullable();
+            $table->string('foto_kk', 100)->nullable();
             $table->integer('status_korlap');
             $table->string('activation_code', 100);
             $table->tinyInteger('is_verify')->default(0);

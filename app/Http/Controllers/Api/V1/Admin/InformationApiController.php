@@ -60,8 +60,8 @@ class InformationApiController extends Controller
                 if ($request->file('foto')) {
                     $pict = $request->file('foto');
                     $pict_name = time() . $pict->getClientOriginalName();
-                    /*$path = $pict->storeAs('public/articles', $pict_name); */
-                    $pict->move(public_path() . '/images/articles', $pict_name);
+                    $path = $pict->storeAs('articles', $pict_name);
+                    // $pict->move(public_path() . '/images/articles', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';
                 }

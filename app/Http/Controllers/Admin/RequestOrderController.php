@@ -9,7 +9,9 @@ use App\Http\Requests\StoreRORequest;
 use App\Http\Requests\UpdateRORequest;
 use App\Request as Req;
 use App\PeriodeProgram;
+use App\DetailRequest;
 use App\MstGudang;
+use App\RoleUser;
 use App\User;
 use App\Item;
 
@@ -126,7 +128,30 @@ class RequestOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        abort_unless(\Gate::allows('transaction_edit'), 403);
+
+        $ro = Req::find($id);
+        $program= PeriodeProgram::all()->pluck('name', 'id');
+        $cekLevel = RoleUser::where('user_id', \Auth::user()->id)->first();
+        if ($cekLevel->role_id == 3) {
+            $findKec = DetailUsers::where('userid', \Auth::user()->id)->first();
+            $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->where('role_user.role_id', 3)
+                ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->select('users.name', 'users.id')
+                ->get();
+                // ->pluck('users.name', 'users.id');
+        } else {
+            $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->select('users.name', 'users.id')
+                ->get();
+                // ->pluck('name', 'id');
+        }
+        $item   = Item::all()->pluck('nama','id');
+
+        return view('admin.ro.edit', compact('ro', 'program', 'member', 'item'));
     }
 
     /**
@@ -138,7 +163,32 @@ class RequestOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            $ro = Req::find($id);
+            $ro->no_request = $request->no_request;
+            $ro->program_id = $request->program_id;
+            $ro->updated_by = \Auth::user()->id;
+            $ro->status     = 1;
+            $ro->update();
+
+            $i=0;
+            if(isset($request->chkbox[$i])) {
+                for($count = 0;$count < count($request->chkbox); $count++) {
+                    $data = array(
+                        'no_req'        => $request->no_request,
+                        'receiver_id'   => $request->chkbox[$count],
+                        'updated_at'    => date('Y-m-d H:i:s')
+                    );
+                    $insert_detail[] = $data;
+                }
+                DetailRequest::insert($insert_detail);
+            }
+            \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
     }
 
     /**

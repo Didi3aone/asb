@@ -50,8 +50,19 @@ class ArticleCategoryApiController extends Controller
                     'data'      => $validator->errors()
                 ], 400);
             } else {
+
+                if ($request->file('thumbnail')) {
+                    $pict = $request->file('thumbnail');
+                    $pict_name = time() . $pict->getClientOriginalName();
+                    $path = $pict->storeAs('thumbnail', $pict_name);
+                    // $pict->move(public_path() . '/images/articles', $pict_name);
+                } else {
+                    $pict_name = 'noimage.jpg';
+                }
+
                 $category = Category::create([
                     'name'          => $request->name,
+                    'thumbnail'     => $pict_name,
                     'created_by'    => Auth::user()->id,
                     'created_at'    => date('Y-m-d H:i:s'),
                 ]);

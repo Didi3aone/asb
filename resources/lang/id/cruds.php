@@ -445,8 +445,8 @@ return [
 
     'transaction-stock'          => [
         'title'          => 'Keluar Masuk Stok',
-        'title_transaction_in'   => 'Masuk',
-        'title_transaction_out'  => 'Keluar',
+        'title_transaction_in'   => 'Pemasukan',
+        'title_transaction_out'  => 'Pengeluaran',
         'title_singular' => 'Transaksi',
         'fields'         => [
             'id'                => 'ID',
