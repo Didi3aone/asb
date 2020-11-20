@@ -7,34 +7,34 @@
     </div>
 
     <div class="card-body">
-        <form class="form-material mt-4" action="{{ route("admin.transaksi.store") }}" method="POST" enctype="multipart/form-data">
+        <form class="form-material mt-4" action="{{ route("admin.ro.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="tipe" value="1">
-            <div class="form-group {{ $errors->has('nomor_ijin') ? 'has-error' : '' }}">
-                {{-- <label for="nomor_ijin">{{ trans('cruds.request-order.fields.nomor_ijin') }}*</label> --}}
-                <label for="nomor_ijin">No Request*</label>
-                <input type="text" id="nomor_ijin" name="nomor_ijin" class="form-control" value="{{ old('nomor_ijin', '') }}">
-                @if($errors->has('nomor_ijin'))
+            <div class="form-group {{ $errors->has('no_req') ? 'has-error' : '' }}">
+                {{-- <label for="no_req">{{ trans('cruds.request-order.fields.no_req') }}*</label> --}}
+                <label for="no_req">No Request*</label>
+                <input type="text" id="no_req" name="no_req" class="form-control" value="{{ old('no_req', '') }}">
+                @if($errors->has('no_req'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('nomor_ijin') }}
+                        {{ $errors->first('no_req') }}
                     </em>
                 @endif
                 <p class="helper-block">
 
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('gudang_id') ? 'has-error' : '' }}">
-                {{-- <label for="roles">{{ trans('cruds.request-order.fields.gudang_id') }}*</label> --}}
+            <div class="form-group {{ $errors->has('program_id') ? 'has-error' : '' }}">
+                {{-- <label for="roles">{{ trans('cruds.request-order.fields.program_id') }}*</label> --}}
                 <label for="roles">Program ID *</label>
-                <select name="gudang_id" id="gudang_id" class="form-control select2" required style="width: 100%; height:36px;">
+                <select name="program_id" id="program_id" class="form-control select2" required style="width: 100%; height:36px;">
                     <option value="">{{ trans('global.pleaseSelect') }}</option>
                     @foreach($program as $id => $gd)
                         <option value="{{ $id }}">{{ $gd }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('gudang_id'))
+                @if($errors->has('program_id'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('gudang_id') }}
+                        {{ $errors->first('program_id') }}
                     </em>
                 @endif
                 <p class="helper-block">
@@ -45,50 +45,30 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" id="checkAll" name="chk" ></th>
                             <th>{{ trans('cruds.request-order.fields.member') }}</th>
-                            <th>{{ trans('cruds.request-order.fields.receive') }}</th>
-                            <th>{{ trans('cruds.request-order.fields.receive_date') }}</th>
-                            <th>&nbsp;</th>
+                            {{-- <th>{{ trans('cruds.request-order.fields.receive_date') }}</th> --}}
                         </tr>
                     </thead>
                     <tbody id="items">
-                    <tr>
-                        <td>
-                            <select name="member[]" id="member_0" class="form-control select2" required style="width: 100%; height:36px;">
-                                <option value="">{{ trans('global.pleaseSelect') }}</option>
-                                @foreach($member as $id => $it)
-                                    <option value="{{ $id }}">{{ $it }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('member'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('member') }}
-                                </em>
-                            @endif
-                            <p class="helper-block">
-                            </p>
-                        </td>
-                        <td>
-                            <input type="checkbox" id="receive_0" name="receive[]">
-                            {{-- <input type="text" id="receive_0" name="receive[]" onkeypress="return isNumber(event)" class="form-control" value="{{ old('receive', '') }}">
-                            @if($errors->has('receive'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('receive') }}
-                                </em>
-                            @endif --}}
-                        </td>
-                        <td>
-                            <input type="text" id="receive_date_0" name="receive_date[]" class="form-control date" value="{{ old('receive_date', date('Y-m-d')) }}">
-                            @if($errors->has('receive_date'))
-                                <em class="invalid-feedback">
-                                    {{ $errors->first('receive_date') }}
-                                </em>
-                            @endif
-                        </td>
-                        <td>
-                            <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
-                        </td>
-                    </tr>
+                        @foreach($member as $key => $rows)
+                        <tr data-entry-id="{{ $rows->id }}">
+                            <td>
+                                <input type="checkbox" id="receive_{{ $rows->id }}" name="chkbox[]" value="{{ $rows->id }}" >
+                            </td>
+                            <td>
+                                <input type="text" id="name" name="name" value="{{ $rows->name }}" readonly>
+                            </td>
+                            {{-- <td>
+                                <input type="text" id="receive_date" name="receive_date" class="form-control date" value="{{ old('receive_date', date('Y-m-d')) }}">
+                                @if($errors->has('receive_date'))
+                                    <em class="invalid-feedback">
+                                        {{ $errors->first('receive_date') }}
+                                    </em>
+                                @endif
+                            </td> --}}
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -160,13 +140,8 @@
         })
     })
     
-    function listStartDate (i) {
-        const $start = $('#receive_date_'+ i);
-        var dateNow = new Date();
-        
-        $start.datetimepicker({
-            defaultDate:dateNow
-        });
-    }
+    $("#checkAll").click(function(){
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
 </script>
 @endsection

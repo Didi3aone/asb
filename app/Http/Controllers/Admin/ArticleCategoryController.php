@@ -43,8 +43,18 @@ class ArticleCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->hasFile('thumbnail')) {
+            $pict = $request->file('thumbnail');
+            $pict_name = time() . $pict->getClientOriginalName();
+            $path = $pict->storeAs('thumbnail', $pict_name);
+            // $pict->move(public_path() . '/images/', $pict_name);
+        } else {
+            $pict_name = 'noimage.jpg';
+        }
+        
         $category = Category::create([
             'name'      => $request->nama,
+            'thumbnail' => $pict_name,
             'created_by'=> \Auth::user()->id,
             'created_at'   => date('Y-m-d H:i:s'),
         ]);
@@ -86,8 +96,18 @@ class ArticleCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($request->hasFile('thumbnail')) {
+            $pict = $request->file('thumbnail');
+            $pict_name = time() . $pict->getClientOriginalName();
+            $path = $pict->storeAs('thumbnail', $pict_name);
+            // $pict->move(public_path() . '/images/', $pict_name);
+        } 
+        
         $category = Category::find($id);
         $category->name          = $request->name;
+        if ($request->hasFile('thumbnail')) {
+            $category->thumbnail     = $pict_name;
+        }
         $category->updated_by    = \Auth::user()->id;
         $category->updated_at    = date('Y-m-d H:i:s');
         $category->update();

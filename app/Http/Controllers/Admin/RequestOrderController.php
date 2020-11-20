@@ -29,6 +29,8 @@ class RequestOrderController extends Controller
             ->select('requests.id','requests.no_request', 'requests.created_at', 'users.name as fullname', 'periode_programs.name')
             ->get();
         
+        
+        
         return view('admin.ro.index', compact('ro')); 
     }
 
@@ -51,8 +53,23 @@ class RequestOrderController extends Controller
         abort_unless(\Gate::allows('transaction_create'), 403);
         
         $program= PeriodeProgram::all()->pluck('name', 'id');
-        $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
-                ->where('role_user.role_id', 3)->pluck('name', 'id');
+        $cekLevel = RoleUser::where('user_id', \Auth::user()->id)->first();
+        if ($cekLevel->role_id == 3) {
+            $findKec = DetailUsers::where('userid', \Auth::user()->id)->first();
+            $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->where('role_user.role_id', 3)
+                ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->select('users.name', 'users.id')
+                ->get();
+                // ->pluck('users.name', 'users.id');
+        } else {
+            $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->where('role_user.role_id', 3)
+                ->select('users.name', 'users.id')
+                ->get();
+                // ->pluck('name', 'id');
+        }
         $item   = Item::all()->pluck('nama','id');
 
         return view('admin.ro.create', compact('program', 'member', 'item'));
@@ -101,7 +118,34 @@ class RequestOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            $req = Req::create([
+                'no_request'    => $request->no_req,
+                'program_id'    => $request->program_id,
+                'created_by'    => \Auth::user()->id,
+                'status'        => 1,
+            ]);
+            
+            $i=0;
+            if(isset($request->chkbox[$i])) {
+                for($count = 0;$count < count($request->chkbox); $count++) {
+                    $data = array(
+                        'no_req'        => $request->no_req,
+                        'receiver_id'   => $request->chkbox[$count],
+                        'created_at'    => date('Y-m-d H:i:s'),
+                        'status_penerima' => 1
+                    );
+                    $insert_detail[] = $data;
+                }
+                DetailRequest::insert($insert_detail);
+            }
+            \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            throw $th;
+        }
+        return \redirect()->route('admin.ro.index')->with('success',\trans('notif.notification.update_data.success'));
     }
 
     /**
@@ -114,10 +158,15 @@ class RequestOrderController extends Controller
     {
         $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
             ->join('users', 'requests.created_by', '=', 'users.id')
-            ->where('periode_programs.id', $id)
+            ->where('requests.id', $id)
             ->first();
+        // dd($ro); 
+        $detail = DetailRequest::join('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
+                ->join('users', 'detail_users.userid', '=', 'users.id')
+                ->where('no_req', $ro->no_request)
+                ->get();
         
-        return view('admin.ro.show', compact('ro')); 
+        return view('admin.ro.show', compact('ro', 'detail')); 
     }
 
     /**

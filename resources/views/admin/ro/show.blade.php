@@ -50,38 +50,6 @@
                             {{ $ro->created_by }}
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            Provinsi
-                        </th>
-                        <td>
-                            Provinsi
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kabupaten / Kota
-                        </th>
-                        <td>
-                            Kabupaten
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kecamatan
-                        </th>
-                        <td>
-                            Kecamatan
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Kelurahan
-                        </th>
-                        <td>
-                            Kelurahan
-                        </td>
-                    </tr>
                     
                 </tbody>
             </table>
@@ -89,6 +57,9 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>
+                            No
+                        </th>
                         <th>
                             NIK
                         </th>
@@ -110,10 +81,78 @@
                         <th>
                             Pekerjaan
                         </th>
+                        <th>
+                            Provinsi
+                        </th>
+                        <th>
+                            Kabupaten
+                        </th>
+                        <th>
+                            Kecamatan
+                        </th>
+                        <th>
+                            Kelurahan
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    @if(count($detail) > 0)
+                        @foreach($detail as $key => $rows)
+                            <tr>
+                                <td>
+                                    {{ $key +1 }}
+                                </td>
+                                <td>
+                                    {{ $rows->nik }}
+                                </td>
+                                <td>
+                                    {{ $rows->no_kk }}
+                                </td>
+                                <td>
+                                    {{ $rows->nickname }}
+                                </td>
+                                <td>
+                                    {{ $rows->no_telp }}
+                                </td>
+                                <td>
+                                    {{ $rows->no_hp }}
+                                </td>
+                                <td>
+                                    {{ $rows->email }}
+                                </td>
+                                <td>
+                                    @php
+                                        $name = \App\Job::getName($rows->pekerjaan);
+                                    @endphp
+                                    {{ $name->name }}
+                                </td>
+                                <td>
+                                    @php
+                                        $name = \App\Provinsi::getProv($rows->provinsi);
+                                    @endphp
+                                    {{ $name->name }}
+                                </td>
+                                <td>
+                                    @php
+                                        $name = \App\Kabupaten::getKab($rows->kabupaten);
+                                    @endphp
+                                    {{ $name->name }}
+                                </td>
+                                <td>
+                                    @php
+                                        $name = \App\Kecamatan::getKec($rows->kecamatan);
+                                    @endphp
+                                    {{ $name->name }}
+                                </td>
+                                <td>
+                                    @php
+                                        $name = \App\Kelurahan::getKel($rows->kelurahan);
+                                    @endphp
+                                    {{ $name->name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </thead>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">

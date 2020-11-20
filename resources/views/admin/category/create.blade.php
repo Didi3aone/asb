@@ -21,6 +21,17 @@
 
                 </p>
             </div>
+            <div class="form-group {{ $errors->has('thumbnail') ? 'has-error' : '' }}">
+                <label for="kode">{{ trans('cruds.information.fields.pict') }}*</label>
+                <input type="file" id="thumbnail" name="thumbnail" class="form-control" value="{{ old('thumbnail', '') }}">
+                @if($errors->has('thumbnail'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('thumbnail') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                </p>
+            </div>
             <div>
                 <button class="btn btn-primary" id="save" type="submit">
                     <span class="spinner-border spin-save spinner-border-sm" role="status" aria-hidden="true"></span>

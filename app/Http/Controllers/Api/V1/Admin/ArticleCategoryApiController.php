@@ -23,7 +23,7 @@ class ArticleCategoryApiController extends Controller
         return response([
             'success'   => true,
             'message'   => 'List Semua program',
-            'data'      => $program
+            'data'      => $category
         ], 200);
     }
 

@@ -17,7 +17,7 @@ class InformationController extends Controller
     public function index()
     {
         abort_unless(\Gate::allows('information_access'), 403);
-        $path = \Image::make(storage_path() . '/app/articles/1605601994banjir.jpg');
+        // $path = \Image::make(storage_path() . '/app/articles/1605601994banjir.jpg');
         $info = Information::all();
         // dd($path);
         return view('admin.info.index', compact('info'));
