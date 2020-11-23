@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use App\RoleUser;
 use Illuminate\Support\Str;
 use App\User;
 use App\DetailUsers;
@@ -20,7 +21,26 @@ class MemberApiController extends Controller
      */
     public function index()
     {
-        $data = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+        $cekLevel = RoleUser::where('user_id', Auth::user()->id)->first();
+
+        if ($cekLevel->role_id == 3) {
+            $findKec = DetailUsers::where('userid', Auth::user()->id)->first();
+
+            $data = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
+                ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                ->selectRaw('detail_users.userid ,provinsis.zona_waktu as provid ,
+                        kecamatans.id as kecid ,detail_users.no_member ,
+                        users.name ,detail_users.nik ,detail_users.no_hp ,
+                        users.email ,users.created_at ,
+                        users.is_active ,detail_users.status_korlap')
+                ->where('role_user.role_id', 3)
+                ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->whereRaw('users.id != ?', Auth::user()->id)
+                ->get();
+        } else {
+            $data = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('kecamatans', 'detail_users.kecamatan', '=', 'kecamatans.id_kec')
                 ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
@@ -31,6 +51,7 @@ class MemberApiController extends Controller
                         users.is_active ,detail_users.status_korlap')
                 ->where('role_user.role_id', 3)
                 ->get();
+        }
 
         if(is_null($data)){
             return Response([

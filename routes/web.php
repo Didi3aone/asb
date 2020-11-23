@@ -17,6 +17,10 @@ Route::get('verify', 'RegistrationController@verify')->name('daftar.verify');
 Route::get('change-passwords', 'ChangePasswordController@index')->name('change-passwords');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
 
+Route::get('img/articles/{filename}', 'ImgController@displayArticles')->name('img.articles');
+Route::get('img/thumbnail/{filename}', 'ImgController@displayThumbnail')->name('img.thumbnail');
+Route::get('img/avatar/{filename}', 'ImgController@displayAvatar')->name('img.avatar');
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
 

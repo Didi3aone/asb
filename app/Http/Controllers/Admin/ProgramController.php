@@ -134,7 +134,39 @@ class ProgramController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            $product = Program::find($id);
+            $product->name          = $request->nama;
+            $product->start_date    = $request->start_date;
+            $product->end_date      = $request->end_date;
+            $product->description   = $request->desc;
+            $product->updated_by    = \Auth::user()->id;
+            $product->updated_at    = date('Y-m-d H:i:s');
+            $product->update();
+
+            $i=0;
+            if(isset($request->id_barang[$i])) {
+                for($count = 0;$count < count($request->id_barang); $count++) {
+                    if(isset($request->id_detail[$count])) {
+                        $dt = DetailPeriodeProgram::find($request->id_detail[$count]);
+                        $dt->delete();
+                    }
+                    $data = array(
+                        'id_periode'    => $id,
+                        'id_barang'     => $request->id_barang[$count],
+                        'created_at'    => date('Y-m-d H:i:s')
+                    );
+                    $insert_detail[] = $data;
+                }
+                DetailPeriodeProgram::insert($insert_detail);
+            }
+            \DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+        }
+        return \redirect()->route('admin.program.index')->with('success',\trans('notif.notification.update_data.success'));
     }
 
     /**

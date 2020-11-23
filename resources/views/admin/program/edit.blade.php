@@ -66,7 +66,13 @@
                         <th>{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
                         {{-- <th>{{ trans('cruds.transaction-stock.fields.qty') }}</th>
                         <th>{{ trans('cruds.transaction-stock.fields.nomor_sparepart') }}</th> --}}
-                        <th>&nbsp;</th>
+                        @if(count($detail) > 0)
+                            <th>
+                                <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
+                            </th>
+                        @else
+                            <th>&nbsp;</th>
+                        @endif
                     </tr>
                     </thead>
                     <tbody id="items">
@@ -74,7 +80,7 @@
                         @foreach ($detail as $key => $rows)
                             <tr>
                                 <td>
-                                    <input id="id_detail_0" name="to_rcr[]" type="hidden" value="{{ $rows->id }}" />
+                                    <input id="id_detail_0" name="id_detail[]" type="hidden" value="{{ $rows->id }}" />
                                     <select name="id_barang[]" id="id_barang_0" class="form-control select2" required style="width: 100%; height:36px;">
                                         <option value="">{{ trans('global.pleaseSelect') }}</option>
                                         @foreach($item as $id => $it)
@@ -88,9 +94,6 @@
                                     @endif
                                     <p class="helper-block">
                                     </p>
-                                </td>
-                                <td>
-                                    <button type="button" id="add_item" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> </button>
                                 </td>
                             </tr>
                         @endforeach
