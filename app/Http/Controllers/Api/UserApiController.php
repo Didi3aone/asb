@@ -26,8 +26,45 @@ class UserApiController extends Controller
                 return response()->json(['error' => 'invalid_credentials'], 400);
                 $detail = '';
             } else {
-                $detail = DetailUsers::where('userid', Auth::user()->id)->first();
-            }
+                $detail = DetailUsers::join('users', 'detail_users.userid', '=', 'users.id')
+                    ->join('provinsis', 'detail_users.provinsi', '=', 'provinsis.id_prov')
+                    ->join('kabupatens', 'kabupatens.id_kab', '=', 'detail_users.kabupaten')
+                    ->join('kecamatans', 'kecamatans.id_kec', '=', 'detail_users.kecamatan')
+                    ->join('kelurahans', 'kelurahans.id_kel', '=', 'detail_users.kelurahan')
+                    ->join('jobs', 'jobs.id', '=', 'detail_users.pekerjaan')
+                    ->selectRaw("users.id,detail_users.no_member ,detail_users.nickname , users.name ,users.name ,users.email ,users.is_verified,
+                        detail_users.nik ,detail_users.no_kk ,
+                        CASE 
+                            WHEN detail_users.gender = 1 THEN 'Laki-Laki'
+                        ELSE 'Perempuan' END AS kelamin,
+                        detail_users.tgl_lahir ,
+                        CASE 
+                            WHEN detail_users.status_kawin = 1 THEN 'Menikah'
+                        ELSE 'Belum Kawin' END AS statuskawin,
+                        jobs.name as job,
+                        detail_users.no_hp ,
+                        detail_users.alamat , provinsis.name as provinsi,
+                        kabupatens.name as kabupaten,
+                        kecamatans.name as kecamatan,
+                        kelurahans.name as kelurahans,
+                        detail_users.foto_ktp ,
+                        detail_users.foto_kk ,
+                        detail_users.avatar, 
+                        detail_users.status_korlap")
+                    ->where('userid', Auth::user()->id)->first();
+
+                $domisili = DetailUsers::join('provinsis', 'detail_users.provinsi_domisili', '=', 'provinsis.id_prov')
+                    ->join('kabupatens', 'kabupatens.id_kab', '=', 'detail_users.kabupaten_domisili')
+                    ->join('kecamatans', 'kecamatans.id_kec', '=', 'detail_users.kecamatan_domisili')
+                    ->join('kelurahans', 'kelurahans.id_kel', '=', 'detail_users.kelurahan_domisili')
+                    ->selectRaw("provinsis.name as prov_domisili,
+                                kabupatens.name as kabupaten_domisili ,
+                                kecamatans.name as kec_domisili,
+                                kelurahans.name as kel_domisili")
+                    ->where('userid', Auth::user()->id)->first();
+            }   $ttl = DetailUsers::join('kabupatens', 'kabupatens.id_kab', '=', 'detail_users.birth_place')
+                    ->selectRaw("kabupatens.name as kota_kelahiran")
+                    ->where('userid', Auth::user()->id)->first();
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
             $detail = '';
@@ -36,7 +73,9 @@ class UserApiController extends Controller
         
         return response()->json([
             'token' => $token,
-            'data' => $detail
+            'data' => $detail,
+            'domisili' => $domisili,
+            'ttl' => $ttl
         ]);
     }
 
@@ -199,7 +238,7 @@ class UserApiController extends Controller
                     'avatar'            => $avatar_name,
                     'foto_ktp'          => $ktp_name,
                     'foto_kk'           => $kk_name,
-                    'status_korlap'     => 1,
+                    'status_korlap'     => 0,
                     'created_at'        => date('Y-m-d H:i:s')
                 );
                 $detail = DetailUsers::insert($data);

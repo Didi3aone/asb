@@ -54,8 +54,8 @@ class ArticleCategoryApiController extends Controller
                 if ($request->file('thumbnail')) {
                     $pict = $request->file('thumbnail');
                     $pict_name = time() . $pict->getClientOriginalName();
-                    $path = $pict->storeAs('thumbnail', $pict_name);
-                    // $pict->move(public_path() . '/images/articles', $pict_name);
+                    // $path = $pict->storeAs('thumbnail', $pict_name);
+                    $pict->move(public_path() . '/images/thumbnail/', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';
                 }
@@ -100,9 +100,93 @@ class ArticleCategoryApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function updateArticle(Request $request)
+    {
+        \DB::beginTransaction();
+        // dd($request);
+        try {
+            if ($request->file('thumbnail')) {
+                $pict = $request->file('thumbnail');
+                $pict_name = time() . $pict->getClientOriginalName();
+                $path = $pict->storeAs(public_path(). '/images/thumbnail/', $pict_name);
+                // $pict->move(public_path() . '/images/thumbnail/', $pict_name);
+            } else {
+                $pict_name = 'noimage.jpg';
+            }
+            $category = Category::find($request->input('id'));
+            $category->name          = $request->input('kategoriname');
+            if ($request->file('thumbnail')) {
+                $category->thumbnail     = $pict_name;
+            }
+            $category->updated_by    = Auth::user()->id;
+            $category->updated_at    = date('Y-m-d H:i:s');
+            $category->update();
+
+            \DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Artikel Kategori Berhasil Disimpan!',
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel Kategori Gagal Disimpan!',
+            ], 400);
+        }
+    }
+
     public function update(Request $request, $id)
     {
-        //
+        \DB::beginTransaction();
+        try {
+            dd($request);
+            $validator = Validator::make($request->all(), [
+                'name'          => 'required'
+            ],
+            [
+                'name.required'         => 'Masukkan nama kategori !'                
+            ]);
+            if($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'silahkan isi kolom yang kosong',
+                    'data'      => $validator->errors()
+                ], 400);
+            } else {
+                
+                if ($request->file('thumbnail')) {
+                    $pict = $request->file('thumbnail');
+                    $pict_name = time() . $pict->getClientOriginalName();
+                    // $path = $pict->storeAs('thumbnail', $pict_name);
+                    $pict->move(public_path() . '/images/thumbnail/', $pict_name);
+                } else {
+                    $pict_name = 'noimage.jpg';
+                }
+
+                $category = findOrFail($id);
+                $category->name          = $request->name;
+                if ($request->file('thumbnail')) {
+                    $category->thumbnail     = $pict_name;
+                }
+                $category->updated_by    = Auth::user()->id;
+                $category->updated_at    = date('Y-m-d H:i:s');
+                $category->update();
+            }
+            \DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Artikel Kategori Berhasil Disimpan!',
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel Kategori Gagal Disimpan!',
+            ], 400);
+        }
     }
 
     /**

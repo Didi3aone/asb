@@ -56,15 +56,15 @@ class SliderApiController extends Controller
                 if ($request->file('gambar')) {
                     $pict = $request->file('gambar');
                     $pict_name = time() . $pict->getClientOriginalName();                    
-                    $path = $pict->storeAs('thumbnail', $pict_name);
-                    // $pict->move(public_path() . '/images/slider/', $pict_name);
+                    // $path = $pict->storeAs('thumbnail', $pict_name);
+                    $pict->move(public_path() . '/images/slider/', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';
                 }
 
                 $slider = Slider::create([
                     'name'          => $request->input('name'),
-                    'isi'           => $request->input('start_date'),
+                    'isi'           => $request->input('isi'),
                     'gambar'        => $pict_name
                 ]);
             }

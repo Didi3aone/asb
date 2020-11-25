@@ -208,7 +208,11 @@ class RegistrationController extends Controller
             // otherwise change user status to "activated"
             $user->is_verified = 'verified';
             $user->save();
-
+            
+            //save verify
+            $dt = DetailUsers::where('userid', $user->id)->first();
+            $dt->is_verify = 1;
+            $dt->save();
             // autologin
             Auth::loginUsingId($user->id);
 

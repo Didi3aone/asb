@@ -54,7 +54,8 @@
                 </tbody>
             </table>
             <h2>Detail Penerima</h2>
-            <table class="table table-bordered table-striped">
+            <div class="table table-responsive">
+                <table class="table table-bordered table-striped table-sm" class="table table-striped table-bordered ">
                 <thead>
                     <tr>
                         <th>
@@ -92,6 +93,9 @@
                         </th>
                         <th>
                             Kelurahan
+                        </th>
+                        <th>
+                            Status
                         </th>
                     </tr>
                 </thead>
@@ -150,11 +154,15 @@
                                     @endphp
                                     {{ $name->name }}
                                 </td>
+                                <td>
+                                    status
+                                </td>
                             </tr>
                         @endforeach
                     @endif
                 </thead>
             </table>
+            </div>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
                 {{ trans('global.back_to_list') }}
             </a>

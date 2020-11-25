@@ -46,8 +46,9 @@ class ArticleCategoryController extends Controller
         if ($request->hasFile('thumbnail')) {
             $pict = $request->file('thumbnail');
             $pict_name = time() . $pict->getClientOriginalName();
-            $path = $pict->storeAs('thumbnail', $pict_name);
-            // $pict->move(public_path() . '/images/', $pict_name);
+            // $path = $pict->storeAs('thumbnail', $pict_name);
+            // $path = $pict->storeAs(public_path(). '/images/thumbnail/', $pict_name);
+            $pict->move(public_path() . '/images/thumbnail/', $pict_name);
         } else {
             $pict_name = 'noimage.jpg';
         }
@@ -99,8 +100,9 @@ class ArticleCategoryController extends Controller
         if ($request->hasFile('thumbnail')) {
             $pict = $request->file('thumbnail');
             $pict_name = time() . $pict->getClientOriginalName();
-            $path = $pict->storeAs('thumbnail', $pict_name);
-            // $pict->move(public_path() . '/images/', $pict_name);
+            // $path = $pict->storeAs('thumbnail', $pict_name);
+            // $path = $pict->storeAs(public_path(). '/images/thumbnail/', $pict_name);
+            $pict->move(public_path() . '/images/thumbnail/', $pict_name);
         } 
         
         $category = Category::find($id);

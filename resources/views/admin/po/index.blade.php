@@ -126,9 +126,10 @@
                             </td>
                             <td>
                                 @php
-                                    $sum = \App\DetailPurchase::sumPO($transactions->id); 
+                                    $sum = \App\DetailPurchase::sumPO($transactions->id);
+                                    $rp = \App\PurchaseOrder::rupiah($sum);
                                 @endphp
-                                {{ $sum ?? 0 }}
+                                {{ $rp ?? 0 }}
                             </td>
                             <td>
                                 @if ($transactions->status_payment == 0)

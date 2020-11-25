@@ -113,7 +113,7 @@ class ProgramApiController extends Controller
                 'success'   => true,
                 'message'   => ' program!',
                 'program'   => $program,
-                'detail'    => $datail,
+                'detail'    => $detail,
             ], 200);
         } else {
             return response()->json([

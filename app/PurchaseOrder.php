@@ -26,6 +26,14 @@ class PurchaseOrder extends Model
         'updated_by',
     ];
 
+    public static function rupiah($val){
+	
+	    $rp = "Rp " . number_format($val);
+        
+        return $rp;
+        
+    }
+
     public static function boot()
     {
         parent::boot();

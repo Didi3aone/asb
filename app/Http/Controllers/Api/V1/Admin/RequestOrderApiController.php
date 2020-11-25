@@ -104,7 +104,30 @@ class RequestOrderApiController extends Controller
      */
     public function show($id)
     {
-        //
+        $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
+            ->join('users', 'requests.created_by', '=', 'users.id')
+            ->where('requests.id', $id)
+            ->first();
+        // dd($ro); 
+        $detail = DetailRequest::join('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
+                ->join('users', 'detail_users.userid', '=', 'users.id')
+                ->where('no_req', $ro->no_request)
+                ->get();
+        
+        if ($ro) {
+            return response()->json([
+                'success'   => true,
+                'message'   => ' Request Order!',
+                'RequestOrder'   => $ro,
+                'detail'    => $detail,
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Detail program Tidak Ditemukan!',
+                'data'    => ''
+            ], 404);
+        }
     }
 
     /**

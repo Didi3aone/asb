@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\RoleUser;
+use App\Mail\VerifyEmail;
+use Mail;
 use Illuminate\Support\Str;
 use App\User;
 use App\DetailUsers;
@@ -142,24 +144,24 @@ class MemberApiController extends Controller
                 if ($request->file('avatar')) {
                     $avatar = $request->file('avatar');
                     $avatar_name = time() . $avatar->getClientOriginalName();
-                    $path = $avatar->storeAs('avatar', $avatar_name);
-                    // $avatar->move(public_path() . '/images/avatar/', $avatar_name);
+                    // $path = $avatar->storeAs('avatar', $avatar_name);
+                    $avatar->move(public_path() . '/images/avatar/', $avatar_name);
                 } else {
                     $kk_name = 'noimage.jpg';
                 }
                 if ($request->file('foto_kk')) {
                     $kk = $request->file('foto_kk');
                     $kk_name = time() . $kk->getClientOriginalName();
-                    $path = $kk->storeAs('kk', $kk_name);
-                    // $kk->move(public_path() . '/images/kk/', $kk_name);
+                    // $path = $kk->storeAs('kk', $kk_name);
+                    $kk->move(public_path() . '/images/kk/', $kk_name);
                 } else {
                     $kk_name = 'noimage.jpg';
                 }
                 if ($request->file('foto_ktp')) {
                     $ktp = $request->file('foto_ktp');
                     $ktp_name = time() . $ktp->getClientOriginalName();
-                    $path = $ktp->storeAs('ktp', $ktp_name);
-                    // $ktp->move(public_path() . '/images/ktp/', $ktp_name);
+                    // $ktp->storeAs('images/ktp/', $ktp_name, 'public_local');
+                    $ktp->move(public_path() . '/images/ktp/', $ktp_name);
                 } else {
                     $ktp_name = 'noimage.jpg';
                 }
@@ -184,7 +186,7 @@ class MemberApiController extends Controller
                     'userid'            => $users->id,
                     'no_member'         => $no_member,
                     'nickname'          => $request->input('nickname'),
-                    'no_ktp'            => $request->input('no_ktp'),
+                    'nik'               => $request->input('no_ktp'),
                     'no_kk'             => $request->input('no_kk'),
                     'gender'            => $request->input('gender'),
                     'tgl_lahir'         => $request->input('tgl_lahir'),
@@ -207,7 +209,7 @@ class MemberApiController extends Controller
                     'foto_ktp'          => $ktp_name,
                     'foto_kk'           => $kk_name,
                     'status_korlap'     => 1,
-                    'member'            => date('Y-m-d H:i:s')
+                    'created_at'        => date('Y-m-d H:i:s')
                 );
                 $detail = DetailUsers::insert($data);
                 Mail::to($users->email)->send(new VerifyEmail($users));

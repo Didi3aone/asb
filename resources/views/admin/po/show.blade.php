@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        Show Request Order
+        Show Purchase Order
     </div>
 
     <div class="card-body">
@@ -63,7 +63,10 @@
                                     {{ $rows->qty }}
                                 </td>
                                 <td>
-                                    {{ $rows->price }}
+                                    @php
+                                        $rp = \App\PurchaseOrder::rupiah($rows->price);
+                                    @endphp
+                                    {{ $rp }}
                                 </td>
                                 <td>
                                     @if ($rows->ppn == 0) 
