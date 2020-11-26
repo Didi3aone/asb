@@ -59,10 +59,10 @@ class RequestOrderApiController extends Controller
                     'data'      => $validator->errors()
                 ], 400);
             } else {
-                $request = Req::create([
+                $req = Req::insertGetId([
                     'no_request'    => $request->input('no_request'),
                     'program_id'    => $request->input('program_id'),
-                    'created_by'    => 1,
+                    'created_by'    => Auth::user()->id,
                     'status'        => 1,
                     'created_at'    => date('Y-m-d H:i:s'),
                 ]);
@@ -71,9 +71,8 @@ class RequestOrderApiController extends Controller
                 if(isset($request->member[$i])) {
                     for($count = 0;$count < count($request->member); $count++) {
                         $data = array(
-                            'no_req'        => $request->input('no_request'),
+                            'no_req'        => $req,
                             'receiver_id'   => $request->input('member')[$count],
-                            'created_by'    => Auth::user()->id,
                             'created_at'    => date('Y-m-d H:i:s')
                         );
                         $insert_detail[] = $data;
@@ -110,7 +109,7 @@ class RequestOrderApiController extends Controller
             ->first();
         // dd($ro); 
         $detail = DetailRequest::join('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
-                ->join('users', 'detail_users.userid', '=', 'users.id')
+                ->join('users', 'detail_userss.userid', '=', 'users.id')
                 ->where('no_req', $ro->no_request)
                 ->get();
         
@@ -137,6 +136,75 @@ class RequestOrderApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function updateRO(Request $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $validator = Validator::make($request->all(), [
+                'no_request'   => 'required',
+                'program_id'   => 'required',
+            ],
+            [
+                'no_request.required'     => 'Masukkan no request!',
+                'program_id.required'     => 'Masukkan program!'
+            ]);
+
+            if($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'silahkan isi kolom yang kosong',
+                    'data'      => $validator->errors()
+                ], 400);
+            } else {
+                $req = Req::find($request->input('id'));
+                $req->no_request    = $request->input('no_request');
+                $req->program_id    = $request->input('program_id');
+                $req->updated_by    = Auth::user()->id;
+                $req->status        = 1;
+                $req->updated_at    = date('Y-m-d H:i:s');
+
+                $i=0;
+                if(isset($request->member[$i])) {
+                    for($count = 0;$count < count($request->member); $count++) {
+                        if(isset($request->input('detail_id')[$count])) {
+                            $dt = DetailRequest::find($request->input('detail_id')[$count]);
+                            $dt->no_req         = $request->input('id');
+                            $dt->receiver_id    = $request->input('member')[$count];
+                            $dt->status_penerima= 1;
+                            $dt->tanggal_terima = $request->input('tgl_terima')[$count] ?? date('Y-m-d H:i:s');
+                            $dt->updated_at     = date('Y-m-d H:i:s');
+                            $dt->update();
+                        } else {
+                            $data = array(
+                                'no_req'            => $request->input('id'),
+                                'receiver_id'       => $request->input('member')[$count],
+                                'created_at'        => date('Y-m-d H:i:s'),
+                                'status_penerima'   => 1,
+                                'tanggal_terima'    => $request->input('tgl_terima')[$count] ?? date('Y-m-d H:i:s'),
+                                'updated_at'        => date('Y-m-d H:i:s'),
+                            );
+                            $insert_detail[] = $data;
+                            DetailRequest::insert($insert_detail);
+                        }
+                    }
+                }
+            }
+            \DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Order Berhasil Di update!',
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Request Order Gagal Disimpan!',
+            ], 400);
+        }
+    }
+    
     public function update(Request $request, $id)
     {
         //

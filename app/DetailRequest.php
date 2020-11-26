@@ -35,10 +35,6 @@ class DetailRequest extends Model
             $model->created_by = $user->id ?? '9999';
             $model->updated_by = $user->id ?? '9999';
         });
-        static::updating(function ($model) {
-            $user              = \Auth::user();
-            $model->updated_by = $user->id ?? '9999';
-        });
         static::deleting(function ($model) {
             $model->deleted_at = date('Y-m-d H:i:s');
         });

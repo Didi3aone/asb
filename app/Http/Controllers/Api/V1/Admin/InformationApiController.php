@@ -110,7 +110,120 @@ class InformationApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         \DB::beginTransaction();
+        try {
+            $validator = Validator::make($request->all(), [
+                'nama'          => 'required',
+                'content'       => 'required',
+                'kategori_id'   => 'required',
+                'foto'          => 'mimes:jpeg,jpg,png,gif|required|max:10000'
+            ],
+            [
+                'nama.required'     => 'Masukkan nama Artikel !',
+                'content.required'  => 'Masukkan elin',
+                'foto.required'     => 'Masukkan file photo',
+            ]);
+            
+            if($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'silahkan isi kolom yang kosong',
+                    'data'      => $validator->errors()
+                ], 400);
+            } else {
+                
+                if ($request->file('foto')) {
+                    $pict = $request->file('foto');
+                    $pict_name = time() . $pict->getClientOriginalName();
+                    // $path = $pict->storeAs('articles', $pict_name);
+                    $pict->move(public_path() . '/images/articles', $pict_name);
+                } else {
+                    $pict_name = 'noimage.jpg';
+                }
+
+                $info = Information::find($request->input('id'));
+                $info->kategori_id   = $request->input('kategori_id');
+                $info->name          = $request->input('nama');
+                $info->content       = $request->input('content');
+                if ($request->file('foto')) {
+                    $info->gambar    = $pict_name;
+                }
+                $info->updated_by    = Auth::user()->id;
+                $info->updated_at    = date('Y-m-d H:i:s');
+                $info->update();
+            }
+            \DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Artikel Berhasil Di Update!',
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel Gagal Disimpan!',
+            ], 400);
+        }
+    }
+
+    public function updateArtikel(Request $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $validator = Validator::make($request->all(), [
+                'nama'          => 'required',
+                'content'       => 'required',
+                'kategori_id'   => 'required',
+                'foto'          => 'mimes:jpeg,jpg,png,gif|required|max:10000'
+            ],
+            [
+                'nama.required'     => 'Masukkan nama Artikel !',
+                'content.required'  => 'Masukkan elin',
+                'foto.required'     => 'Masukkan file photo',
+            ]);
+            
+            if($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'silahkan isi kolom yang kosong',
+                    'data'      => $validator->errors()
+                ], 400);
+            } else {
+                
+                if ($request->file('foto')) {
+                    $pict = $request->file('foto');
+                    $pict_name = time() . $pict->getClientOriginalName();
+                    // $path = $pict->storeAs('articles', $pict_name);
+                    $pict->move(public_path() . '/images/articles', $pict_name);
+                } else {
+                    $pict_name = 'noimage.jpg';
+                }
+
+                $info = Information::find($request->input('id'));
+                $info->kategori_id   = $request->input('kategori_id');
+                $info->name          = $request->input('nama');
+                $info->content       = $request->input('content');
+                if ($request->file('foto')) {
+                    $info->gambar    = $pict_name;
+                }
+                $info->updated_by    = Auth::user()->id;
+                $info->updated_at    = date('Y-m-d H:i:s');
+                $info->update();
+            }
+            \DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Artikel Berhasil Di Update!',
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            \DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel Gagal Disimpan!',
+            ], 400);
+        }
     }
 
     /**
