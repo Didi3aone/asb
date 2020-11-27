@@ -151,7 +151,7 @@ class RequestOrderController extends Controller
             ->first();
         // dd($ro); 
         $detail = DetailRequest::leftJoin('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
-                ->join('users', 'detail_users.userid', '=', 'users.id')
+                ->leftJoin('users', 'detail_users.userid', '=', 'users.id')
                 ->where('req_id', $id)
                 ->get();
         

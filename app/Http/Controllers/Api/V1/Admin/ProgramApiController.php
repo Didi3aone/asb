@@ -106,6 +106,7 @@ class ProgramApiController extends Controller
     {
         $program = Program::find($id);
         $detail = DetailPeriodeProgram::where('id_periode', $id)
+                ->join('barang', 'p_detail_periode_programs.id_barang', '=', 'barang.nama')
                 ->get();
         
         if ($program) {

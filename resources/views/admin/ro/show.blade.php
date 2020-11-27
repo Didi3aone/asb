@@ -99,6 +99,11 @@
                         </th>
                     </tr>
                 </thead>
+                @php
+                    echo "<pre>";
+                        print_r($detail);
+                    echo "</pre>";
+                @endphp
                 <tbody>
                     @if(count($detail) > 0)
                         @foreach($detail as $key => $rows)
@@ -122,37 +127,40 @@
                                     {{ $rows->no_hp }}
                                 </td>
                                 <td>
-                                    {{ $rows->email }}
+                                    {{ $rows->email ?? '-' }}
                                 </td>
                                 <td>
+                                    @if ($rows->pekerjaan != null)
+                                        
+                                    @endif
                                     @php
                                         $name = \App\Job::getName($rows->pekerjaan);
                                     @endphp
-                                    {{ $name->name }}
+                                    {{ $name->name ?? '-' }}
                                 </td>
                                 <td>
                                     @php
                                         $name = \App\Provinsi::getProv($rows->provinsi);
                                     @endphp
-                                    {{ $name->name }}
+                                    {{ $name->name ?? '-' }}
                                 </td>
                                 <td>
                                     @php
                                         $name = \App\Kabupaten::getKab($rows->kabupaten);
                                     @endphp
-                                    {{ $name->name }}
+                                    {{ $name->name ?? '-' }}
                                 </td>
                                 <td>
                                     @php
                                         $name = \App\Kecamatan::getKec($rows->kecamatan);
                                     @endphp
-                                    {{ $name->name }}
+                                    {{ $name->name ?? '-' }}
                                 </td>
                                 <td>
                                     @php
                                         $name = \App\Kelurahan::getKel($rows->kelurahan);
                                     @endphp
-                                    {{ $name->name }}
+                                    {{ $name->name ?? '-' }}
                                 </td>
                                 <td>
                                     status

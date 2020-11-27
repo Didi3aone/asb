@@ -29,6 +29,7 @@ Route::group(['prefix' => 'v1', 'as' => 'admin.',  'middleware' => ['jwt.verify'
     Route::apiResource('article-category', 'ArticleCategoryApiController');
     Route::post('update-article-category', 'ArticleCategoryApiController@updateArticle');
     Route::apiResource('member', 'MemberApiController');
+    Route::post('member-update', 'MemberApiController@updateMember');
     Route::apiResource('ro', 'RequestOrderApiController');
     Route::post('ro-update', 'RequestOrderApiController@updateRO');
     Route::apiResource('slider', 'SliderApiController');
