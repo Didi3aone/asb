@@ -105,6 +105,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    // echo "<pre>";
+                    //     print_r($ro);
+                    //     echo "</pre>";
+                    @endphp
                     @foreach($ro as $key => $transactions)
                         <tr data-entry-id="{{ $transactions->id }}">
                             <td>
@@ -123,14 +128,22 @@
                                 {{ $transactions->name ?? '' }}
                             </td>
                             <td>
-                                Kecamatan
+                                @if(isset($transactions->kecamatan))
+                                @php
+                                    $name = \App\Kecamatan::getKec($transactions->kecamatan);
+                                    // dd($name);
+                                @endphp
+                                {{ $name->name }}
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td>
-                                Request By
+                                {{ $transactions->fullname ?? '' }}
                             </td>
                             <td>
                                 @php
-                                    $count = \App\DetailRequest::countRO($transactions->no_request); 
+                                    $count = \App\DetailRequest::countRO($transactions->id); 
                                 @endphp
                                 {{ $count ?? 0 }}
                             </td>

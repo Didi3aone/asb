@@ -18,4 +18,9 @@ class TransaksiStokDetail extends Model
         'qty',
         'nomor_sparepart',
     ];
+
+    public static function dt($id)
+    {
+        return TransaksiStokDetail::where('transaksi_id', $id)->get();
+    }
 }

@@ -32,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($detail as $key => $rows)
+                        @foreach($po as $key => $rows)
                             <tr>
                                 <td>
                                     {{ $key+1 }}
@@ -43,22 +43,44 @@
                                 <td>
                                     {{ $rows->supplier_id ?? '' }}
                                 </td>
+                                @php
+                                    $dt = \App\DetailPurchase::dt($rows->id);
+                                @endphp
                                 <td>
-                                    Gula,
-                                    Minyak
+                                    @foreach($dt as $key => $datas)
+                                    @php
+                                        $name = \App\Item::getItem($datas->id_barang);
+                                    @endphp
+                                    {{ $name->nama }}<br>
+                                @endforeach
                                 </td>
                                 <td>
-                                    3, 2
-                                </td>
-                                
-                                <td>
-                                    16000, 17000
+                                    @foreach($dt as $key => $datas)
+                                    {{ $datas->qty }}<br>
+                                    @endforeach
                                 </td>
                                 <td>
-                                    No
+                                    @foreach($dt as $key => $datas)
+                                    @php
+                                        $rp = App\DetailPurchase::rupiah($datas->price);
+                                    @endphp
+                                    {{ $rp }}<br>
+                                    @endforeach
                                 </td>
                                 <td>
-                                    48000, 34000
+                                    @foreach($dt as $key => $datas)
+                                    @if($datas->ppn == 0)
+                                        Tidak
+                                    @else
+                                        Ya
+                                    @endif
+                                    <br>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach($dt as $key => $datas)
+                                    {{ $datas->total }}<br>
+                                    @endforeach
                                 </td>
                             </tr>
                         @endforeach

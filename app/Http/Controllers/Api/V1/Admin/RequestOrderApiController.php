@@ -71,7 +71,7 @@ class RequestOrderApiController extends Controller
                 if(isset($request->member[$i])) {
                     for($count = 0;$count < count($request->member); $count++) {
                         $data = array(
-                            'no_req'        => $req,
+                            'req_id'        => $req,
                             'receiver_id'   => $request->input('member')[$count],
                             'created_at'    => date('Y-m-d H:i:s')
                         );
@@ -109,8 +109,8 @@ class RequestOrderApiController extends Controller
             ->first();
         // dd($ro); 
         $detail = DetailRequest::join('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
-                ->join('users', 'detail_userss.userid', '=', 'users.id')
-                ->where('no_req', $ro->no_request)
+                ->join('users', 'detail_users.userid', '=', 'users.id')
+                ->where('req_id', $id)
                 ->get();
         
         if ($ro) {
@@ -169,7 +169,7 @@ class RequestOrderApiController extends Controller
                     for($count = 0;$count < count($request->member); $count++) {
                         if(isset($request->input('detail_id')[$count])) {
                             $dt = DetailRequest::find($request->input('detail_id')[$count]);
-                            $dt->no_req         = $request->input('id');
+                            $dt->req_id         = $request->input('id');
                             $dt->receiver_id    = $request->input('member')[$count];
                             $dt->status_penerima= 1;
                             $dt->tanggal_terima = $request->input('tgl_terima')[$count] ?? date('Y-m-d H:i:s');
@@ -177,7 +177,7 @@ class RequestOrderApiController extends Controller
                             $dt->update();
                         } else {
                             $data = array(
-                                'no_req'            => $request->input('id'),
+                                'req_id'            => $request->input('id'),
                                 'receiver_id'       => $request->input('member')[$count],
                                 'created_at'        => date('Y-m-d H:i:s'),
                                 'status_penerima'   => 1,

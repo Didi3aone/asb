@@ -12,7 +12,7 @@ class DetailRequest extends Model
     
     protected $fillable = [
         'id',
-        'no_req',
+        'req_id',
         'receiver_id',
         'created_at',
         'updated_at',
@@ -23,7 +23,12 @@ class DetailRequest extends Model
 
     public static function countRO($id)
     {
-        return DetailRequest::where('no_req',$id)->count();
+        return DetailRequest::where('req_id',$id)->count();
+    }
+
+    public static function dt($id)
+    {
+        return DetailRequest::where('req_id', $id)->get();
     }
 
     public static function boot()

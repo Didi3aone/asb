@@ -9,6 +9,7 @@ class Kecamatan extends Model
 {
     use softDeletes;
     public $table = 'kecamatans';
+    
     public static function getKec($value)
     {
         return Kecamatan::where('id_kec', $value)->select('name')->first();

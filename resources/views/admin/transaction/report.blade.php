@@ -28,28 +28,75 @@
                             <th scope="col">{{ trans('cruds.transaction-stock.fields.nomor_transaksi') }}</th>
                             <th scope="col">{{ trans('cruds.transaction-stock.fields.gudang_id') }}</th>
                             <th scope="col">{{ trans('cruds.transaction-stock.fields.rak_id') }}</th>
+                            <th scope="col">{{ trans('cruds.transaction-stock.fields.barang_id') }}</th>
                             <th scope="col">{{ trans('cruds.transaction-stock.fields.in') }}</th>
                             <th scope="col">{{ trans('cruds.transaction-stock.fields.out') }}</th>
-                            <th scope="col">{{ trans('cruds.transaction-stock.fields.saldo') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach($report as $key => $rows)
+                        {{-- @php
+                            echo "<pre>";
+                                print_r($report);
+                            echo "</pre>";
+                        @endphp --}}
+                        @foreach($report as $key => $rows)
                             <tr>
                                 <td>
                                     {{ $key+1 }}
                                 </td>
                                 <td>
-                                    {{ $rows->name ?? '' }}
+                                    {{ $rows->nomor_ijin ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $rows->description ?? '' }}
+                                    {{ $rows->nama_gudang ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $rows->nama ?? '' }}
+                                    {{ $rows->rak_id ?? '' }}
                                 </td>
+                                @php
+                                    $dt = \App\TransaksiStokDetail::dt($rows->id);
+                                @endphp
+                                <td>
+                                    @foreach($dt as $key => $datas)
+                                        @php
+                                            $name = \App\Item::getItem($datas->barang_id);
+                                        @endphp
+                                        {{ $name->nama }}<br>
+                                    @endforeach
+                                </td>
+                                @if($rows->tipe == 1)
+                                <td>
+                                    @foreach($dt as $key => $datas)
+                                    {{ $datas->qty }}<br>
+                                    @endforeach
+                                </td>
+                                @else
+                                <td>
+                                    0
+                                </td>
+                                @endif
+                                @if($rows->tipe == 2)
+                                    <td>
+                                        @foreach($dt as $key => $datas)
+                                        {{ $datas->qty }}<br>
+                                        @endforeach
+                                    </td>
+                                    @else
+                                    <td>
+                                        0
+                                    </td>
+                                @endif
                             </tr>
-                        @endforeach --}}
+                        @endforeach
+                        <tr>
+                            <td><b>Total</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{ $sumIn->income }}</td>
+                            <td>{{ $sumOut->outcome }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

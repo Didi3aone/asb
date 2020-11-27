@@ -47,9 +47,39 @@ class TransaksiStokController extends Controller
         return view('admin.transaction.create-in',\compact('gudang','item'));
     }
 
-    public function reportTransaksi()
+    public function reportTransaksi(Request $request)
     {
-        return view('admin.transaction.report');
+        $trx = TransaksiStok::join('mst_gudang', 'mst_gudang.id', '=', 'transaksi_stoks.gudang_id')
+            ->selectRaw('transaksi_stoks.nomor_ijin,transaksi_stoks.id,transaksi_stoks.tanggal_transaksi,
+                        mst_gudang.nama_gudang, transaksi_stoks.rak_id,transaksi_stoks.tipe ');
+        if(isset($request->start) && isset($request->end))
+        {
+            $trx->where('transaksi_stoks.tanggal_transaksi', '>=', $request->start);
+            $trx->where('transaksi_stoks.tanggal_transaksi', '<=', $request->end);
+        }
+        $report = $trx->get();
+
+        $In = TransaksiStok::join('transaksi_stok_details', 'transaksi_stok_details.transaksi_id', '=', 'transaksi_stoks.id')
+                ->where('transaksi_stoks.tipe', 1)
+                ->selectRaw('sum(transaksi_stok_details.qty) as income');
+        if(isset($request->start) && isset($request->end))
+        {
+            $In->where('transaksi_stoks.tanggal_transaksi', '>=', $request->start);
+            $In->where('transaksi_stoks.tanggal_transaksi', '<=', $request->end);
+        }
+        $sumIn = $In->first();
+
+        $Out = TransaksiStok::join('transaksi_stok_details', 'transaksi_stok_details.transaksi_id', '=', 'transaksi_stoks.id')
+                ->where('transaksi_stoks.tipe', 2)
+                ->selectRaw('sum(transaksi_stok_details.qty) as outcome');
+        if(isset($request->start) && isset($request->end))
+        {
+            $Out->where('transaksi_stoks.tanggal_transaksi', '>=', $request->start);
+            $Out->where('transaksi_stoks.tanggal_transaksi', '<=', $request->end);
+        }
+        $sumOut = $Out->first();
+        
+        return view('admin.transaction.report', compact('report', 'sumIn', 'sumOut'));
     }
 
     /**

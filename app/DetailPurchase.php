@@ -40,6 +40,17 @@ class DetailPurchase extends Model
         return DetailPurchase::where('purchase_id',$id)->sum('total');
     }
 
+    public static function dt($id)
+    {
+        return DetailPurchase::where('purchase_id', $id)->get();
+    }
+
+    public static function rupiah($val){
+	    $rp = "Rp " . number_format($val, 0, ',', '.');
+        
+        return $rp;   
+    }
+
     public static function boot()
     {
         parent::boot();

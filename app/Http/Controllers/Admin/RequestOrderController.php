@@ -26,10 +26,9 @@ class RequestOrderController extends Controller
     {
         $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
             ->join('users', 'requests.created_by', '=', 'users.id')
-            ->select('requests.id','requests.no_request', 'requests.created_at', 'users.name as fullname', 'periode_programs.name')
+            ->leftJoin('detail_users', 'users.id', '=', 'detail_users.userid')
+            ->select('requests.id','requests.no_request', 'requests.created_at','detail_users.kecamatan', 'users.name as fullname', 'periode_programs.name')
             ->get();
-        
-        
         
         return view('admin.ro.index', compact('ro')); 
     }
@@ -87,25 +86,14 @@ class RequestOrderController extends Controller
             $title = 'Semua Status';
         }
 
-        $detail = Req::join('periode_programs', 'requests.program_id', '=', 'periode_programs.id')
-                ->join('r_detail_requests', 'r_detail_requests.no_req', '=', 'requests.no_request')
-                ->leftJoin('users', 'r_detail_requests.receiver_id', '=', 'users.id')
-                ->selectRaw('requests.no_request , periode_programs.name, users.name as member,
-                    CASE 
-                        when r_detail_requests.status_penerima = 1 then "Diajukan"
-                        when r_detail_requests.status_penerima = 2 then "Dikirim"
-                        else "Diterima"
-                    end as status, r_detail_requests.status_penerima'
-                );
-        if(isset($request->type)) {
-            $detail->where('r_detail_requests.status_penerima', $request->type);
-        }
-        if(isset($request->start) && isset($request->end))
-        {
-            $detail->where('periode_programs.start_date', '>=', $request->start);
-            $detail->where('periode_programs.end_date', '<=', $request->end);
-        }
-        $report = $detail->get();
+        $req = Req::join('periode_programs', 'requests.program_id', '=', 'periode_programs.id')
+            ->selectRaw('requests.id, requests.no_request, periode_programs.name');
+            if(isset($request->start) && isset($request->end))
+            {
+                $req->where('requests.created_at', '>=', $request->start);
+                $req->where('requests.created_at', '<=', $request->end);
+            }
+        $report = $req->get();
 
         return view('admin.ro.report', compact('report', 'title')); 
     }
@@ -120,10 +108,11 @@ class RequestOrderController extends Controller
     {
         \DB::beginTransaction();
         try {
-            $req = Req::create([
+            $req = Req::insertGetId([
                 'no_request'    => $request->no_req,
                 'program_id'    => $request->program_id,
                 'created_by'    => \Auth::user()->id,
+                'created_at'    => date('Y-m-d H:i:s'),
                 'status'        => 1,
             ]);
             
@@ -131,7 +120,7 @@ class RequestOrderController extends Controller
             if(isset($request->chkbox[$i])) {
                 for($count = 0;$count < count($request->chkbox); $count++) {
                     $data = array(
-                        'no_req'        => $request->no_req,
+                        'req_id'        => $req,
                         'receiver_id'   => $request->chkbox[$count],
                         'created_at'    => date('Y-m-d H:i:s'),
                         'status_penerima' => 1
@@ -161,9 +150,9 @@ class RequestOrderController extends Controller
             ->where('requests.id', $id)
             ->first();
         // dd($ro); 
-        $detail = DetailRequest::join('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
+        $detail = DetailRequest::leftJoin('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
                 ->join('users', 'detail_users.userid', '=', 'users.id')
-                ->where('no_req', $ro->no_request)
+                ->where('req_id', $id)
                 ->get();
         
         return view('admin.ro.show', compact('ro', 'detail')); 
@@ -225,7 +214,7 @@ class RequestOrderController extends Controller
             if(isset($request->chkbox[$i])) {
                 for($count = 0;$count < count($request->chkbox); $count++) {
                     $data = array(
-                        'no_req'        => $request->no_request,
+                        'req_id'        => $id,
                         'receiver_id'   => $request->chkbox[$count],
                         'updated_at'    => date('Y-m-d H:i:s')
                     );

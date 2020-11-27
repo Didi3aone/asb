@@ -108,29 +108,17 @@ class PurchaseOrderController extends Controller
             $title = 'Semua Status';
         }
         $detail = PurchaseOrder::all();
-        /* 
-        $detail = Req::join('periode_programs', 'requests.program_id', '=', 'periode_programs.id')
-                ->join('r_detail_requests', 'r_detail_requests.no_req', '=', 'requests.no_request')
-                ->leftJoin('users', 'r_detail_requests.receiver_id', '=', 'users.id')
-                ->selectRaw('requests.no_request , periode_programs.name, users.name as member,
-                    CASE 
-                        when r_detail_requests.status_penerima = 1 then "Diajukan"
-                        when r_detail_requests.status_penerima = 2 then "Dikirim"
-                        else "Diterima"
-                    end as status, r_detail_requests.status_penerima'
-                );
-        if(isset($request->type)) {
-            $detail->where('r_detail_requests.status_penerima', $request->type);
-        }
+        $po = PurchaseOrder::get();
         if(isset($request->start) && isset($request->end))
         {
-            $detail->where('periode_programs.start_date', '>=', $request->start.'00:00:00');
-            $detail->where('periode_programs.end_date', '<=', $request->end.'24:00:00');
+            $po = PurchaseOrder::get();
+            $po->where('created_at', '>=', $request->start);
+            $po->where('created_at', '<=', $request->end);
+        } else {
+            $po = PurchaseOrder::get();
         }
-        $report = $detail->get(); */
 
-        // return view('admin.po.report', compact('report', 'title')); 
-        return view('admin.po.report', compact('detail')); 
+        return view('admin.po.report', compact('po')); 
     }
 
     /**

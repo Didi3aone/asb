@@ -32,6 +32,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{-- @php
+                            echo "<pre>";
+                                print_r($report);
+                            echo "</pre>";exit;
+                        @endphp --}}
                         @foreach($report as $key => $rows)
                             <tr>
                                 <td>
@@ -43,11 +48,25 @@
                                 <td>
                                     {{ $rows->name ?? '' }}
                                 </td>
+                                @php
+                                    $dt = \App\DetailRequest::dt($rows->id);
+                                @endphp
                                 <td>
-                                    {{ $rows->member ?? '' }}
+                                @foreach($dt as $key => $datas)
+                                    @php
+                                        $name = \App\User::getName($datas->receiver_id);
+                                    @endphp
+                                    {{ $name->name ?? '' }} <br>
+                                @endforeach
                                 </td>
                                 <td>
-                                    {{ $rows->status ?? '' }}
+                                @foreach($dt as $key => $datas)
+                                    @if ($datas->status == 1)
+                                        Terima
+                                    @else
+                                        Belum Terima
+                                    @endif <br>
+                                @endforeach
                                 </td>
                             </tr>
                         @endforeach
