@@ -229,7 +229,7 @@ class MemberApiController extends Controller
         }
     }
 
-    public function memberUpdate(Request $request)
+    public function updateMember(Request $request)
     {
         \DB::beginTransaction();
         try {
