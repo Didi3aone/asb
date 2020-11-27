@@ -61,8 +61,8 @@
                                 {{ $name->name ?? '' }}
                             </td>
                             <td>
-                                {{-- <img width=100 src="{{ asset('images/'.($rows->gambar)) }}"> --}}
-                                <img width=100 src="{{ route('admin.img.articles',$rows->gambar) }}">
+                                <img width=100 src="{{ asset('images/articles/'.($rows->gambar)) }}"> 
+                                {{--<img width=100 src="{{ route('admin.img.articles/',$rows->gambar) }}">--}}
                             </td>
                             <td>
                                 @if($rows->is_active == 1)

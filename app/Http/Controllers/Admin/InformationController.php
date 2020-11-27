@@ -47,8 +47,8 @@ class InformationController extends Controller
         if ($request->hasFile('foto')) {
             $pict = $request->file('foto');
             $pict_name = time() . $pict->getClientOriginalName();
-            $path = $pict->storeAs('articles', $pict_name);
-            // $pict->move(public_path() . '/images/', $pict_name);
+            // $path = $pict->storeAs('articles', $pict_name);
+            $pict->move(public_path() . '/images/articles', $pict_name);
         } else {
             $pict_name = 'noimage.jpg';
         }
@@ -105,8 +105,8 @@ class InformationController extends Controller
         if ($request->hasFile('foto')) {
             $pict = $request->file('foto');
             $pict_name = time() . $pict->getClientOriginalName();
-            $path = $pict->storeAs('articles', $pict_name);
-            // $pict->move(public_path() . '/images/', $pict_name);
+            // $path = $pict->storeAs('articles', $pict_name);
+            $pict->move(public_path() . '/images/articles', $pict_name);
         } else {
             $pict_name = 'noimage.jpg';
         }

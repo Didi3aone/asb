@@ -60,8 +60,7 @@ class InformationApiController extends Controller
                 if ($request->file('foto')) {
                     $pict = $request->file('foto');
                     $pict_name = time() . $pict->getClientOriginalName();
-                    $path = $pict->storeAs('articles', $pict_name);
-                    // $pict->move(public_path() . '/images/articles', $pict_name);
+                    $pict->move(public_path() . '/images/articles', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';
                 }
@@ -135,7 +134,6 @@ class InformationApiController extends Controller
                 if ($request->file('foto')) {
                     $pict = $request->file('foto');
                     $pict_name = time() . $pict->getClientOriginalName();
-                    // $path = $pict->storeAs('articles', $pict_name);
                     $pict->move(public_path() . '/images/articles', $pict_name);
                 } else {
                     $pict_name = 'noimage.jpg';
@@ -179,7 +177,7 @@ class InformationApiController extends Controller
             ],
             [
                 'nama.required'     => 'Masukkan nama Artikel !',
-                'content.required'  => 'Masukkan elin',
+                'content.required'  => 'Masukkan Konten',
                 'foto.required'     => 'Masukkan file photo',
             ]);
             
