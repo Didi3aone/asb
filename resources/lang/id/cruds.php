@@ -483,6 +483,7 @@ return [
             'tipe'               => 'Tipe',
             'member'             => 'Anggota',
             'type'               => 'Jenis Report',
+            'notfound'           => 'Tidak Di Ketemukan',
             'request'            => 'Diajukan',
             'send'               => 'Dikirim',
             'receive'            => 'Diterima',

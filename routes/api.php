@@ -25,12 +25,15 @@ Route::group(['prefix' => 'v1', 'as' => 'admin.',  'middleware' => ['jwt.verify'
     Route::apiResource('program', 'ProgramApiController');
     
     Route::apiResource('artikel', 'InformationApiController');
+    Route::get('latest-artikel', 'InformationApiController@indexLatest');
     Route::post('artikel-update', 'InformationApiController@updateArtikel');
+    Route::get('search-artikel-by-category', 'InformationApiController@findArticleByCategory');
     Route::apiResource('article-category', 'ArticleCategoryApiController');
     Route::post('update-article-category', 'ArticleCategoryApiController@updateArticle');
     Route::apiResource('member', 'MemberApiController');
     Route::post('member-update', 'MemberApiController@updateMember');
     Route::apiResource('ro', 'RequestOrderApiController');
+    Route::get('member-ro', 'RequestOrderApiController@getProgram');
     Route::post('ro-update', 'RequestOrderApiController@updateRO');
     Route::apiResource('slider', 'SliderApiController');
     

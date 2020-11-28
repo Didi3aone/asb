@@ -27,6 +27,18 @@ class InformationApiController extends Controller
         ], 200);
     }
 
+    public function indexLatest()
+    {
+        $info = Information::orderBy('created_at', 'DESC')
+                ->get();
+
+        return response([
+            'success'   => true,
+            'message'   => 'List Semua Artikel',
+            'data'      => $info
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -41,7 +53,7 @@ class InformationApiController extends Controller
                 'nama'          => 'required',
                 'content'       => 'required',
                 'kategori_id'   => 'required',
-                'foto'          => 'mimes:jpeg,jpg,png,gif|required|max:10000'
+                'foto'          => 'mimes:jpeg,jpg,png,gif|required|max:2000'
             ],
             [
                 'nama.required'     => 'Masukkan nama Artikel !',
@@ -86,6 +98,26 @@ class InformationApiController extends Controller
                 'success' => false,
                 'message' => 'Artikel Gagal Disimpan!',
             ], 400);
+        }
+    }
+
+    public function findArticleByCategory(Request $request)
+    {
+        $category = Information::where('kategori_id', $request->input('val'))
+                ->get();
+        
+        if ($category) {
+            return response()->json([
+                'success'   => true,
+                'message'   => ' list Artikel!',
+                'category'   => $category
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel Tidak Ditemukan!',
+                'data'    => ''
+            ], 404);
         }
     }
 

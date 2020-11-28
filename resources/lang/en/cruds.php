@@ -492,6 +492,7 @@ return [
             'receive_date'      => 'Receive Date',
             'total'             => 'Total',
             'tipe'              => 'Type',
+            'notfound'          => 'Not Found',
             'type'              => 'Report Type',
             'request'           => 'Requested',
             'send'              => 'Sent',

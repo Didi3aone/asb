@@ -47,7 +47,10 @@
                             Created By
                         </th>
                         <td>
-                            {{ $ro->created_by }}
+                            @php
+                                $name = \App\User::getName($ro->created_by);
+                            @endphp
+                            {{ $name->name }}
                         </td>
                     </tr>
                     
@@ -99,73 +102,76 @@
                         </th>
                     </tr>
                 </thead>
-                @php
-                    echo "<pre>";
-                        print_r($detail);
-                    echo "</pre>";
-                @endphp
                 <tbody>
                     @if(count($detail) > 0)
                         @foreach($detail as $key => $rows)
-                            <tr>
-                                <td>
-                                    {{ $key +1 }}
-                                </td>
-                                <td>
-                                    {{ $rows->nik }}
-                                </td>
-                                <td>
-                                    {{ $rows->no_kk }}
-                                </td>
-                                <td>
-                                    {{ $rows->nickname }}
-                                </td>
-                                <td>
-                                    {{ $rows->no_telp }}
-                                </td>
-                                <td>
-                                    {{ $rows->no_hp }}
-                                </td>
-                                <td>
-                                    {{ $rows->email ?? '-' }}
-                                </td>
-                                <td>
-                                    @if ($rows->pekerjaan != null)
-                                        
-                                    @endif
-                                    @php
-                                        $name = \App\Job::getName($rows->pekerjaan);
-                                    @endphp
-                                    {{ $name->name ?? '-' }}
-                                </td>
-                                <td>
-                                    @php
-                                        $name = \App\Provinsi::getProv($rows->provinsi);
-                                    @endphp
-                                    {{ $name->name ?? '-' }}
-                                </td>
-                                <td>
-                                    @php
-                                        $name = \App\Kabupaten::getKab($rows->kabupaten);
-                                    @endphp
-                                    {{ $name->name ?? '-' }}
-                                </td>
-                                <td>
-                                    @php
-                                        $name = \App\Kecamatan::getKec($rows->kecamatan);
-                                    @endphp
-                                    {{ $name->name ?? '-' }}
-                                </td>
-                                <td>
-                                    @php
-                                        $name = \App\Kelurahan::getKel($rows->kelurahan);
-                                    @endphp
-                                    {{ $name->name ?? '-' }}
-                                </td>
-                                <td>
-                                    status
-                                </td>
-                            </tr>
+                            @if($rows->nik == null)
+                                <tr>
+                                    <td colspan="13">
+                                        <center>{{ trans('cruds.request-order.fields.member') }} {{ trans('cruds.request-order.fields.notfound') }}</center>
+                                    </td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td>
+                                        {{ $key +1 }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->nik }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->no_kk }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->nickname }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->no_telp }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->no_hp }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->email ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @if ($rows->pekerjaan != null)
+                                            
+                                        @endif
+                                        @php
+                                            $name = \App\Job::getName($rows->pekerjaan);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Provinsi::getProv($rows->provinsi);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Kabupaten::getKab($rows->kabupaten);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Kecamatan::getKec($rows->kecamatan);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Kelurahan::getKel($rows->kelurahan);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        status
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     @endif
                 </thead>

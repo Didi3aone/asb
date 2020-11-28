@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Request as Req;
+use App\RoleUser;
 use App\DetailRequest;
 use App\MstGudang;
 use App\Member;
@@ -21,10 +22,20 @@ class RequestOrderApiController extends Controller
      */
     public function index()
     {
-        $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
+        $cekLevel = RoleUser::where('user_id', Auth::user()->id)->first();
+        
+        if ($cekLevel->role_id == 3) {
+            $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
+            ->join('users', 'requests.created_by', '=', 'users.id')
+            ->select('requests.id','requests.no_request', 'requests.created_at', 'users.name as fullname', 'periode_programs.name')
+            ->where('requests.created_by', Auth::user()->id)
+            ->get();
+        } elseif ($cekLevel->role_id == 1) {
+            $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
             ->join('users', 'requests.created_by', '=', 'users.id')
             ->select('requests.id','requests.no_request', 'requests.created_at', 'users.name as fullname', 'periode_programs.name')
             ->get();
+        }
 
         return response([
             'success'   => true,
@@ -93,6 +104,30 @@ class RequestOrderApiController extends Controller
                 'message' => 'Request Order Gagal Disimpan!',
             ], 400);
         }
+    }
+
+    public function getProgram()
+    {
+        $ro = Req::join('periode_programs', 'requests.program_id','=', 'periode_programs.id')
+            ->join('r_detail_requests', 'r_detail_requests.req_id', '=', 'requests.id')
+            ->select('periode_programs.name')
+            ->where('r_detail_requests.receiver_id', Auth::user()->id)
+            ->get();
+        
+        if ($ro) {
+            return response()->json([
+                'success'   => true,
+                'message'   => ' list Program!',
+                'program'   => $ro
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Detail program Tidak Ditemukan!',
+                'data'    => ''
+            ], 404);
+        }
+        
     }
 
     /**
