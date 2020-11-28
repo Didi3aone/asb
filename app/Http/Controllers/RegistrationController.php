@@ -95,12 +95,20 @@ class RegistrationController extends Controller
             $count = DetailUsers::count();
             $no_member = str_pad($count+1,12,"0",STR_PAD_LEFT);
             
+            //validation email & nomor ktp
             $check = User::where('email', $request->emailaddress)
+                    ->select('id')
+                    ->first();
+
+            $checkNik = User::where('nik', $request->nik)
                     ->select('id')
                     ->first();
             if(isset($check->id)) {
                 $message['is_error'] = true;
                 $message['error_msg'] = "Email Sudah Ada";
+            } elseif (isset($checkNik->id)) {
+                $message['is_error'] = true;
+                $message['error_msg'] = "nomor KTP sudah terdaftar";
             } else {
                 if ($request->file('foto_kk')) {
                     $kk = $request->file('foto_kk');

@@ -168,7 +168,11 @@
                                         {{ $name->name ?? '-' }}
                                     </td>
                                     <td>
-                                        status
+                                        @if ($rows->status_penerima == 1)
+                                            Belum Menerima
+                                        @else
+                                            Sudah Menerima
+                                        @endif
                                     </td>
                                 </tr>
                             @endif

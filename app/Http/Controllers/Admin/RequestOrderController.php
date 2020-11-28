@@ -59,12 +59,14 @@ class RequestOrderController extends Controller
                 ->join('detail_users', 'users.id', '=', 'detail_users.userid')
                 ->where('role_user.role_id', 3)
                 ->where('detail_users.kecamatan', $findKec->kecamatan)
+                ->whereRaw('users.id != ?', \Auth::user()->id)
                 ->select('users.name', 'users.id')
                 ->get();
                 // ->pluck('users.name', 'users.id');
         } else {
             $member = User::join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->where('role_user.role_id', 3)
+                ->whereRaw('users.id != ?', \Auth::user()->id)
                 ->select('users.name', 'users.id')
                 ->get();
                 // ->pluck('name', 'id');
@@ -237,6 +239,12 @@ class RequestOrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Req::find($id);
+        // $data->is_active  = 0;
+        $data->deleted_at = date('Y-m-d H:i:s');
+        $data->updated_by = \Auth::user()->id;
+        $data->update();
+
+        return \redirect()->route('admin.ro.index')->with('success',\trans('notif.notification.delete_data.success'));
     }
 }

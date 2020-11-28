@@ -206,7 +206,7 @@ class RequestOrderApiController extends Controller
                             $dt = DetailRequest::find($request->input('detail_id')[$count]);
                             $dt->req_id         = $request->input('id');
                             $dt->receiver_id    = $request->input('member')[$count];
-                            $dt->status_penerima= 1;
+                            $dt->status_penerima= 2;
                             $dt->tanggal_terima = $request->input('tgl_terima')[$count] ?? date('Y-m-d H:i:s');
                             $dt->updated_at     = date('Y-m-d H:i:s');
                             $dt->update();
