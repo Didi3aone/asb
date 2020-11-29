@@ -19,6 +19,11 @@
         <div class="card-body">
             <div class="mb-2">
                 <table class="table table-striped" id="table-datatables">
+                    @php
+                        echo "<pre>";
+                            print_r($report);
+                        echo "</pre>";
+                    @endphp
                     <thead>
                         <tr>
                             <th scope="col">No.</th>

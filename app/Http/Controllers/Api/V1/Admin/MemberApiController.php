@@ -52,7 +52,6 @@ class MemberApiController extends Controller
                         users.email ,users.created_at ,
                         users.is_active ,detail_users.status_korlap')
                 ->where('role_user.role_id', 3)
-                ->whereRaw('users.id != ?', Auth::user()->id)
                 ->get();
         }
 
@@ -88,7 +87,7 @@ class MemberApiController extends Controller
                 'emailaddress'      => 'required|email|unique:users,email',
                 'password'          => 'required',
                 'nickname'          => 'required',
-                'no_ktp'            => 'required|numeric|unique:detail_users',
+                'no_ktp'            => 'required|numeric',
                 'no_kk'             => 'required|numeric',
                 'gender'            => 'required',
                 'tgl_lahir'         => 'required',
@@ -114,7 +113,7 @@ class MemberApiController extends Controller
                 'emailaddress.required'     => 'Masukkan email yg Valid !',
                 'password.required'         => 'Masukkan password !',
                 'nickname.required'         => 'Masukkan nama panggilan !',
-                'no_ktp.required'           => 'Masukkan no_ktp / harus nomor !/nomor KTP sudah terdaftar',
+                'no_ktp.required'           => 'Masukkan no_ktp / harus nomor !',
                 'no_kk.required'            => 'Masukkan no kk / harus nomor !',
                 'gender.required'           => 'Masukkan Gender !',
                 'tgl_lahir.required'        => 'Masukkan tanggal lahir !',
@@ -240,7 +239,7 @@ class MemberApiController extends Controller
             $validator = Validator::make($request->all(), [
                 'name'              => 'required',
                 'nickname'          => 'required',
-                'no_ktp'            => 'required|numeric|unique:detail_users',
+                'no_ktp'            => 'required|numeric',
                 'no_kk'             => 'required|numeric',
                 'gender'            => 'required',
                 'tgl_lahir'         => 'required',
@@ -258,21 +257,17 @@ class MemberApiController extends Controller
                 'kabupaten_domisili'=> 'required',
                 'kecamatan_domisili'=> 'required',
                 'kelurahan_domisili'=> 'required',
-                'foto_kk'           => 'required|mimes:jpeg,jpg,png,gif|required|max:20000',
-                'foto_ktp'          => 'required|mimes:jpeg,jpg,png,gif|required|max:20000',
             ],
             [
                 'name.required'             => 'Masukkan nama !',
                 'nickname.required'         => 'Masukkan nama panggilan !',
-                'no_ktp.required'           => 'Masukkan no_ktp / harus nomor !/nomor KTP sudah terdaftar',
+                'no_ktp.required'           => 'Masukkan no_ktp / harus nomor !',
                 'no_kk.required'            => 'Masukkan no kk / harus nomor !',
                 'gender.required'           => 'Masukkan Gender !',
                 'tgl_lahir.required'        => 'Masukkan tanggal lahir !',
                 'birth_place.required'      => 'Masukkan tempat lahir !',
                 'pekerjaan.required'        => 'Masukkan Pekerjaan !',
                 'no_hp.required'            => 'Masukkan nomor HP !',
-                'foto_ktp.required'         => 'Masukkan nomor HP !',
-                'foto_kk.required'          => 'Masukkan nomor HP !',
                 'alamat.required'           => 'Masukkan Alamat !',
                 'provinsi.required'         => 'Masukkan provinsi !',
                 'kabupaten.required'        => 'Masukkan kabupaten !',
@@ -319,9 +314,11 @@ class MemberApiController extends Controller
 
                 $users = User::find($request->input('id'));
                 $users->name          = $request->input('name');
+                $users->email         = $request->input('emailaddress');
+                $users->password      = $request->input('password');
                 $users->updated_at    = date('Y-m-d H:i:s');
                 $users->updated_by    = Auth::user()->id;
-                $user->update();
+                $users->update();
 
                 $findMember = DetailUsers::where('userid', $request->input('id'))->first();
 
@@ -348,14 +345,14 @@ class MemberApiController extends Controller
                     $member->kecamatan_domisili= $request->input('kecamatan_domisili');
                     $member->kelurahan_domisili= $request->input('kelurahan_domisili');
                     $member->activation_code   = Str::random(40).$request->input('email');
-                    if ($request->file('foto_kk')) {
-                        $member->foto_kk           = $kk_name;
-                    }
-                    if ($request->file('foto_ktp')) {
-                        $member->foto_ktp          = $ktp_name;
-                    }
                     if ($request->file('avatar')) {
                         $member->avatar            = $avatar_name;
+                    }
+                    if ($request->file('foto_kk')) {
+                        $member->foto_ktp          = $ktp_name;
+                    }
+                    if ($request->file('foto_ktp')) {
+                        $member->foto_kk           = $kk_name;
                     }
                     $member->created_at        = date('Y-m-d H:i:s');
                     $member->update();
@@ -386,7 +383,7 @@ class MemberApiController extends Controller
                         'avatar'            => $avatar_name,
                         'foto_ktp'          => $ktp_name,
                         'foto_kk'           => $kk_name,
-                        'status_korlap'     => 1,
+                        'status_korlap'     => 0,
                         'created_at'        => date('Y-m-d H:i:s')
                     );
                     $detail = DetailUsers::insert($data);

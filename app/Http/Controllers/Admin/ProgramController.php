@@ -103,7 +103,7 @@ class ProgramController extends Controller
                     $detail->where('end_date', '<=', $request->end);
                 }
         $report = $detail->get();
-        // dd($detail);
+        
         return view('admin.program.report', compact('report', 'program')); 
     }
     /**
