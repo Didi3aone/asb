@@ -107,7 +107,7 @@ class PurchaseOrderController extends Controller
         } else {
             $title = 'Semua Status';
         }
-        $detail = PurchaseOrder::all();
+        
         $po = PurchaseOrder::get();
         if(isset($request->start) && isset($request->end))
         {
@@ -118,7 +118,17 @@ class PurchaseOrderController extends Controller
             $po = PurchaseOrder::get();
         }
 
-        return view('admin.po.report', compact('po')); 
+        $dt = DetailPurchase::selectRaw('SUM(qty) as totqty,SUM(price) as totprice, SUM(total) as grandtot');
+        if(isset($request->start) && isset($request->end))
+        {
+            $dt->where('created_at', '>=', $request->start);
+            $dt->where('created_at', '<=', $request->end);
+        } 
+
+        $detail = $dt->first();
+
+        // dd($detail);
+        return view('admin.po.report', compact('po', 'detail')); 
     }
 
     /**

@@ -43,7 +43,9 @@
                                     {{ $key+1 }}
                                 </td>
                                 <td>
-                                    {{ $rows->no_request ?? '' }}
+                                    <a href="{{ route('admin.ro.show', $rows->id) }}">
+                                        {{ $rows->no_request ?? '' }}        
+                                    </a>
                                 </td>
                                 <td>
                                     {{ $rows->name ?? '' }}

@@ -17,7 +17,9 @@ class KecamatanController extends Controller
      */
     public function index()
     {
-        $kec = Kecamatan::all();
+        $kec = Kecamatan::join('kabupatens', 'kabupatens.id_kab', '=', 'kecamatans.id_kab')
+            ->selectRaw('kecamatans.id, kecamatans.id_kec , kecamatans.name as kec , kecamatans.status, kabupatens.name as kab')
+            ->get();
 
         return view('admin.kec.index', compact('kec'));
     }

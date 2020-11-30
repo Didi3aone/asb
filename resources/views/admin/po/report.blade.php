@@ -38,10 +38,15 @@
                                     {{ $key+1 }}
                                 </td>
                                 <td>
-                                    {{ $rows->no_po ?? '' }}
+                                    <a href="{{ route('admin.po.show', $rows->id) }}">
+                                        {{ $rows->no_po ?? '' }}
+                                    </a>
                                 </td>
                                 <td>
-                                    {{ $rows->supplier_id ?? '' }}
+                                    @php
+                                        $name = \App\User::getName($rows->supplier_id);
+                                    @endphp
+                                    {{ $name->name ?? '' }}
                                 </td>
                                 @php
                                     $dt = \App\DetailPurchase::dt($rows->id);
@@ -79,45 +84,37 @@
                                 </td>
                                 <td>
                                     @foreach($dt as $key => $datas)
-                                    {{ $datas->total }}<br>
+                                    @php
+                                        $rp = App\DetailPurchase::rupiah($datas->total);
+                                    @endphp
+                                    {{ $rp }}<br>
                                     @endforeach
                                 </td>
                             </tr>
                         @endforeach
-                        {{-- <tr>
-                            <td rowspan="2">1</td>
-                            <td rowspan="2">TSC-0005</td>
-                            <td rowspan="2">Paijo</td>
-                            <td>Minyak</td>
-                            <td>2</td>
-                            <td>150000</td>
-                            <td>No</td>
-                            <td>300000</td>
-                        </tr>
                         <tr>
-                            <td>Terigu</td>
-                            <td>2</td>
-                            <td>40000</td>
-                            <td>No</td>
-                            <td>80000</td>
+                            <td>
+                                Total
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                {{ $detail->totqty }}
+                            </td>
+                            <td>
+                                @php
+                                    $rp = App\DetailPurchase::rupiah($detail->totprice);
+                                @endphp
+                                {{ $rp }}
+                            </td>
+                            <td></td>
+                            <td>@php
+                                    $rp = App\DetailPurchase::rupiah($detail->grandtot);
+                                @endphp
+                                {{ $rp }}
+                            </td>
                         </tr>
-                        <tr>
-                            <td rowspan="2">2</td>
-                            <td rowspan="2">TSC-0006</td>
-                            <td rowspan="2">Paino</td>
-                            <td>Minyak</td>
-                            <td>2</td>
-                            <td>150000</td>
-                            <td>No</td>
-                            <td>300000</td>
-                        </tr>
-                        <tr>
-                            <td>Terigu</td>
-                            <td>2</td>
-                            <td>40000</td>
-                            <td>No</td>
-                            <td>80000</td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>

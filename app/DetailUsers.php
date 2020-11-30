@@ -58,4 +58,9 @@ class DetailUsers extends Model
         0 => 'Unverify',
         1 => 'Verified'
     ];
+
+    public static function countMember($value)
+    {
+        return DetailUsers::where('kecamatan', $value)->selectRaw('COUNT(id) as tot')->first();
+    }
 }

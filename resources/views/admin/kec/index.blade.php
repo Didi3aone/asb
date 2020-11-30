@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-@can('customer_create')
+{{-- @can('customer_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-primary float-right" href="{{ route("admin.kecamatan.create") }}">
@@ -8,7 +8,7 @@
             </a>
         </div>
     </div>
-@endcan
+@endcan --}}
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.kecamatan.title_singular') }} {{ trans('global.list') }}
@@ -32,8 +32,11 @@
                             {{ trans('cruds.kecamatan.fields.active') }}
                         </th>
                         <th>
-                            &nbsp;
+                            Total Korlap
                         </th>
+                        {{-- <th>
+                            &nbsp;
+                        </th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -44,14 +47,11 @@
                             </td>
                             <td>
                                 <a href="{{ route('admin.report-member-kec', $rows->id) }}" target="_blank">
-                                    {{ $rows->name ?? '' }}
+                                    {{ $rows->kec ?? '' }}
                                 </a>
                             </td>
                             <td>
-                                @php
-                                    $name = \App\Kabupaten::getKab($rows->id_kab);
-                                @endphp
-                                {{ $name->name ?? '' }}
+                                {{ $rows->kab ?? '' }}
                             </td>
                             <td>
                                 @if($rows->status == 1)
@@ -61,6 +61,12 @@
                                 @endif
                             </td>
                             <td>
+                                @php
+                                    $count = \App\DetailUsers::countMember($rows->id_kec);
+                                @endphp
+                                {{ $count->tot }}
+                            </td>
+                            {{-- <td>
                                 @can('customer_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.kecamatan.show', $rows->id) }}">
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
@@ -82,7 +88,7 @@
                                         </button>
                                     </form>
                                 @endcan
-                            </td>
+                            </td> --}}
 
                         </tr>
                     @endforeach

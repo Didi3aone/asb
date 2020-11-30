@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
-@can('customer_create')
+{{-- @can('customer_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-primary float-right" href="{{ route("admin.provinsi.create") }}">
@@ -9,7 +9,7 @@
             </a>
         </div>
     </div>
-@endcan
+@endcan --}}
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.provinsi.title_singular') }} {{ trans('global.list') }}
@@ -29,9 +29,9 @@
                         <th>
                             {{ trans('cruds.provinsi.fields.active') }}
                         </th>
-                        <th>
+                        {{-- <th>
                             &nbsp;
-                        </th>
+                        </th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                                     {{ trans('cruds.provinsi.fields.statusinactive') }}
                                 @endif
                             </td>
-                            <td>
+                            {{-- <td>
                                 @can('customer_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.provinsi.show', $rows->id) }}">
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
@@ -74,7 +74,7 @@
                                         </button>
                                     </form>
                                 @endcan
-                            </td>
+                            </td> --}}
 
                         </tr>
                     @endforeach
