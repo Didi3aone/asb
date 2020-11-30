@@ -13,7 +13,7 @@
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.member.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.unverified-member.title') }}
     </div>
 
     <div class="card-body">

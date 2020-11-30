@@ -386,8 +386,8 @@ return [
         ],
     ],
     'verified-member'          => [
-        'title'          => 'Anggota Terverifikasi',
-        'title_singular' => 'Anggota Terverifikasi',
+        'title'          => 'Daftar Anggota (Terverifikasi)',
+        'title_singular' => 'Daftar Anggota (Terverifikasi)',
         'fields'         => [
             'id'                 => 'ID',
             'nama'               => 'Nama',
@@ -398,8 +398,8 @@ return [
         ],
     ],
     'unverified-member'          => [
-        'title'          => 'Anggota Belum Terverifikasi',
-        'title_singular' => 'Anggota Belum Terverifikasi',
+        'title'          => 'Daftar Anggota (Belum Terverifikasi)',
+        'title_singular' => 'Daftar Anggota (Belum Terverifikasi)',
         'fields'         => [
             'id'                 => 'ID',
             'nama'               => 'Nama',
@@ -505,7 +505,7 @@ return [
         'fields'         => [    
             'no_req'            => 'ID',
             'date'              => 'Transaksi Number',
-            'supplier_by'       => 'Pemasok',
+            'supplier_by'       => 'Nama Supplier',
             'program'           => 'Program',
             'total'             => 'Total',
             'tipe'              => 'Tipe',

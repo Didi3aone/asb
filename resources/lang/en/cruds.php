@@ -395,8 +395,8 @@ return [
         ],
     ],
     'verified-member'          => [
-        'title'          => 'Verified Member',
-        'title_singular' => 'Verified Member',
+        'title'          => 'Member List (Verified)',
+        'title_singular' => 'Member List (Verified)',
         'fields'         => [
             'id'                 => 'ID',
             'nama'               => 'Name',
@@ -407,10 +407,11 @@ return [
         ],
     ],
     'unverified-member'          => [
-        'title'          => 'Unverified Member',
-        'title_singular' => 'Unverified Member',
+        'title'          => 'Member List (Pending)',
+        'title_singular' => 'Member List (Pending)',
         'fields'         => [
             'id'                 => 'ID',
+            'list'               => 'Member List (Pending)',
             'nama'               => 'Name',
             'status'             => 'Status',
             'created_at'         => 'Created At',
@@ -513,7 +514,7 @@ return [
         'fields'         => [
             'no_req'            => 'No Request',
             'date'              => 'Date',
-            'supplier_by'       => 'Supplier By',
+            'supplier_by'       => 'Supplier Name',
             'program'           => 'Program',
             'total'             => 'Total',
             'tipe'              => 'Type',

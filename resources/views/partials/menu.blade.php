@@ -126,25 +126,25 @@
             <div class="dropdown-menu" aria-labelledby="download">
                 @can('item_category_access')
                 <a href="{{ route("admin.item-category.index") }}" class="dropdown-item {{ request()->is('admin/item-category') || request()->is('admin/item-category/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
+                    <i class="fas fa-cart-plus nav-icon">
 
-                    </i> --}}
+                    </i>
                     {{ trans('cruds.item-category.title') }}
                 </a>
                 @endcan
                 @can('item_unit_access')
                 <a href="{{ route("admin.item-unit.index") }}" class="dropdown-item {{ request()->is('admin/item-unit') || request()->is('admin/item-unit/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
+                    <i class="fas fa-suitcase nav-icon">
 
-                    </i> --}}
+                    </i>
                     {{ trans('cruds.item-unit.title') }}
                 </a>
                 @endcan
                 @can('item_access')
                 <a href="{{ route("admin.item.index") }}" class="dropdown-item {{ request()->is('admin/item') || request()->is('admin/item/*') ? 'active' : '' }}">
-                    {{-- <i class="fas fa-building nav-icon">
+                    <i class="fas fa-gift nav-icon">
 
-                    </i> --}}
+                    </i>
                     {{ trans('cruds.item.title') }}
                 </a>
                 @endcan
