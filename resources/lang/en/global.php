@@ -257,6 +257,6 @@ return [
     'revision'                             => 'Revision',
     'more_info'                            => 'More Info',
     'data_stock_item'                      => 'Stock data',
-    'site_title'                           => 'Apps Item Stock ',
+    'site_title'                           => 'JCUIM',
     'setting'                              => 'Setting'
 ];

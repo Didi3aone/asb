@@ -256,6 +256,6 @@ return [
     'revision'                             => 'Revisi',
     'more_info'                            => 'Info Selanjutnya',
     'data_stock_item'                      => 'Data stok barang',
-    'site_title'                           => 'Apps Stok Barang',
+    'site_title'                           => 'JCUIM',
     'setting'                              => 'Setting'
 ];
