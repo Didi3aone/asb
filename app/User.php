@@ -36,6 +36,8 @@ class User extends Authenticatable implements JWTSubject
         'updated_at',
         'deleted_at',
         'remember_token',
+        'theme_color',
+        'color_id',
         'gudang_id',
         'email_verified_at',
         'is_verified'
@@ -81,5 +83,25 @@ class User extends Authenticatable implements JWTSubject
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public static function getTheme($value)
+    {
+        $result = User::join('master_themes', 'users.theme_color', '=', 'master_themes.id')
+            ->where('users.id', $value)
+            ->select('master_themes.file')
+            ->first();
+        
+        return $result;
+    }
+
+    public static function getColor($value)
+    {
+        $result = User::join('master_colors', 'users.color_id', '=', 'master_colors.id')
+            ->where('users.id', $value)
+            ->select('master_colors.code')
+            ->first();
+        
+        return $result;
     }
 }

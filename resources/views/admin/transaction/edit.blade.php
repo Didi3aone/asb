@@ -1,13 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-
+@php
+	$color = \App\User::getColor(\Auth::user()->id);
+@endphp
 <div class="card">
     @if($transaksi->tipe == 1)
         <div class="card-header bg-warning">
             {{ trans('global.edit') }} {{ trans('cruds.transaction-stock.title_transaction_in') }}
         </div>
     @else
-        <div class="card-header bg-primary">
+        <div class="card-header {{ $color->code }}">
             {{ trans('global.edit') }} {{ trans('cruds.transaction-stock.title_transaction_out') }}
         </div>
     @endif

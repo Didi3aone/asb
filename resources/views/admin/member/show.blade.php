@@ -132,9 +132,168 @@
                             {{ $name->name ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            Provinsi Domisili
+                        </th>
+                        <td>
+                            @php
+                                $name = \App\Provinsi::getProv($detail->provinsi_domisili);
+                            @endphp
+                            {{ $name->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Kabupaten/Kota Domisili
+                        </th>
+                        <td>
+                            @php
+                                $name = \App\Kabupaten::getKab($detail->kabupaten_domisili);
+                            @endphp
+                            {{ $name->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Kecamatan Domisili
+                        </th>
+                        <td>
+                            @php
+                                $name = \App\Kecamatan::getKec($detail->kecamatan_domisili);
+                            @endphp
+                            {{ $name->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Kelurahan Domisili
+                        </th>
+                        <td>
+                            @php
+                                $name = \App\Kelurahan::getKel($detail->kelurahan_domisili);
+                            @endphp
+                            {{ $name->name ?? '' }}
+                        </td>
+                    </tr>
                     
                 </tbody>
             </table>
+            <h2>Member</h2>
+            <div class="table table-responsive">
+                <table class="table table-bordered table-striped table-sm" class="table table-striped table-bordered ">
+                <thead>
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            NIK
+                        </th>
+                        <th>
+                            No. KK 
+                        </th>
+                        <th>
+                            Nama 
+                        </th>
+                        <th>
+                            No. Telp 
+                        </th>
+                        <th>
+                            No. Handphone 
+                        </th>
+                        <th>
+                            Email 
+                        </th>
+                        <th>
+                            Pekerjaan
+                        </th>
+                        <th>
+                            Provinsi
+                        </th>
+                        <th>
+                            Kabupaten
+                        </th>
+                        <th>
+                            Kecamatan
+                        </th>
+                        <th>
+                            Kelurahan
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(count($show) > 0)
+                        @foreach($show as $key => $rows)
+                            @if($rows->nik == null)
+                                <tr>
+                                    <td colspan="13">
+                                        <center>{{ trans('cruds.request-order.fields.member') }} {{ trans('cruds.request-order.fields.notfound') }}</center>
+                                    </td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td>
+                                        {{ $key +1 }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->nik }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->no_kk }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->nickname }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->no_telp }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->no_hp }}
+                                    </td>
+                                    <td>
+                                        {{ $rows->email ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @if ($rows->pekerjaan != null)
+                                            
+                                        @endif
+                                        @php
+                                            $name = \App\Job::getName($rows->pekerjaan);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Provinsi::getProv($rows->provinsi);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Kabupaten::getKab($rows->kabupaten);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Kecamatan::getKec($rows->kecamatan);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $name = \App\Kelurahan::getKel($rows->kelurahan);
+                                        @endphp
+                                        {{ $name->name ?? '-' }}
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    @endif
+                </thead>
+            </table>
+            </div>
             
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
                 {{ trans('global.back_to_list') }}

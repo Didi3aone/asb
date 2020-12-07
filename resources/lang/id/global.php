@@ -101,6 +101,7 @@ return [
     'change_notifications_field_1_label'   => 'Kirim pemberitahuan email ke User',
     'change_notifications_field_2_label'   => 'Saat masuk di CRUD',
     'change_password'                      => 'Ganti Password',
+    'change_theme'                         => 'Ganti Template',
     'chart_type'                           => 'Jenis bagan',
     'code'                                 => 'Kode',
     'companies'                            => 'Perusahaan',

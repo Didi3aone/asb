@@ -115,7 +115,7 @@ class RequestOrderController extends Controller
                 'program_id'    => $request->program_id,
                 'created_by'    => \Auth::user()->id,
                 'created_at'    => date('Y-m-d H:i:s'),
-                'status'        => 1,
+                'status'        => 0,
             ]);
             
             $i=0;
@@ -125,7 +125,7 @@ class RequestOrderController extends Controller
                         'req_id'        => $req,
                         'receiver_id'   => $request->chkbox[$count],
                         'created_at'    => date('Y-m-d H:i:s'),
-                        'status_penerima' => 1
+                        'status_penerima' => 0
                     );
                     $insert_detail[] = $data;
                 }
@@ -218,7 +218,9 @@ class RequestOrderController extends Controller
                     $data = array(
                         'req_id'        => $id,
                         'receiver_id'   => $request->chkbox[$count],
-                        'updated_at'    => date('Y-m-d H:i:s')
+                        'updated_at'    => date('Y-m-d H:i:s'),
+                        'tanggal_terima' => date('Y-m-d H:i:s'),
+                        'status_penerima'=> 1,
                     );
                     $insert_detail[] = $data;
                 }

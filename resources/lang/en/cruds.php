@@ -21,6 +21,10 @@ return [
         'title'          => 'Transaction',
         'title_singular' => 'Transaction',
     ],
+    'theme'      => [
+        'title'          => 'Theme',
+        'title_singular' => 'Theme',
+    ],
     'information'        => [
         'title'          => 'Informations',
         'title_singular' => 'Informations',

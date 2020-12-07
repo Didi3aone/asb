@@ -81,10 +81,7 @@
                                     {{ $name->nama }}
                                 </td>
                                 <td>
-                                    @php
-                                        $name = \App\Item::getItem($rows->qty);
-                                    @endphp
-                                    {{ $name->nama }}
+                                    {{ $rows->qty }}
                                 </td>
                             </tr>
                         @endforeach

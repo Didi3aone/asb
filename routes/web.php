@@ -43,6 +43,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('transaksi-out','TransaksiStokController@createOut')->name('transaksi-out');
     Route::post('transaksi-store-out','TransaksiStokController@storeOut')->name('transaksi-store-out');
     Route::get('report-transaksi', 'TransaksiStokController@reportTransaksi')->name('report-transaksi');
+    Route::resource('invoice', 'InvoiceController');
+    Route::resource('sales-po', 'SalesPOController');
     
 
     //RO
@@ -105,6 +107,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('configuration/edit/{id}','ConfigurationController@edit')->name('configuration.edit');
     Route::put('configuration/update/{id}','ConfigurationController@update')->name('configuration.update');
     Route::post('configuration/store','ConfigurationController@store')->name('configuration.store');
+    Route::resource('template', 'ThemeController');
+    Route::get('change-template', 'ThemeController@change')->name('change-template');
+    Route::post('change-template', 'ThemeController@changePost')->name('change-template');
 
     //helper
     Route::get('get-kel', 'HelperController@getKelurahan')->name('get-kel');

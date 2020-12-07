@@ -48,7 +48,10 @@
     </div>
     <div class="col-12">
         <div class="card">
-            <div class="card-header bg-primary">
+            @php
+                $color = \App\User::getColor(\Auth::user()->id);
+            @endphp
+            <div class="card-header {{ $color->code }}">
                 <a href="#" class="btn btn-primary">
                     {{ trans('global.data_stock_item') }}
                 </a>

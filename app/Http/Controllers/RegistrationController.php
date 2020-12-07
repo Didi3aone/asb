@@ -100,9 +100,10 @@ class RegistrationController extends Controller
                     ->select('id')
                     ->first();
 
-            $checkNik = User::where('nik', $request->nik)
+            $checkNik = DetailUsers::where('nik', $request->nik)
                     ->select('id')
                     ->first();
+                    
             if(isset($check->id)) {
                 $message['is_error'] = true;
                 $message['error_msg'] = "Email Sudah Ada";

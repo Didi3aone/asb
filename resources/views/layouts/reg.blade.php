@@ -592,6 +592,7 @@
 						processData: false,
 						error: function (data) {
 							console.log('Error:', data);
+							$(this).find('input[type="submit"]').attr('disabled','disabled');
 							swal('error',data.error_msg);
 						}
 					});

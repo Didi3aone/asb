@@ -285,8 +285,17 @@ class MemberController extends Controller
         $detail = DetailUsers::where('userid', $id)
                 ->first();
 
-
-        return view('admin.member.show', compact('member', 'detail'));
+        if($detail->status_korlap == 1) {
+            $show = User::join('detail_users', 'users.id', '=', 'detail_users.userid')
+                ->where('detail_users.kecamatan', $detail->kecamatan)
+                ->whereRaw('users.id != ?', $id)
+                ->select('users.name', 'detail_users.*')
+                ->get();
+            
+            return view('admin.member.show', compact('member', 'show', 'detail'));
+        } else {
+            return view('admin.member.show', compact('member', 'detail'));
+        }
     }
 
     /**

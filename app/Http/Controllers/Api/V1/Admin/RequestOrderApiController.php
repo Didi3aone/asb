@@ -54,12 +54,14 @@ class RequestOrderApiController extends Controller
     {
         \DB::beginTransaction();
         try {
+            $count = Req::count();
+            $no = str_pad($count+1,4,"0",STR_PAD_LEFT);
+            $noreq = "RO/".date('d/m/y')."-".$no;
+
             $validator = Validator::make($request->all(), [
-                'no_request'   => 'required',
                 'program_id'   => 'required', 
             ],
             [
-                'no_request.required'     => 'Masukkan no request!',
                 'program_id.required'     => 'Masukkan program!'
             ]);
 
@@ -71,7 +73,7 @@ class RequestOrderApiController extends Controller
                 ], 400);
             } else {
                 $req = Req::insertGetId([
-                    'no_request'    => $request->input('no_request'),
+                    'no_request'    => $noreq,
                     'program_id'    => $request->input('program_id'),
                     'created_by'    => Auth::user()->id,
                     'status'        => 1,
@@ -83,6 +85,7 @@ class RequestOrderApiController extends Controller
                     for($count = 0;$count < count($request->member); $count++) {
                         $data = array(
                             'req_id'        => $req,
+                            'status_penerima'=> 0,
                             'receiver_id'   => $request->input('member')[$count],
                             'created_at'    => date('Y-m-d H:i:s')
                         );
@@ -143,8 +146,9 @@ class RequestOrderApiController extends Controller
             ->where('requests.id', $id)
             ->first();
         // dd($ro); 
-        $detail = DetailRequest::join('detail_users', 'r_detail_requests.receiver_id', '=', 'detail_users.userid')
-                ->join('users', 'detail_users.userid', '=', 'users.id')
+        $detail = DetailRequest::join('users', 'r_detail_requests.receiver_id', '=', 'users.id')
+                ->selectRaw('r_detail_requests.id as detail_id ,r_detail_requests.receiver_id as member, users.name ,
+                        r_detail_requests.status_penerima ,r_detail_requests.tanggal_terima')
                 ->where('req_id', $id)
                 ->get();
         
@@ -177,11 +181,9 @@ class RequestOrderApiController extends Controller
         \DB::beginTransaction();
         try {
             $validator = Validator::make($request->all(), [
-                'no_request'   => 'required',
                 'program_id'   => 'required',
             ],
             [
-                'no_request.required'     => 'Masukkan no request!',
                 'program_id.required'     => 'Masukkan program!'
             ]);
 
@@ -193,7 +195,6 @@ class RequestOrderApiController extends Controller
                 ], 400);
             } else {
                 $req = Req::find($request->input('id'));
-                $req->no_request    = $request->input('no_request');
                 $req->program_id    = $request->input('program_id');
                 $req->updated_by    = Auth::user()->id;
                 $req->status        = 1;
@@ -206,7 +207,7 @@ class RequestOrderApiController extends Controller
                             $dt = DetailRequest::find($request->input('detail_id')[$count]);
                             $dt->req_id         = $request->input('id');
                             $dt->receiver_id    = $request->input('member')[$count];
-                            $dt->status_penerima= 2;
+                            $dt->status_penerima= 1;
                             $dt->tanggal_terima = $request->input('tgl_terima')[$count] ?? date('Y-m-d H:i:s');
                             $dt->updated_at     = date('Y-m-d H:i:s');
                             $dt->update();

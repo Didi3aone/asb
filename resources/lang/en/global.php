@@ -101,6 +101,7 @@ return [
     'change_notifications_field_1_label'   => 'Send email notification to User',
     'change_notifications_field_2_label'   => 'When Entry on CRUD',
     'change_password'                      => 'Change password',
+    'change_theme'                         => 'Change Template',
     'chart_type'                           => 'Chart type',
     'code'                                 => 'Code',
     'companies'                            => 'Companies',

@@ -21,6 +21,10 @@ return [
         'title'          => 'Transaksi',
         'title_singular' => 'Transaksi',
     ],
+    'theme'      => [
+        'title'          => 'Tema',
+        'title_singular' => 'Tema',
+    ],
     'information'           => [
         'title'          => 'Informasi',
         'title_singular' => 'Informasi',

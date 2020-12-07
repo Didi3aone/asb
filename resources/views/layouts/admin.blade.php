@@ -8,7 +8,12 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<title>{{ \App\Configuration::where('name','apps_name')->first()->value }}</title>
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+	{{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" /> --}}
+	@php
+		$theme = \App\User::getTheme(\Auth::user()->id);
+		$color = \App\User::getColor(\Auth::user()->id);
+	@endphp
+	<link href="{{ asset('css/'. $theme->file) }}" rel="stylesheet" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
 	<link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet" />
 	<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -45,7 +50,7 @@
 </head>
 
 <body ng-app="app">
-	<div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+	<div class="navbar navbar-expand-lg fixed-top navbar-dark {{ $color->code }}">		
 		<div class="container">
 			<a href="{{ route('admin.home') }}" class="navbar-brand">{{ \App\Configuration::where('name','apps_name')->first()->value }}</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +78,7 @@
 			</div>
 		</footer>
 	</div>
+	{{-- <script src="{{asset('js/app.js')}}"></script> --}}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>

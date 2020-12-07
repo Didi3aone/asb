@@ -161,11 +161,20 @@ class UserApiController extends Controller
                 'kelurahan_domisili.required'=> 'Masukkan kelurahan domisili !',
             ]);
             
+            $checkNik = DetailUsers::where('nik', $request->input('no_ktp'))
+                    ->select('id')
+                    ->first();
+
             if($validator->fails()) {
                 return response()->json([
                     'success'   => false,
                     'message'   => 'silahkan isi kolom yang kosong',
                     'data'      => $validator->errors()
+                ], 400);
+            } elseif (isset($checkNik->id)) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'Nik Sudah Ada',
                 ], 400);
             } else {
                 if ($request->file('avatar')) {

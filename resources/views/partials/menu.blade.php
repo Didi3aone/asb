@@ -74,6 +74,22 @@
                     Transaksi IN/Out
                 </a>
                 @endcan
+                @can('gudang_access')
+                <a href="{{ route("admin.invoice.index") }}" class="dropdown-item {{ request()->is('admin/invoice') || request()->is('admin/invoice/*') ? 'active' : '' }}">
+                    <i class="fas fa-building nav-icon">
+
+                    </i>
+                    Invoice
+                </a>
+                @endcan
+                @can('gudang_access')
+                <a href="{{ route("admin.sales-po.index") }}" class="dropdown-item {{ request()->is('admin/sales-po') || request()->is('admin/sales-po/*') ? 'active' : '' }}">
+                    <i class="fas fa-building nav-icon">
+
+                    </i>
+                    Sales PO
+                </a>
+                @endcan
                 @can('transaction_access')
                 <a href="{{ route("admin.ro.index") }}" class="dropdown-item {{ request()->is('admin/ro') || request()->is('admin/ro/*') ? 'active' : '' }}">
                     <i class="fa fa-download nav-icon">
@@ -301,6 +317,10 @@
             <i class="nav-icon fas fa-refresh">
             </i>
             {{ trans('global.change_password') }}
+        </a>
+        <a href="{{ route("admin.change-template") }}" class="dropdown-item">
+            <i class="nav-icon fas fa-palette"></i>
+            {{ trans('global.change_theme') }}
         </a>
         <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
             <i class="nav-icon fas fa-sign-out-alt">
