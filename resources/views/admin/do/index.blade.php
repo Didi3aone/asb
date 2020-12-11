@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-       Laporan {{ trans('cruds.invoice.title_singular') }}
+       Laporan {{ trans('cruds.do.title_singular') }}
     </div>
     <div class="card-body">
         <div class="row">
@@ -37,8 +37,8 @@
                     <label for="type">{{ trans('cruds.request-order.fields.type') }}*</label>
                     <select name="type" id="type" class="form-control select2" required style="width: 100%; height:36px;">
                         <option value="">{{ trans('global.pleaseSelect') }}</option>
-                        <option value="1">{{ trans('cruds.invoice.fields.in') }}</option>
-                        <option value="2">{{ trans('cruds.invoice.fields.out') }}</option>
+                        <option value="1">{{ trans('cruds.do.fields.in') }}</option>
+                        <option value="2">{{ trans('cruds.do.fields.out') }}</option>
                     </select>
                     @if($errors->has('type'))
                         <em class="invalid-feedback">
@@ -58,15 +58,15 @@
 @can('transaction_create')
     <div style="margin-bottom: 10px;padding:10 10 10 10px" class="row">
         <div class="col-lg float-right" style="margin-bottom: 10px;padding:10 10 10 10 px;">
-            <a class="btn btn-warning" href="{{ route("admin.invoice.create") }}">
-                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.invoice.title_singular') }}
+            <a class="btn btn-warning" href="{{ route("admin.do.create") }}">
+                <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.do.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.invoice.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.do.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="card-body">
@@ -78,13 +78,13 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.invoice.fields.nomor_transaksi') }}
+                            {{ trans('cruds.do.fields.nomor_transaksi') }}
                         </th>
                         <th>
-                            {{ trans('cruds.invoice.fields.tanggal_transaksi') }}
+                            {{ trans('cruds.do.fields.tanggal_transaksi') }}
                         </th>
                         <th>
-                            {{ trans('global.grandtotal') }}
+                            {{ trans('global.status') }}
                         </th>
                         <th>
                             &nbsp;
@@ -92,29 +92,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($trx as $key => $rows)
+                    @foreach($do as $key => $rows)
                         <tr data-entry-id="{{ $rows->id }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $rows->no_transaksi ?? '' }}
+                                {{ $rows->sk ?? '' }}
                             </td>
                             <td>
-                                {{ $rows->transaction_date ?? '' }}
+                                {{ $rows->send_date ?? '' }}
                             </td>
                             <td>
-                                {{ $rows->grandtotal ?? '' }}
+                                @if ($rows->status == 0)
+                                    Pending
+                                @elseif ($rows->status == 1)
+                                    Send
+                                @else
+                                    Receive
+                                @endif
                                 {{-- {{ \App\TransaksiStok::TypeTransaction[$rows->tipe] ?? '' }} --}}
                             </td>
                             <td>
                                 @can('transaction_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.invoice.show', $rows->id) }}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.do.show', $rows->id) }}">
                                         <i class="fa fa-eye"></i> {{ trans('global.view') }}
                                     </a>
                                 @endcan
                                 @can('transaction_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.invoice.edit', $rows->id) }}">
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.do.edit', $rows->id) }}">
                                         <i class="fa fa-edit"></i> {{ trans('global.edit') }}
                                     </a>
                                 @endcan

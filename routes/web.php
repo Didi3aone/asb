@@ -45,6 +45,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('report-transaksi', 'TransaksiStokController@reportTransaksi')->name('report-transaksi');
     Route::resource('invoice', 'InvoiceController');
     Route::resource('sales-po', 'SalesPOController');
+    Route::resource('do', 'DeliveryOrderController');
     
 
     //RO
@@ -117,5 +118,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('get-kab', 'HelperController@getKabupaten')->name('get-kab');
     Route::get('get-member', 'HelperController@getMember')->name('get-member');
     Route::get('get-rak', 'HelperController@getRak')->name('get-rak');
+    Route::get('get-product', 'HelperController@getProduct')->name('get-product');
     
 });

@@ -103,6 +103,8 @@ return [
     'change_password'                      => 'Change password',
     'change_theme'                         => 'Change Template',
     'chart_type'                           => 'Chart type',
+    'grandtotal'                           => 'Grand Total',
+    'total'                                => 'Total',
     'code'                                 => 'Code',
     'companies'                            => 'Companies',
     'company'                              => 'Company',

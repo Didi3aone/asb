@@ -1,0 +1,27 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class DeliveryLog extends Model
+{
+    use SoftDeletes;
+    
+    protected $table = 'delivery_logs';  
+
+    protected $fillable = [
+        'id',
+        'do_id',
+        'sk',
+        'custid',
+        'send_date',
+        'receive_date',
+        'is_active',
+        'status',
+        'created_by',
+        'created_at',
+        'updated_at',
+    ];
+}

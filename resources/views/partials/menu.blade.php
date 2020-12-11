@@ -79,7 +79,15 @@
                     <i class="fas fa-building nav-icon">
 
                     </i>
-                    Invoice
+                    {{ trans('cruds.invoice.title') }}
+                </a>
+                @endcan
+                @can('gudang_access')
+                <a href="{{ route("admin.do.index") }}" class="dropdown-item {{ request()->is('admin/do') || request()->is('admin/do/*') ? 'active' : '' }}">
+                    <i class="fas fa-building nav-icon">
+
+                    </i>
+                    {{ trans('cruds.do.title') }}
                 </a>
                 @endcan
                 @can('gudang_access')

@@ -53,4 +53,12 @@ class HelperController extends Controller
                 
         return \Response::json($data);
     }
+
+    public function getProduct(Request $request)
+    {
+        $data = Item::select('id', 'name')
+                ->get();
+                
+        return \Response::json($data);
+    }
 }

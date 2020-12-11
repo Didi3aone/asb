@@ -104,6 +104,8 @@ return [
     'change_theme'                         => 'Ganti Template',
     'chart_type'                           => 'Jenis bagan',
     'code'                                 => 'Kode',
+    'grandtotal'                           => 'Grand Total',
+    'total'                                => 'Total',
     'companies'                            => 'Perusahaan',
     'company'                              => 'Perusahaan',
     'company_name'                         => 'Nama Perusahaan',

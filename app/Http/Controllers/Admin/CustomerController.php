@@ -20,7 +20,8 @@ class CustomerController extends Controller
     {
         abort_unless(\Gate::allows('customer_access'), 403);
 
-        $customer = MstCustomer::all();
+        $customer = MstCustomer::orderBy('created_at', 'DESC')
+                    ->get();
 
         return view('admin.customer.index', compact('customer'));
     }

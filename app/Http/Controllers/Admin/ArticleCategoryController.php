@@ -18,7 +18,8 @@ class ArticleCategoryController extends Controller
     {
         abort_unless(\Gate::allows('category_access'), 403);
 
-        $category = Category::all();
+        $category = Category::orderBy('created_at', 'DESC')
+                    ->get();
         // dd($program);
         return view('admin.category.index', compact('category'));
     }
